@@ -1,0 +1,56 @@
+
+th,td{
+    /* padding: 1rem; */
+    
+}
+th,td{
+    /* width: 100px; */
+    /* border-radius: 30px; */
+}
+
+table{
+    /* width: 100%; */
+   
+    /* border-collapse: separate; */
+}
+
+#table{
+
+}
+#table-thead{
+
+}
+#table-tbody{
+    
+}
+
+/* 
+.swiper-button-prev{
+    background-color: white;
+    color: black;
+    width: 30px;
+    opacity: 1;
+    border-radius: 32px;
+    height: 30px;
+    cursor: auto;
+    pointer-events: none;
+}
+
+.swiper-button-prev:after, .swiper-rtl .swiper-button-next:after {
+    font-size: 13px;
+    font-weight: bolder;
+    content: 'prev';
+    color: black;
+    opacity: 1;
+} */
+
+.bg-left-from-banner{
+    background: rgb(0,0,0);
+    background: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(255,255,255,0) 48%, rgba(93,142,152,0) 100%);
+}
+.bg-bottom-from-banner{
+    background: rgb(0,0,0);
+background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(255,255,255,0) 48%, rgba(93,142,152,0) 100%);
+}
+
+

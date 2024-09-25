@@ -1,0 +1,50 @@
+.swiper-pagination{
+    top: 160px;
+}
+
+.main-sellers::before{
+    content: '';
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.6);
+
+}
+.main-about::before{
+    content: '';
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.6);
+    
+}
+
+.custom-height{
+    height: calc(100vh - 600px);
+}
+
+
+
+.blog-title{
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+ 
+}
+.blog-description{
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+}
+
+.iframe-custom-class{
+    border-radius: 20px;
+    object-fit: cover;
+    -webkit-overflow-scrolling: touch; /* Enable momentum scrolling in iOS */
+    /* For older Safari versions */
+    -webkit-border-radius: 20px;
+    /* For older Firefox versions */
+    -moz-border-radius: 20px;
+}
