@@ -2,25 +2,21 @@ import { ErrorMessage } from "formik";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 
-const CitiesDropdown = ({ isLoading, name, value, onChange, options, clearForms,existingData }) => {
+const CitiesDropdown = ({ isLoading, name, value, onChange, options, clearForms, existingData }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedCities, setSelectedCities] = useState(value || []);
-  const [cities,setCities] = useState([]);
+  const [cities, setCities] = useState([]);
   const availableCities = options?.filter(
     (city) => !selectedCities.some((selectedCity) => selectedCity._id === city._id)
   );
+
   useEffect(() => {
     if (existingData && Array.isArray(existingData)) {
       // Filter out cities already in existingData from options
       const filteredOptions = options?.filter(
         (city) => !existingData.some((existingCity) => existingCity._id === city._id)
       );
-
-      setCities(filteredOptions)
-  
-      console.log("Filtered Options:", filteredOptions);
-      console.log("Existing Data:", existingData);
-      console.log("Original Options:", options);
+      setCities(filteredOptions);
     } else {
       console.warn("No existing data provided or it is not an array.");
     }
@@ -89,7 +85,7 @@ const CitiesDropdown = ({ isLoading, name, value, onChange, options, clearForms,
             transition={{ duration: 0.3 }}
             className="border border-[#E4E4E4] rounded-[10px] bg-white mt-2 max-h-40 overflow-y-auto shadow-md"
           >
-            {cities.map((city) => (
+            {availableCities.map((city) => (
               <div
                 key={city._id}
                 onClick={() => handleCityClick(city)}

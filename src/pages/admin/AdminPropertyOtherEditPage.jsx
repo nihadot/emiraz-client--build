@@ -162,34 +162,15 @@ for (const element of obj) {
     }
   }
 
-  const handleDelete =async(item,type)=>{
+  const handleDeleteCity =async({_id:id},type)=>{
 
-    const {_id:id} = item;
 
     const status = window.confirm('Are you sure you want to delete this?');
     if(status){
 
-            if(type === 'property-type'){
-                try {
-                    const response = await axios.delete(`${SERVER_URL}/property/property-type/delete/${projectId}/${item}`, {
-                      headers: { Authorization: `Bearer ${localStorage.getItem(ADMIN_TOKEN)}` },
-                    });
-                    console.log('[Response]: => ', response);
-                    navigate('/admin/edit-properties');
-                    successToast('Property deleted successfully');
-                  } catch (error) {
-                    errorToast(error?.response?.data?.message || error?.message || 'Error occurred while deleting property');
-                  } finally {
-                    setIsLoading(false);
-                  }
-            }
-      
-
-
-        if(type === 'cities'){
-
+       
       try {
-        const response = await axios.delete(`${SERVER_URL}/property/city/add/${projectId}/${id}`, {
+        const response = await axios.delete(`${SERVER_URL}/property/city/delete/${projectId}/${id}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem(ADMIN_TOKEN)}` },
         });
         console.log('[Response]: => ', response);
@@ -200,8 +181,7 @@ for (const element of obj) {
       } finally {
         setIsLoading(false);
       }
-    }
-
+  
 
 
     }
@@ -283,6 +263,12 @@ for (const element of obj) {
             } )}
         </div>
 
+
+
+
+
+
+
               {/*  */}
               <CitiesDropdown
                 name="cities"
@@ -302,7 +288,7 @@ for (const element of obj) {
                     <div className="flex justify-center  gap-3 mt-3 w-fit items-center border capitalize sf-medium border-[#E4E4E4] py-3 px-4 rounded-[10px] font-normal text-sm text-[#333333] cursor-pointer outline-none relative bg-white ">
                     <div className="capitalize   rounded" key={index}>{item?.cityName}</div>
                         {/* <FaTrash onClick={()=>handleDelete(item)} color="red" size={14}/> */}
-                            <Link onClick={()=>handleDelete(item,'city')} className="text-slate-50 bg-red-600/90 w-5 h-5 flex justify-center items-center rounded-full text-[10px]"> ✕</Link>
+                            <Link onClick={()=>handleDeleteCity(item)} className="text-slate-50 bg-red-600/90 w-5 h-5 flex justify-center items-center rounded-full text-[10px]"> ✕</Link>
                     </div>
                 )
             } )}
