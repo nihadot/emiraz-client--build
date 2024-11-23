@@ -62,7 +62,7 @@ const PropertyTypeDropdown = ({ isLoading, name, value, onChange, clearForms, ex
       </div>
       {/* Animated Options */}
       <AnimatePresence>
-        {isOpen && (
+        {isOpen && propertyTypes.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -77,7 +77,7 @@ const PropertyTypeDropdown = ({ isLoading, name, value, onChange, clearForms, ex
                 className={`py-3 px-5 ${
                   selectedOptions.includes(option)
                     ? "bg-black text-white"
-                    : "hover:bg-black hover:text-white text-[#666666]"
+                    : "hover:bg-slate-100 hover:text-black text-[#666666]"
                 } text-sm transition-all duration-300 cursor-pointer`}
               >
                 {option.charAt(0).toUpperCase() + option.slice(1)}

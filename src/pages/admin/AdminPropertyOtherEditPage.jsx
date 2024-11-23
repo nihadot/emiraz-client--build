@@ -146,7 +146,7 @@ for (const element of obj) {
     handleClear();
     setIsDraft(false);  // Reset the draft state here after form reset
     successToast('Successfully added');
-
+      navigate(`/admin/edit-properties`)
    
     if(data.priority){
      
@@ -162,10 +162,32 @@ for (const element of obj) {
     }
   }
 
-  const handleDelete =async({_id:id})=>{
-    console.log(id,'id')
-   const status = window.confirm('Are you sure you want to delete this property?')
+  const handleDelete =async(item,type)=>{
+
+    const {_id:id} = item;
+
+    const status = window.confirm('Are you sure you want to delete this?');
     if(status){
+
+            if(type === 'property-type'){
+                try {
+                    const response = await axios.delete(`${SERVER_URL}/property/property-type/delete/${projectId}/${item}`, {
+                      headers: { Authorization: `Bearer ${localStorage.getItem(ADMIN_TOKEN)}` },
+                    });
+                    console.log('[Response]: => ', response);
+                    navigate('/admin/edit-properties');
+                    successToast('Property deleted successfully');
+                  } catch (error) {
+                    errorToast(error?.response?.data?.message || error?.message || 'Error occurred while deleting property');
+                  } finally {
+                    setIsLoading(false);
+                  }
+            }
+      
+
+
+        if(type === 'cities'){
+
       try {
         const response = await axios.delete(`${SERVER_URL}/property/city/add/${projectId}/${id}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem(ADMIN_TOKEN)}` },
@@ -179,8 +201,37 @@ for (const element of obj) {
         setIsLoading(false);
       }
     }
+
+
+
+    }
   }
 
+
+  const handleDeletePropertyType = async(item,obj)=>{
+    
+    const status = window.confirm('Are you sure you want to delete this?');
+   if(!status){
+    return true;
+   }
+    try {
+
+      if(obj.length === 1){
+        return errorToast('Remaining one property')
+      }
+
+        const response = await axios.delete(`${SERVER_URL}/property/property-type/delete/${projectId}/${item}`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem(ADMIN_TOKEN)}` },
+        });
+        console.log('[Response]: => ', response);
+        navigate('/admin/edit-properties');
+        successToast('Property deleted successfully');
+      } catch (error) {
+        errorToast(error?.response?.data?.message || error?.message || 'Error occurred while deleting property');
+      } finally {
+        setIsLoading(false);
+      }
+  }
 
 
   return (
@@ -218,8 +269,18 @@ for (const element of obj) {
 
 
 
-        <div className=" flex gap-3">
-            {userData?.propertyType?.map((item,index)=> <div className="capitalize bg-slate-200 mt-3 w-fit px-6 py-2 rounded" key={index}>{item}</div> )}
+      
+        <div className="flex justify-center  gap-3 mt-3 w-fit items-center  capitalize sf-bold border-[#E4E4E4] py-3 px-4 rounded-[10px] font-normal text-sm text-[#333333] cursor-pointer outline-none relative bg-white ">Already existing : </div>
+<div className=" flex gap-3">
+            {userData?.propertyType?.map((item,index)=> {
+                return(
+                    <div className="flex justify-center  gap-3 mt-3 w-fit items-center border capitalize sf-medium border-[#E4E4E4] py-3 px-4 rounded-[10px] font-normal text-sm text-[#333333] cursor-pointer outline-none relative bg-white ">
+                    <div className="capitalize   rounded" key={index}>{item}</div>
+                        {/* <FaTrash onClick={()=>handleDelete(item)} color="red" size={14}/> */}
+                            <Link onClick={()=>handleDeletePropertyType(item,userData?.propertyType)} className="text-slate-50 bg-red-600/90 w-5 h-5 flex justify-center items-center rounded-full text-[10px]"> ✕</Link>
+                    </div>
+                )
+            } )}
         </div>
 
               {/*  */}
@@ -241,12 +302,11 @@ for (const element of obj) {
                     <div className="flex justify-center  gap-3 mt-3 w-fit items-center border capitalize sf-medium border-[#E4E4E4] py-3 px-4 rounded-[10px] font-normal text-sm text-[#333333] cursor-pointer outline-none relative bg-white ">
                     <div className="capitalize   rounded" key={index}>{item?.cityName}</div>
                         {/* <FaTrash onClick={()=>handleDelete(item)} color="red" size={14}/> */}
-                            <Link onClick={()=>handleDelete(item)} className="text-slate-50 bg-red-600/90 w-5 h-5 flex justify-center items-center rounded-full text-[10px]"> ✕</Link>
+                            <Link onClick={()=>handleDelete(item,'city')} className="text-slate-50 bg-red-600/90 w-5 h-5 flex justify-center items-center rounded-full text-[10px]"> ✕</Link>
                     </div>
                 )
             } )}
         </div>
-{/* {console.log(userData,'sss')} */}
 
 
 
