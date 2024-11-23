@@ -10,7 +10,7 @@ import { SERVER_URL } from "../../api";
 import { errorToast, successToast } from "../../toast";
 // import CitiesDropdown from "../../components/AddProject/CitiesDropdown";
 import DevelopersDropdown from "../../components/AddProject/DevelopersDropdown";
-import FacilitiesAndAmenities from "../../components/AddProject/FacilitiesAndAmenities";
+// import FacilitiesAndAmenities from "../../components/AddProject/FacilitiesAndAmenities";
 import PaymentOptions from "../../components/PaymentOptions";
 import NearbyAreas from "../../components/AddProject/NearbyAreas";
 import PriorityDropdown from "../../components/PriorityDropdown";
@@ -18,6 +18,7 @@ import AdsOptionDropdown from "../../components/AddProject/AdsOptionDropdown";
 import PropertyTypeDropdown from "./PropertyTypeDropdown";
 import CitiesDropdown from "./CitiesDropdown";
 import { FaTrash } from "react-icons/fa";
+import FacilitiesAndAmenities from "./FacilitiesAndAmenities";
 // import PropertyTypeDropdown from "./PropertyTypeDropdown";
 
 
@@ -38,6 +39,10 @@ function AdminPropertyOtherEditPage() {
   const handleClear = () => {
     setClearForms(!clearForms); // Trigger clearing
   };
+
+  const [facilities, setFacilities] = useState([]);
+
+
   const [existPriorities, setExistPriorities] = useState([]);
   const [priorityValue, setPriorityValue] = useState({status:false,value:''});
   const { projectId } = useParams();
@@ -68,6 +73,8 @@ console.log(state,'state')
             cityDetails: state.cityDetails,
             developerDetails : state.developerDetails
         });
+
+        setFacilities(state.facilities);
 
     }
   },[])
@@ -220,16 +227,17 @@ for (const element of obj) {
        
         propertyType: [],
         cities:[],
-        facilities:[],
+        facilities:userData.facilities || [],
 
         developer: "",
-        paymentOptions:[],
-        nearbyAreas:'',
+        paymentOptions:userData.paymentOptions || [],
+        nearbyAreas: userData.nearbyAreas || [],
         priority: "",
-        ...userData
+        // ...userData
       }}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
+      ed
     >
       {({ setFieldValue, values,errors }) => (
         <Form className="flex-wrap flex">
@@ -346,12 +354,24 @@ for (const element of obj) {
 
 
 
+
+
+
+
+
               <FacilitiesAndAmenities
                 name="facilities"
                 clear={clearForms}
                 value={values.facilities}
                 onChange={setFieldValue}
+                existingData={facilities}
               />
+
+
+
+
+
+              
 
               <PaymentOptions
                 name="paymentOptions"
@@ -431,10 +451,10 @@ priorityValue={priorityValue}
 
 
            {/* Debug */}
-           {/* <div className="mt-4">
+           <div className="mt-4">
             <pre>{JSON.stringify(values, null, 2)}</pre>
             <pre>{JSON.stringify(errors, null, 2)}</pre>
-          </div> */}
+          </div>
 
           <div className="flex-1 sticky flex-wrap top-2 h-full px-5">
      
