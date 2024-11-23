@@ -47,7 +47,7 @@ function AdminPropertyOtherEditPage() {
     propertyType: [],
     cities:[],
     facilities:[],
-
+    developerDetails:{},
     developer: "",
     paymentOptions:[],
     nearbyAreas:'',
@@ -116,7 +116,7 @@ console.log(state,'state')
     console.log(event,'er')
     // console.log(state)
     // if(!state?.propertyType?.length > 0) errorToast('Please select a property type')
-        if(!state?.cities?.length > 0) errorToast('Please select a city')
+        // if(!state?.cities?.length > 0) errorToast('Please select a city')
             // if(!state?.developer) errorToast('Please select developer')
     // return true;
     
@@ -133,9 +133,9 @@ for (const element of obj) {
         data.cities = data.cities.map(city => city._id)
       }
 
-    //      if(data.developer){
-    //     data.developer = data.developer.id;
-    //   }
+         if(data.developer){
+        data.developer = data.developer.id;
+      }
 
     console.log('[Data]: => ', data)
     const response = await axios.put(`${SERVER_URL}/property/update-other-options/${projectId}`, data, {
@@ -237,6 +237,8 @@ for (const element of obj) {
             <div className="flex-1">
              
 
+<div className="mb-14">
+
   {/* Property Type Dropdown */}
   <PropertyTypeDropdown
             clearForms={clearForms}
@@ -262,12 +264,15 @@ for (const element of obj) {
                 )
             } )}
         </div>
+</div>
 
 
 
 
 
 
+
+<div className="mb-10">
 
               {/*  */}
               <CitiesDropdown
@@ -294,7 +299,23 @@ for (const element of obj) {
             } )}
         </div>
 
+        </div>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div className="mb-14">
 
               <DevelopersDropdown
                 name="developer"
@@ -304,11 +325,25 @@ for (const element of obj) {
                 onChange={setFieldValue}
                 isLoading={isLoading}
                 options={developers}
+                existingData={userData.developerDetails}
               />
 
-<div className=" flex gap-3 mb-3">
-            {userData?.developerDetails && <div className="capitalize bg-slate-200 mt-3 w-fit px-6 py-2 rounded">{userData?.developerDetails?.developerName}</div> }
-        </div>
+<div className="flex justify-center  gap-3 mt-3 w-fit items-center  capitalize sf-bold border-[#E4E4E4] py-3 px-4 rounded-[10px] font-normal text-sm text-[#333333] cursor-pointer outline-none relative bg-white ">Already existing : </div>
+
+        <div className="flex justify-center  gap-3 mt-3 mb-5 w-fit items-center border capitalize sf-medium border-[#E4E4E4] py-3 px-4 rounded-[10px] font-normal text-sm text-[#333333] cursor-pointer outline-none relative bg-white ">
+                    <div className="capitalize rounded">{userData?.developerDetails?.developerName}</div>
+                        {/* <FaTrash onClick={()=>handleDelete(item)} color="red" size={14}/> */}
+                    </div>
+                
+                    </div>
+
+
+
+
+
+
+
+
 
 
               <FacilitiesAndAmenities
