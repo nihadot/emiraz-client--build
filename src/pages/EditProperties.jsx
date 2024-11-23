@@ -8,10 +8,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 function EditProperties() {
 
-  const { data } = useSelector((state) => state.property); 
-
   const dispatch = useDispatch();
-
+const [data,setData] = useState([]);
   const [refresh,setRefresh] = useState(true);
   
 
@@ -21,18 +19,12 @@ function EditProperties() {
 
   const fetchdata =async ()=>{
     try {
-      dispatch(setLoading());
-      const response = await getProperties()
-      dispatch(fetchProperties(response));
-
+      const response = await getProperties();
+      setData(response?.result);
     } catch (error) {
-      if (error.response && error.response.data) {
-        dispatch(setError(error.response.data.message));
-        errorToast(error.response.data.message)
-      } else {
-        dispatch(setError('An error occurred during login.'));
-        errorToast('An error occurred during login.');
-      }
+   
+        errorToast(error?.response?.data?.message || error?.message || 'Error occurred while fetching properties')
+  
     }
     }
 
@@ -45,12 +37,16 @@ function EditProperties() {
         return errorToast(error.response.data.message || error.message || 'error occurs!')
       }
     }
-  
-
+    
   return (
-
+    <div className="">
+         <div className="sticky z-50 top-0 bg-white flex justify-between py-6">
+          <h1 className="sf-medium font-medium text-5xl">View Projects</h1>
+        </div>
     <div className='grid h-fit grid-cols-3 gap-2 flex-wrap'>
-        { data && data?.map((item)=> <Cards handleDelete={handleDelete} refresh={refresh} setRefresh={setRefresh} key={item._id} item={item} /> )}
+       
+        { data && data?.map((item)=> <Cards view handleDelete={handleDelete} refresh={refresh} setRefresh={setRefresh} key={item._id} item={item} /> )}
+    </div>
     </div>
   )
 }

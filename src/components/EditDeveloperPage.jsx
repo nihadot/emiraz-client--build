@@ -1,321 +1,357 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import PlaceHolder from "../assets/placeholder/placeholder-image.png";
 import { errorToast, successToast } from "../toast";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import {
-  editDeveloperSuccess,
-  setError,
-  setLoading,
-} from "../features/developerSlice";
-import { MAIN_IMAG_URL, deletePriorityByIdMatching, fetchDevelopersPrioritesAPI, updateDeveloper } from "../api";
-import { FaAngleDown, FaAngleUp, FaEye, FaEyeSlash } from "react-icons/fa";
 import UploadingImage from "./uploading/UploadingImage";
 import { CiCircleRemove } from "react-icons/ci";
+import { FaAngleDown, FaAngleUp } from "react-icons/fa";
+import { addingDeveloper, fetchCityPrioritesAPI, fetchDeveloperByIdAPI, fetchDevelopersPrioritesAPI, updateDeveloper } from "../api";
+import { CLOUDINARY_NAME, CLOUDINARY_PERSISTENT } from "../api/localstorage-varibles";
+import axios from "axios";
+import Lazyloading from "./Lazyloading/Lazyloading";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
-function EditDeveloperPage() {
-  const { state } = useLocation();
-  const dispatch = useDispatch();
+function AddUser() {
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
+
   const [priority, setPriority] = useState(false);
-  // --------------------------------------------
+  const [priorityCount, setPriorityCount] = useState([]);
+  const {id} = useParams();
+  const priorityList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
-  const [image, setImage] = useState("");
+  const [imageState, setImageState] = useState();
 
-  // -----------------------------------------------------
-  const [formData, setFormData] = useState({
-    contactNumber: "",
-    developerName: "",
-    preview: "",
-    username: "",
-    priority:"",
-    password: "",
+  const validationSchema = Yup.object().shape({
+    developerName: Yup.string()
+      .required("Developer Name is required")
+      .min(3, "Minimum 3 characters required")
+      .max(50, "Maximum 50 characters allowed"),
+    password: Yup.string()
+      .required("Password is required")
+      .min(8, "Password must be at least 8 characters")
+      .max(20, "Password must not exceed 20 characters"),
+    username: Yup.string()
+      .required("Username is required")
+      .min(3, "Minimum 3 characters required")
+      .max(20, "Maximum 20 characters allowed"),
+    priority: Yup.string().optional(),
   });
-  // -----------------------------------------------------
-  const removeImage = () => {
-    setFormData({ ...formData, preview: "" });
-    setImage("");
-  };
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-  // -------------------------------------------------
+  // useEffect(() => {
+  //   fetchdata()
+  // }, [])
+  const navigate = useNavigate();
 
-  const [visible, setVisible] = React.useState("password");
-  const [priorityCount,setPriorityCount] = useState([]);
-  const handleSubmit = async (e) => {
-    try {
-      e.preventDefault();
-      setIsLoading(true);
-      const formDataFields = new FormData();
-      formDataFields.append("developerName", formData.developerName);
-      formDataFields.append("contactNumber", formData.contactNumber);
-      formDataFields.append("username", formData.username);
-      formDataFields.append("password", formData.password);
-      formDataFields.append("priority", formData.priority);
 
-      if (image) {
-        formDataFields.append("mainImgaeLink", image);
-      }
-      formDataFields.append("_id", formData._id);
+  const { state } = useLocation();
 
-      dispatch(setLoading());
-      await updateDeveloper(formDataFields);
-      dispatch(editDeveloperSuccess());
-      successToast("Updated");
-      navigate("/admin/developers");
-      setIsLoading(false);
-    } catch (error) {
-      if (error.response && error.response.data) {
-        dispatch(setError(error.response.data.message));
-        errorToast(error.response.data.message);
-      } else {
-        dispatch(setError("An error occurred during login."));
-        errorToast("An error occurred during login.");
-      }
-      setIsLoading(false);
+  const [formData, setFormData] = useState({
+    developerName: "",
+    password: "",
+    username: "",
+    priority: "",
+    image: {
+      secure_url: '',
+      width: '',
+      height: '',
+      size: '',
+      url: '',
+      public_id: '',
+      bytes: '',
     }
-  };
+  });
+
 
   React.useEffect(() => {
-    setFormData({ ...state });
-    setImage(state.mainImgaeLink);
+    if (state) {
+
+      setFormData({
+        developerName: state.developerName,
+        password: state.password,
+        username: state.username,
+        priority: state.priority,
+        _id: state._id,
+
+      });
+      setImageState({
+        secure_url: state?.imageFile?.secure_url || '',
+        url: state?.imageFile?.url || '',
+        bytes: state?.imageFile?.bytes || '',
+        width: state?.imageFile?.width || '',
+        height: state?.imageFile?.height || '',
+      });
+    } else {
+      fetchDevelopersAPI()
+    }
     fetchData()
+
   }, [state]);
 
-  const fetchData =async ()=>{
+
+
+  const fetchDevelopersAPI = async () => {
+    try {
+      const response = await axios.get(`${SERVER_URL}/developer/${id}`);
+      setFormData({
+        developerName: state.developerName,
+        password: state.password,
+        username: state.username,
+        priority: state.priority,
+        _id: state._id,
+      });
+
+      setImageState({
+        secure_url: response.data.result?.imageFile?.secure_url || '',
+        url: response.data.result?.imageFile?.url || '',
+        bytes: response.data.result?.imageFile?.bytes || '',
+        width: response.data.result?.imageFile?.width || '',
+        height: response.data.result?.imageFile?.height || '',
+      });
+    } catch (error) {
+      errorToast(error?.response?.data?.message || error?.message || "error occur");
+    }
+  }
+
+
+
+  const fetchData = async () => {
     try {
       const fetchPriorityResponse = await fetchDevelopersPrioritesAPI();
       setPriorityCount(fetchPriorityResponse.result)
     } catch (error) {
-      errorToast(error.response.data.message || error.message || "error occur");
+      errorToast(error?.response?.data?.message || error?.message || "Error occurred");
+
     }
   }
 
-
-  const priorityList = [1,2,3,4,5,6,7,8,9,10,11,12];
-
-  const handlePriority = (prioty) =>{
-    setPriority(!priority);
-    setFormData({ ...formData, priority: prioty });
-  }
-
-  const deletePriority = async(id)=>{
-    
+  const handleSubmit = async (values, { resetForm }) => {
     try {
 
-      const status = window.confirm("Are you want to delete this?")
-      if(status){
-        await deletePriorityByIdMatching(id,'developer');
-        successToast('Deleted')
-        navigate(`/admin/developers`)
-      }
-      
-    } catch (error) {
-      errorToast(error.response.data.message || error.message || "error occur");
-    }
-  }
+      const data = {
+        developerName: values.developerName,
+        password: values.password,
+        username: values.username,
+        priority: values.priority,
 
+        imageFile: {},
+      };
+
+
+      setIsLoading(true);
+
+      // Simulate an image upload process if required
+      if (values.image) {
+        const formData = new FormData();
+        formData.append("file", values.image);
+        formData.append("upload_preset", CLOUDINARY_PERSISTENT); // Replace with your actual preset
+        formData.append("folder", "developers_images"); // Replace with your specific folder name
+        const response = await axios.post(`https://api.cloudinary.com/v1_1/${CLOUDINARY_NAME}/image/upload`, formData);
+        const imageFile = {
+          public_id: response.data.public_id,
+          secure_url: response.data.secure_url,
+          url: response.data.url,
+          bytes: response.data.bytes,
+          width: response.data.width,
+          height: response.data.height,
+        }
+        data.imageFile = imageFile;
+      }
+
+      await updateDeveloper(data,id);
+      // Simulate a success toast
+      successToast("User successfully added");
+      values.priority && setPriorityCount(prev => [...prev, values.priority])
+
+      resetForm();
+      navigate("/admin/developers");
+      setIsLoading(false);
+    } catch (error) {
+      const errorMsg = error.response?.data?.message || error?.message || "An error occurred during the operation.";
+      errorToast(errorMsg);
+      setIsLoading(false);
+    }
+  };
+
+
+   // Initial values for Formik
+   const initialValues = {
+    developerName: formData?.developerName || '',
+    password: formData?.password || '',
+    username: formData?.username || '',
+    priority: formData?.priority || '',
+  };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-wrap">
-      <div className="flex-1">
-        {/* Developer Name */}
-        <div className="flex flex-col gap-2 mx-3">
-          <label
-            htmlFor="developerName"
-            className="sf-medium font-medium text-sm text-[#000000]"
-          >
-            Proprety Headline
-          </label>
-          <input
-            autoComplete="name"
-            value={formData.developerName}
-            name="developerName"
-            onChange={handleChange}
-            type="text"
-            id="developerName"
-            placeholder="Name"
-            title="Developer Name"
-            className="border border-[#E4E4E4] py-4 px-5 rounded-[10px] font-extralight sf-normal text-sm text-[#666666]  outline-none"
-          />
-        </div>
+    <Formik
+      initialValues={initialValues}
+      enableReinitialize
 
-        {/* Username */}
-        <div className="flex flex-col gap-2 mx-3">
-          <label
-            htmlFor="Username"
-            className="sf-medium font-medium text-sm text-[#000000]"
-          >
-            User Name
-          </label>
-          <input
-            autoComplete="username"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            type="text"
-            id="username"
-            placeholder="Username"
-            className="border border-[#E4E4E4] py-4 px-5 rounded-[10px] sf-normal font-extralight text-sm text-[#666666]  outline-none"
-          />
-        </div>
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+    >
+      {({ setFieldValue, values }) => (
+        <Form className="">
+          <div className="flex flex-wrap">
 
-        {/* Password */}
-        <div className="relative flex flex-col gap-2 mt-3 mx-3">
-          <label
-            htmlFor="password"
-            className="sf-medium font-medium text-sm text-[#000000]"
-          >
-            Password
-          </label>
-          <input
-            name="password"
-            onChange={handleChange}
-            value={FormData.password}
-            autoComplete="current-password"
-            type={visible}
-            id="password"
-            placeholder="Enter your Password"
-            className="border border-[#E4E4E4] font-extralight py-4 ps-5 pe-16 rounded-[10px] sf-normal text-sm text-[#666666]  outline-none"
-          />
-          <div className="absolute right-7   top-11">
-            {visible === "password" ? (
-              <FaEye size={20} onClick={() => setVisible("text")} />
-            ) : (
-              <FaEyeSlash size={20} onClick={() => setVisible("password")} />
-            )}
-          </div>
-        </div>
+            <div className="flex-1">
+              {/* Developer Name */}
+              <div className="flex flex-col gap-2">
+                <label htmlFor="developerName" className="font-medium text-sm">
+                  Developer Name <span className="text-lg text-red-600">*</span>
+                </label>
+                <Field
+                  name="developerName"
+                  type="text"
+                  placeholder="Enter developer name"
+                  className="border py-4 px-5 rounded-[10px]  text-sm"
+                />
+                <ErrorMessage name="developerName" component="div" className="text-red-500 text-sm" />
+              </div>
 
-        {/* Contact Number */}
-        {/* <div className="flex flex-col gap-2 mt-3 mx-3">
-          <label
-            htmlFor="contactNumber"
-            className="sf-medium font-medium text-sm text-[#000000]"
-          >
-            Contact Number
-          </label>
-          <input
-            autoComplete="cc-number"
-            name="contactNumber"
-            value={formData.contactNumber}
-            onChange={handleChange}
-            type="number"
-            id="contactNumber"
-            placeholder="Contact Number"
-            className="border border-[#E4E4E4] font-extralight py-4 px-5 rounded-[10px] sf-normal text-sm text-[#666666]  outline-none"
-          />
-        </div> */}
+              {/* Password */}
+              <div className="flex mt-3 flex-col gap-2">
+                <label htmlFor="password" className="font-medium text-sm">
+                  Password <span className="text-lg text-red-600">*</span>
+                </label>
+                <Field
+                  name="password"
+                  type="password"
+                  placeholder="Enter password"
+                  className="border py-4 px-5 rounded-[10px]  text-sm"
+                />
+                <ErrorMessage name="password" component="div" className="text-red-500 text-sm" />
+              </div>
 
-            {/* Priority */}
-            <div className="flex flex-col gap-2 mx-3 relative">
-          <label
-            htmlFor="priority"
-            className="sf-medium font-medium text-sm text-[#000000]"
-          >
-            Priority
-          </label>
-   
-          <div
-            onClick={() => setPriority(!priority)}
-            className="flex cursor-pointer border w-full border-[#E4E4E4] py-4 px-5 rounded-[10px] sf-normal font-extralight text-sm text-[#666666]  outline-none"
-          >
-            <span>{formData.priority ? formData.priority : "Select anyone"}</span>
-            <span className="absolute right-5 top-12">
-              {priority ? <FaAngleUp /> : <FaAngleDown />}
-            </span>
-          </div>
-          {priority && (
-            <div className="z-20 absolute rounded-[10px] top-24 bg-white w-full border p-3">
-              {priorityList &&
-                priorityList.map((item, i) => (
-                  priorityCount && priorityCount?.find((i)=> parseInt(i) === parseInt(item) )  ? <p
-                  key={i}
-                  
-                  className="cursor-not-allowed py-1 text-red-400"
+              {/* Username */}
+              <div className="flex mt-3 flex-col gap-2">
+                <label htmlFor="username" className="font-medium text-sm">
+                  Username <span className="text-lg text-red-600">*</span>
+                </label>
+                <Field
+                  name="username"
+                  type="text"
+                  placeholder="Enter username"
+                  className="border py-4 px-5 rounded-[10px]  text-sm"
+                />
+                <ErrorMessage name="username" component="div" className="text-red-500 text-sm" />
+              </div>
+
+
+
+              {/* Priority */}
+              <div className="flex mt-3 flex-col gap-2 relative mb-6">
+                <label htmlFor="priority" className="sf-medium font-medium text-sm text-[#000000]">
+                  Priority <span className="text-xs text-slate-700/60">(options)</span>
+                </label> 
+                <div
+                  onClick={() => setPriority(!priority)}
+                  className="flex cursor-pointer border w-full border-[#E4E4E4] py-4 px-5 rounded-[10px] sf-normal font-extralight text-sm text-[#666666] outline-none"
                 >
-                  {item} Not available
-                </p> :
-                  
-                  <p
-                    key={i}
-                    onClick={() => handlePriority(item)}
-                    className="py-1 cursor-pointer"
-                  >
-                    {item}
-                  </p>
-                ))}
+                  <span>{values.priority || "Select anyone"}</span>
+                  <span className="absolute right-5 top-12">
+                    {priority ? <FaAngleUp /> : <FaAngleDown />}
+                  </span>
+                </div>
+                {priority && (
+                  <div className="z-50 absolute rounded-[10px] top-24 bg-white w-full border p-3">
+
+                    <p onClick={() => {
+                      setFieldValue("priority", undefined);
+                      setPriority(false);
+                    }} className="">
+                      Choose anyone
+                    </p>
+                    {priorityList.map((item, i) =>
+                      priorityCount.includes(item) ? (
+                        <p key={i} className="cursor-not-allowed py-1 text-red-400">
+                          {item} Not available
+                        </p>
+                      ) : (
+                        <p
+                          key={i}
+                          onClick={() => {
+                            setFieldValue("priority", item);
+                            setPriority(false);
+                          }}
+                          className="py-1 cursor-pointer"
+                        >
+                          {item}
+                        </p>
+                      )
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
-          )}
 
-              { formData.priority &&  <label
-          onClick={()=>deletePriority(formData._id)}
-            htmlFor="delte"
-            className="sf-medium cursor-pointer font-medium text-sm text-red-500"
+            <div className="px-4 flex-1">
+              {/* Image Upload */}
+              <h1 className="mb-3 text-4xl font-medium">Media <span className="text-lg text-red-600">*</span></h1>
+              {/* <h2 className="font-medium text-sm mb-3">Profile Image</h2> */}
+              <div className="flex gap-3 items-center">
+                <div className="w-80 h-64 relative rounded-[10px] overflow-hidden">
+                  <img
+                                    src={values.preview || imageState?.secure_url || PlaceHolder}
+
+                    alt="placeholder"
+                    className=" flex justify-center items-center relative  rounded-[20px] overflow-hidden lg:h-[252px] sm:w-[180px] h-[172px] object-contain  lg:w-[264px]"
+                  />
+                  {values.preview && (
+                    <span
+                      onClick={() => {
+                        setFieldValue("image", "");
+                        setFieldValue("preview", "");
+                      }}
+                      className="absolute top-2 left-3 cursor-pointer"
+                    >
+                      <CiCircleRemove className="text-red-600" size={24} />
+                    </span>
+                  )}
+                </div>
+                <UploadingImage
+                  isLoading={isLoading}
+                  onError={(error) => errorToast(error)}
+                  previewUrl={(url) => setFieldValue("preview", url)}
+                  selectedFile={(file) => {
+                    setFieldValue("image", file);
+                  }}
+                />
+              </div>
+              <ErrorMessage name="image" component="div" className="text-red-500 text-sm" />
+
+              {/* Submit */}
+              <div className="p-3 text-lg">
+                <button
+                  disabled={isLoading}
+                  type="submit"
+                  className="w-52 h-11 bg-black text-white hover:bg-gray-600 flex justify-center items-center rounded"
+                >
+                  {isLoading ? "Loading..." : "Save"}
+                </button>
+              </div>
+            </div>
+          </div>
+
+
+          {/* preview */}
+          <div
+
+            className="cursor-pointer relative overflow-hidden p-5 lg:h-[252px] sm:w-[180px] h-[172px]  lg:w-[264px] rounded-[15px] flex justify-center items-center border"
           >
-            delete
-          </label>}
-          </div>
-      </div>
+            {values.priority && <span className="flex absolute top-2 right-2 rounded-full w-9 h-9 bg-black z-40 text-white justify-center items-center">{values.priority}</span>}
 
-      <div className="px-4 flex-1">
-        {/*  Main image */}
-        <h1 className="mb-3 text-4xl font-medium sf-medium">Media</h1>
-        <h2 className="sf-medium font-medium text-sm mb-3">Main Image</h2>
-        <div className="flex gap-3 items-center">
-          <div className="w-80 h-64 relative flex justify-center items-center  rounded-[20px] overflow-hidden">
-            <img
-              src={
-                formData.preview
-                  ? formData.preview
-                  : image
-                  ? `${MAIN_IMAG_URL}/${image}`
-                  : PlaceHolder
-              }
-              alt="placeholder"
-              className="object-cover"
-            />
-            {formData.preview && (
-              <span
-                onClick={removeImage}
-                className=" absolute top-2 left-3  cursor-pointer"
-              >
-                {" "}
-                <CiCircleRemove className="text-red-600 " size={24} />{" "}
-              </span>
-            )}
-          </div>
+            <Lazyloading
+                         src={values.preview || imageState?.secure_url || PlaceHolder}
 
-          <div className="">
-            <UploadingImage
-              onError={(error) => {
-                errorToast(error);
-              }}
-              previewUrl={(e) => {
-                setFormData({ ...formData, preview: e });
-              }}
-              selectedFile={(file) => setImage(file)}
+              alt={values?.developerName}
+              className={"my-10  object-contain max-h-[120px]"}
             />
           </div>
-        </div>
-
-        {/* submit */}
-
-        <div className="p-3 poppins-semibold text-lg">
-          <button
-            disabled={isLoading}
-            type="submit"
-            className="w-52 h-11 bg-[#000000] text-[#ffffff] hover:bg-[#666666] flex justify-center items-center rounded-[4px] cursor-pointer"
-          >
-            {isLoading ? "loading..." : "Save"}
-          </button>
-        </div>
-      </div>
-    </form>
+        </Form>
+      )}
+    </Formik>
   );
 }
 
-export default EditDeveloperPage;
+export default AddUser;

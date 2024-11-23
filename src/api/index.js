@@ -24,8 +24,8 @@ import {
 } from "./api-end-points";
 import { ADMIN_TOKEN, AGENCY_TOKEN } from "./localstorage-varibles";
 
-// export const SERVER_URL = `http://localhost:4000/api/v1`;
-export const SERVER_URL = 'https://www.propertyseller.ae/api/v1';
+export const SERVER_URL = `http://localhost:4000/api/v1`;
+// export const SERVER_URL = 'https://www.propertyseller.ae/api/v1';
 export const MAIN_IMAG_URL = `${SERVER_URL}/mainImage`;
 export const SMALL_IMAG_URL = `${SERVER_URL}/smallImage`;
 // const MAIN_IMAG_URL = `${SERVER_URL}/mainImgae/`
@@ -120,7 +120,7 @@ export const deleteSideBanners = async (id) => {
 // ==========================//
 
 // ========GET=PROPERTIES========//
-export const getProperties = async (query) => {
+export const getProperties = async (query = '') => {
   try {
     const response = await axios.get(`${SERVER_URL}/${PROPERTY}?${query}`);
     return response.data;
@@ -227,9 +227,9 @@ export const getDevelopers = async () => {
 };
 // ==========================//
 // ========UPDATE=DEVELOPERS=========//
-export const updateDeveloper = async (data) => {
+export const updateDeveloper = async (data,id) => {
   try {
-    const response = await axios.put(`${SERVER_URL}/${DEVELOPER}/`, data, {
+    const response = await axios.put(`${SERVER_URL}/${DEVELOPER}/${id}`, data, {
       headers: { Authorization: `Bearer ${localStorage.getItem(ADMIN_TOKEN)}` },
     });
     return response.data;
@@ -418,9 +418,9 @@ export const deleteClientLogo = async (id) => {
 };
 // ==========================//
 // ========UPDATE=CITY========//
-export const updateCity = async (data) => {
+export const updateCity = async (data,id) => {
   try {
-    const response = await axios.put(`${SERVER_URL}/${CITY}/`, data, {
+    const response = await axios.put(`${SERVER_URL}/${CITY}/${id}`, data, {
       headers: { Authorization: `Bearer ${localStorage.getItem(ADMIN_TOKEN)}` },
     });
     return response.data;
@@ -666,6 +666,16 @@ export const fetchDevelopersPrioritesAPI = async () => {
 export const fetchCityPrioritesAPI = async () => {
   try {
     const response = await axios.get(`${SERVER_URL}/${PRIORITY}/${CITY}`);
+    return response.data;
+  } catch (error) {
+    throw error || "An error occurred during login.";
+  }
+};
+
+
+export const fetchDeveloperByIdAPI = async (id) => {
+  try {
+    const response = await axios.get(`${SERVER_URL}/developer/${id}`);
     return response.data;
   } catch (error) {
     throw error || "An error occurred during login.";

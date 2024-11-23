@@ -24,7 +24,12 @@ import { useEffect } from "react";
 import { GiReceiveMoney } from "react-icons/gi";
 import { useNavigate } from "react-router-dom";
 
-function PropertiesCard({ item,handleDelete,disableDelete = false }) {
+function PropertiesCard({ view,item,handleDelete,disableDelete = false }) {
+
+
+  const formattedDate = item?.handoverDate
+  ? new Date(item.handoverDate).toISOString().split('T')[0] // Extract YYYY-MM-DD
+  : 'N/A';
 
   const navigate = useNavigate()
   const handleShare = (title, url) => {
@@ -39,13 +44,13 @@ function PropertiesCard({ item,handleDelete,disableDelete = false }) {
     }
   };
 
-  const result = item.propertyType.map((i, index) => {
+  const propertyTypesResult = item?.propertyType?.map((i, index) => {
     return (
       <p key={index}>
-        {i.name} {item.propertyType?.length > index + 1 && ","}
+        {i} {item?.propertyType?.length > index + 1 && ","}
       </p>
     );
-  });
+  }) ;
   useEffect(() => {
     const indicators = document.querySelectorAll(".swiper-pagination");
 
@@ -73,8 +78,52 @@ function PropertiesCard({ item,handleDelete,disableDelete = false }) {
     // console.log(indicators,'indicators')
   }, []);
 
+
+
+  const FirstImage =item && (
+    <SwiperSlide className="relative">
+    { item?.isSold && <div className="w-full h-full bg-black/60 absolute z-50 text-white flex justify-center items-center sf-bold text-[35px]">Sold Out</div>}
+
+      { !view && <Lazyloading
+        src={item?.imageFile ? URL.createObjectURL(item?.imageFile) : PlaceHolder}
+        className="w-full h-full object-cover"
+        alt={item?.projectTitle}
+      />}
+
+      {
+        view &&<Lazyloading
+        src={item?.imageFile?.secure_url}
+        className="w-full h-full object-cover"
+        alt={item?.projectTitle}
+      />
+      }
+    </SwiperSlide>
+  )
+
+  const OtherImages = item && item?.imageFiles?.map((i, index) => {
+    return (
+      <SwiperSlide key={index} className="relative">
+    {  item?.isSold && <div className="w-full h-full bg-black/60 absolute z-50 text-white flex justify-center items-center sf-bold text-[35px]">Sold Out</div>}
+
+       { !view &&  <Lazyloading
+          src={`${ i  && URL.createObjectURL(i)}`}
+          className="w-full border-radious-20 h-full object-cover"
+          alt={item?.projectTitle}
+        />}
+{/* {console.log(i.secure_url,'i?.secure_url')} */}
+        {
+          view &&<Lazyloading
+          src={i.secure_url}
+          className="w-full border-radious-20 h-full object-cover"
+          alt={item?.projectTitle}
+        />
+        }
+      </SwiperSlide>
+    );
+  })
+
   return (
-    <div className="card-container  border-radious-20 overflow-hidden">
+    <div className="card-container max-w-[370px] w-full border-radious-20 overflow-hidden">
       <div className="card-slider relative border-radious-20 overflow-hidden">
         <Swiper
           cssMode={true}
@@ -86,35 +135,12 @@ function PropertiesCard({ item,handleDelete,disableDelete = false }) {
           modules={[Navigation, Pagination, Mousewheel, Keyboard]}
           className="mySwiper"
         >
-          {item.mainImgaeLink && (
-            <SwiperSlide className="relative">
-            { item.isSold && <div className="w-full h-full bg-black/60 absolute z-50 text-white flex justify-center items-center sf-bold text-[35px]">Sold Out</div>}
-
-              <Lazyloading
-                src={`${
-                  item.mainImgaeLink
-                    ? MAIN_IMAG_URL + "/" + item.mainImgaeLink
-                    : PlaceHolder
-                }`}
-                className="w-full h-full object-cover"
-                alt={item.propretyHeadline}
-              />
-            </SwiperSlide>
-          )}
-          {item.smallImage.map((i, index) => {
-            return (
-              <SwiperSlide key={index} className="relative">
-            { item.isSold && <div className="w-full h-full bg-black/60 absolute z-50 text-white flex justify-center items-center sf-bold text-[35px]">Sold Out</div>}
-
-                <Lazyloading
-                  src={`${i ? SMALL_IMAG_URL + "/" + i : PlaceHolder}`}
-                  className="w-full border-radious-20 h-full object-cover"
-                  alt={item.propretyHeadline}
-                />
-              </SwiperSlide>
-            );
-          })}
+          {FirstImage || ''}
+          {OtherImages || ''}
         </Swiper>
+        { item.priority &&  <span className="flex absolute top-3 right-3 rounded-full w-9 h-9 bg-black z-40 text-white justify-center items-center">{item.priority}</span>}
+        { item.draft &&  <span className="flex absolute top-14 right-3 rounded-lg w-16 h-9 bg-black z-40 text-white justify-center items-center">Draft</span>}
+
 
         {/* desktop */}
         {/* <div className="hidden absolute w-full md:flex justify-between  z-30 px-4 top-4 left-0 ">
@@ -152,10 +178,12 @@ function PropertiesCard({ item,handleDelete,disableDelete = false }) {
         {/* desktop */}
 
         <div className="flex  absolute w-full justify-between  z-30 px-4 top-4 left-0 ">
-          <div className="">
+          <div className=" w-full ">
             <div className="  flex items-center w-[170px]  bg-[#000000] text-[#ffffff]  h-[20px] justify-center gap-3  rounded-[3px] ">
+
               <p className="uppercase poppins font-semibold text-[10px]">
-                HandOver Date : {item.handoverDate}
+                HandOver Date : {formattedDate}
+                {/* {console.log(item.handoverDate,'sdsd')} */}
               </p>
             </div>
             {item?.isChecked && (
@@ -165,12 +193,13 @@ function PropertiesCard({ item,handleDelete,disableDelete = false }) {
                 </p>
               </div>
             )}
+
           </div>
           <div
             onClick={() =>
               handleShare(
-                item.propretyHeadline,
-                `property/${item.propretyHeadline
+                item.projectTitle,
+                `property/${item.projectTitle
                   .trim()
                   .toLowerCase()
                   .replace(/\s+/g, "-")}/${item._id}`
@@ -184,52 +213,54 @@ function PropertiesCard({ item,handleDelete,disableDelete = false }) {
       </div>
       <div className="px-5 py-3 poppins-medium">
         <div className="text-[#545454] font-normal text-xs  flex justify-between items-center">
-          <div className="capitalize flex gap-0.5">{result}</div>
+          <div className="capitalize flex gap-0.5">{propertyTypesResult}</div>
           <div className="flex gap-2 justify-center items-center">
             <FaBed color="#545454" size={18} />
-            <span className="font-normal text-[10px]">{item.beds}</span>
+            <span className="font-normal text-[10px] max-w-[200px]">{item.beds}</span>
           </div>
         </div>
         <div className=" poppins-semibold text-[#000000] text-xl mt-3">
-          <h1
+          { item?.projectTitle ? <h1
             className="overflow-hidden w-full whitespace-nowrap"
             style={{ textOverflow: "ellipsis" }}
           >
-            {item.propretyHeadline}
-          </h1>
+            {item.projectTitle}
+          </h1> : <h1 className="h-7"></h1>}
         </div>
         <div className="poppins-semibold text-[#000000] text-base mt-3">
           <h1 className="font-medium">
             Starting from{" "}
-            <span className="font-bold text-xl">{item.price}</span>
+            <span className="font-bold text-xl">{item.priceInAED}</span>
           </h1>
         </div>
 
         <div className="flex justify-start items-center gap-1 mt-3">
           <IoLocationSharp  size={19} className="-ms-1 ps-0" color="#545454" />
-          <p className="font-normal poppins text-xs text-[#545454]">
-            {item.address}
+          <p className="font-normal line-clamp-1 poppins text-xs text-[#545454]">
+            {item?.address}
           </p>
         </div>
         <div className="flex items-center gap-1 mt-3">
           <FaBuilding color="#545454" size={15} />
-          <p className="font-semibold text-[10px] poppins">
-            {item.developerInfo.developerName}
+          <p className=" capitalize font-semibold text-[10px] poppins">
+            { view ? item?.developerDetails?.developerName : item?.developer?.developerName}
           </p>
         </div>
 
         <div className="mt-5 mb-2.5 flex gap-2">
           <button
+          disabled={!view}
             onClick={() =>
-              navigate(`/admin/edit-property/${item._id}`, { state: item })
+              navigate(`/admin/edit-property-page/${item._id}`, { state: item })
             }
-            className="flex-1 py-2.5 rounded font-semibold border border-[#000] text-[10px] bg-whire text-[#000000]"
+            className={` ${ !view && 'opacity-20' } flex-1 py-2.5 rounded font-semibold border border-[#000] text-[10px] bg-whire text-[#000000]`}
           >
             Edit
           </button>
           <button
-          disabled={disableDelete}
-            className={`flex-1 py-2.5 rounded font-semibold text-[10px] ${disableDelete ? 'bg-black/45' : 'bg-[#000000]'} text-[#ffffff]`}
+          
+          disabled={!view}
+            className={`flex-1 ${ !view && 'opacity-20' } py-2.5 rounded font-semibold text-[10px] ${disableDelete ? 'bg-black/45' : 'bg-[#000000]'} text-[#ffffff]`}
             onClick={() => {
               const status = confirm("Are you want to delete!");
               if (status) {

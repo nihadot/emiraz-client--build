@@ -36,8 +36,11 @@ import AgencyLoginPage from "./pages/AgencyLoginPage"
 import AgencyDashboard from "./pages/AgencyDashboard"
 import AgencyLayoutPage from "./pages/AgencyLayout"
 import AgencyEnquiriesPage from "./pages/AgencyEnquiriesPage"
-
-
+import AdminEditPage from "./pages/AdminEditPage"
+import AdminEditPropertyPage from "./pages/property/AdminEditPropertyPage"
+import AdminPropertyEditDetailsPage from "./pages/admin/AdminPropertyEditDetailsPage"
+import AdminPropertyEditImagesPage from "./pages/admin/AdminPropertyEditImagesPage"
+import AdminPropertyOtherEditPage from "./pages/admin/AdminPropertyOtherEditPage"
 // sidebar
 import ViewSideBar from "./pages/ViewSideBar";
 import AddSideBar from "./pages/AddSideBar";
@@ -116,6 +119,11 @@ export {
   AgencyDashboard,
   AgencyLayoutPage,
   AgencyEnquiriesPage,
+  AdminEditPage,
+  AdminEditPropertyPage,
+  AdminPropertyEditDetailsPage,
+  AdminPropertyEditImagesPage,
+  AdminPropertyOtherEditPage,
 
   // USER ROUTES
   UserHome,

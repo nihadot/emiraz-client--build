@@ -1,941 +1,687 @@
-import { useEffect, useRef, useState } from "react";
-import { FaAngleDown, FaAngleUp } from "react-icons/fa";
-import { IoMdAdd, IoMdRemove } from "react-icons/io";
-import PlaceHolder from "../assets/placeholder/placeholder-image.png";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import * as Yup from "yup";
+import React, { useEffect, useRef, useState } from "react";
+import DatePicker from "react-datepicker"; // Import DatePicker
+import "react-datepicker/dist/react-datepicker.css"; // Import styles
+import { motion, AnimatePresence } from "framer-motion";
+import PropertyTypeDropdown from "./AddProject/PropertyTypeDropdown";
+import CitiesDropdown from "./AddProject/CitiesDropdown";
+import MapEmbedder from "./AddProject/MapEmbedder";
+import AddressInput from "./AddProject/AddressInput";
+import DescriptionInput from "./AddProject/DescriptionInput";
+import DevelopersDropdown from "./AddProject/DevelopersDropdown";
+import AdvancedImageUploader from "./AddProject/AdvancedImageUploader";
+import NearbyAreas from "./AddProject/NearbyAreas";
+import AdsOptionDropdown from "./AddProject/AdsOptionDropdown";
+import FacilitiesAndAmenities from "./AddProject/FacilitiesAndAmenities";
 import { errorToast, successToast } from "../toast";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  addPropertySuccess,
-  setError,
-  setLoading,
-} from "../features/propertiesSlice";
-import {
-  addingPropertyAPI,
-  fetchNotavailbeSidebar,
-  fetchPriority,
-  fetchPropertyTypeAPI,
-  fetchSideBanners,
-  getCities,
-  getDevelopers,
-} from "../api";
-import { fetchCities } from "../features/citiesSlice";
-import Select from "react-select";
-import makeAnimated from "react-select/animated";
-import { fetchDevelopers } from "../features/developerSlice";
-import { CiCircleRemove } from "react-icons/ci";
-import UploadingImage from "./uploading/UploadingImage";
+import axios from "axios";
+import { addingPropertyAPI, SERVER_URL } from "../api";
+import MainImageUploader from "./AddProject/ImageUploader";
+import PropertiesCard from "./Cards";
+import { useNavigate } from "react-router-dom";
+import { CLOUDINARY_NAME, CLOUDINARY_PERSISTENT } from "../api/localstorage-varibles";
+import PaymentOptions from "./PaymentOptions";
+import PriorityDropdown from "./PriorityDropdown";
 
+const { createFFmpeg, fetchFile } = await import('@ffmpeg/ffmpeg');
+
+
+const uploadImage = async (image, folder) => {
+  const formData = new FormData();
+  formData.append("file", image);
+  formData.append("upload_preset", CLOUDINARY_PERSISTENT);
+  formData.append("folder", folder);
+
+  try {
+    const response = await axios.post(`https://api.cloudinary.com/v1_1/${CLOUDINARY_NAME}/image/upload`, formData);
+    return {
+      asset_id: response.data.asset_id,
+      secure_url: response.data.secure_url,
+      url: response.data.url,
+      public_id: response.data.public_id,
+    };
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    throw new Error('Image upload failed');
+  }
+};
+
+
+const validationSchema = Yup.object().shape({
+  projectTitle: Yup.string()
+    .required("Project Title is required")
+    .min(3, "Project Title must be at least 3 characters")
+    .max(50, "Project Title cannot exceed 50 characters"),
+  priceInAED: Yup.string().required("Price is required"),
+  handoverDate: Yup.date()
+    .required("Handover Date is required")
+    .min(new Date(), "Only future dates are allowed"), // Restrict past dates
+  beds: Yup.string()
+    .required("Beds information is required"),
+  // .matches(/^\d+|[A-Za-z\s]+$/, "Beds must be a number or text"), // Validate as number or text
+  cities: Yup.array()
+    .min(1, "At least one city must be selected")
+    .required("Cities are required"),
+  propertyType: Yup.array().min(1, "At least one property")
+    .required("Property Type is required"),
+    developer: Yup.object()
+    .nullable()
+    .required("Selecting a developer is required"), // Validation for the developer field
+      imageFile: Yup.mixed()
+    .required("Image is required")
+  //  ,
+
+});
+
+
+// Check if it's available
 function AddProperties() {
-  const dispatch = useDispatch();
-  const { isLoading } = useSelector((state) => state.property);
-  const { data } = useSelector((state) => state.city);
-  const { developers } = useSelector((state) => state.developer);
-  const animatedComponents = makeAnimated();
-  const [propertyType, setPropertyType] = useState([]);
-  const [image, setImage] = useState("");
-  const [priorityCount,setPriorityCount] = useState([]);
-  const [notAvailableSidebarIds,setNotAvailableSidebarIds] = useState([]);
-  // --------------------------------------------
-  const uploadSmallImage = useRef(null);
-  const frameOfLocation = useRef(null);
-  const frameOfVideo = useRef(null);
-  // --------------------------------------------
-  const [isChecked, setIsChecked] = useState(false);
-  const [refresh, setrefresh] = useState(false);
-  
-  // ------------------------------------------
-  const [optionsDeveloper, setOptionsDeveloper] = useState(false);
-  const [optionsCities, setOptionsCities] = useState([]);
-  const [sidebar,setSidebar] = useState([]);
-  const [OptionsAdsStatus,setOptionsAdsStatus] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // ------------------------------------------
-
-  // ------------------------------------------------------
-  const [dynamicFacilitiesForm, setDynamicFacilitiesForm] = useState([]);
-  const [dynamicAreasNearBy, setDynamicAreasNearBy] = useState([]);
-  const [dynamicPaymentPlan, setDynamicPaymentPlan] = useState([]);
-  // ------------------------------------------------------
-
-  // ---------------------------------------------------
-  const [smallImage, setSmallImage] = useState([]);
-  // ---------------------------------------------------
-  const [priority, setPriority] = useState(false);
-const [selectedFiles, setSelectedFiles] = useState([]);
-   // Function to handle file selection
-   const handleFileSelect = (event) => {
-    const filesArray = Array.from(event.target.files);
-    const validFiles = filesArray.filter(file => file.size <= 1024 * 1024); // 1MB in bytes
-
-    setSelectedFiles([...selectedFiles, ...validFiles]);
-    
-    // Optionally, you can alert the user if any file exceeds the size limit
-    const invalidFiles = filesArray.filter(file => file.size > 1024 * 1024);
-    if (invalidFiles.length > 0) {
-      alert(`The following files exceed the size limit of 1MB: ${invalidFiles.map(file => file.name).join(', ')}`);
-    }
+  const [clearCityStatus, setClearCityStatus] = useState(false);
+  const [clearPropertyTypeStatus, setClearPropertyTypeStatus] = useState(false);
+  const [clearForms, setClearForms] = useState(false);
+  const [clearGoogleMap, setClearGoogleMap] = useState(false);
+  const [clearTheImageStatus, setClearTheImageStatus] = useState(false);
+  const [clearTheImageMultipleStatus, setClearTheImageMultipleStatus] = useState(false);
+  const [cities, setCities] = useState(null);
+  const [developers, setDevelopers] = useState(null);
+  // const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const handleClear = () => {
+    setClearForms(!clearForms); // Trigger clearing
   };
-    // console.log(file);
-  
-  // -----------------------------------------------------
-  const [formData, setFormData] = useState({
-    propretyHeadline: "",
-    address: "",
-    price: "",
-    beds: "",
-    priority:"",
-    handoverDate: "",
-    googleMapLink: "",
-    description: "",
-    preview: "",
-    videoLink: "",
-    propertyType: "",
-    cityName: "",
-    developerRef: "",
-    developerName: "",
-    // cityRef: "",
-    sideBarRef: "",
-    citiesArrayRef: [],
-    sideBarName: "",
-    projectNo:''
-  });
-  // -----------------------------------------------------
+  const [existPriorities, setExistPriorities] = useState([]);
+  const [priorityValue, setPriorityValue] = useState({status:false,value:''});
 
-  //---------------------------------------------------------------------------------------------------------------
-  const handleDynamicFacilitiesMoreFields = () =>
-    setDynamicFacilitiesForm([...dynamicFacilitiesForm, ""]);
-  const handleDynamicPaymentPlanMoreFields = () =>
-    setDynamicPaymentPlan([...dynamicPaymentPlan, ""]);
-  const handleDynamicAreasNearByFormMoreFields = () =>
-    setDynamicAreasNearBy([...dynamicAreasNearBy, ""]);
-  //---------------------------------------------------------------------------------------------------------------
-
-  //------------------------------------------------------------------
-  const uploadSmallImageButton = () => uploadSmallImage.current.click();
-  // -----------------------------------------------------------------
-
-  // -----------------------------------------------
-
-  const handleChange = (e) => {
-    if (e.target.name === "price") {
-      setFormData({
-        ...formData,
-        [e.target.name]: e.target.value.toUpperCase(),
-      });
-    } else if (e.target.name === "googleMapLink") {
-      const iframeCode = e.target.value.trim();
-      const match = iframeCode.match(/src=["'](.*?)["']/);
-      const url = match && match[1] ? match[1] : "";
-      frameOfLocation.current.src = url;
-      setFormData({ ...formData, [e.target.name]: url });
-    } else if (e.target.name === "indexOf") {
-      setDynamicFacilitiesForm([dynamicFacilitiesForm, e.target.value]);
-      setFormData({ ...formData, [e.target.name]: e.target.value });
-    } else if (e.target.name === "videoLink") {
-      const iframeCode = e.target.value.trim();
-      const match = iframeCode.match(/src=["'](.*?)["']/);
-      const url = match && match[1] ? match[1] : "";
-      frameOfVideo.current.src = url;
-      setFormData({ ...formData, [e.target.name]: url });
-    } else {
-      setFormData({ ...formData, [e.target.name]: e.target.value });
-    }
-  };
-  const handleDynamicForm = (e, index) => {
-    if (e.target.name === "FacilitiesAndAmenities") {
-      const dynamciStateCopy = [...dynamicFacilitiesForm];
-      dynamciStateCopy[index] = e.target.value;
-      setDynamicFacilitiesForm(dynamciStateCopy);
-    } else if (e.target.name === "PaymentPlan") {
-      const dynamciStateCopy = [...dynamicPaymentPlan];
-      dynamciStateCopy[index] = e.target.value;
-      setDynamicPaymentPlan(dynamciStateCopy);
-    } else if (e.target.name === "AreasNearby") {
-      const dynamciStateCopy = [...dynamicAreasNearBy];
-      dynamciStateCopy[index] = e.target.value;
-      setDynamicAreasNearBy(dynamciStateCopy);
-    }
-  };
-  const removeDynamicForm = (name, index) => {
-    if (name === "FacilitiesAndAmenities") {
-      const result = dynamicFacilitiesForm.filter((item, i) => i !== index);
-      setDynamicFacilitiesForm(result);
-    } else if (name === "PaymentPlan") {
-      const result = dynamicPaymentPlan.filter((item, i) => i !== index);
-      setDynamicPaymentPlan(result);
-    } else if (name === "AreasNearby") {
-      const result = dynamicAreasNearBy.filter((item, i) => i !== index);
-      setDynamicAreasNearBy(result);
-    }
-  };
-  // -------------------------------------------------
-
-  const handlePropertyType = (value) => {
-    const result = value.map((item) => item.value);
-    setFormData({ ...formData, propertyType: result });
-  };
-  const handleCitiesChanges = (e) => {
-    const convertToGetCitiesIds = e.map((item)=> item.value)
-    setFormData({ ...formData, citiesArrayRef:convertToGetCitiesIds });
-  };
-  const handleDevelopers = (name, Id) => {
-    setOptionsDeveloper(!optionsDeveloper);
-    setFormData({ ...formData, developerRef: Id, developerName: name });
-  };
-
-  const handleSubmit = async (e) => {
-    try {
-      e.preventDefault();
-      let data = {
-        ...formData,
-        isChecked: isChecked,
-        mainImgaeLink: image,
-        facilities: [...dynamicFacilitiesForm],
-        paymentPlan: [...dynamicPaymentPlan],
-        areasNearBy: [...dynamicAreasNearBy],
-        smallImage: smallImage,
-      };
-      const formdata = new FormData();
-      for (const key in data) {
-        if (Array.isArray(data[key])) {
-          formdata.append(`${key}`, JSON.stringify(data[key]));
-        } else {
-          formdata.append(key, data[key]);
-        }
-      }
-
-      selectedFiles.forEach(file => {
-        formdata.append('smallImage', file);
-      });
-
-      dispatch(setLoading());
-      await addingPropertyAPI(formdata);
-      dispatch(addPropertySuccess());
-      successToast("Successfully added");
-      setFormData({
-        beds: "",
-        description: "",
-        googleMapLink: "",
-        handoverDate: "",
-        mainImgaeLink: "",
-        price: "",
-        propertyType: "",
-        propretyHeadline: "",
-        smallImgaeLink: "",
-        videoLink: "",
-        priority:"",
-        cityName: "",
-        sideBarRef:"",
-        developerRef: "",
-        projectNo:""
-      });
-      setSelectedFiles([])
-      setrefresh(!refresh)
-    } catch (error) {
-        dispatch(setError(error.response.data.message));
-        errorToast(error.response?.data?.message || error?.message || "An error occurred during login.");
-    }
-  };
-
-  const handleCheckboxChange = () => {
-    setIsChecked(!isChecked); // Toggle the checkbox state
-  };
-
- 
-
-  const fetchdata = async () => {
-    try {
-      const response_cities = await getCities();
-      // last changed the
-      const to_converted_cities = response_cities?.result?.map((item) => {
-        console.log(item,'--')
-        return { value: item._id, label: item.cityName };
-      });
-      // dispatch(fetchCities(to_converted_cities));
-      // last changed the
-      setOptionsCities(to_converted_cities)
-
-      const response_developers = await getDevelopers();
-      dispatch(fetchDevelopers(response_developers));
-      const response_propertyType = await fetchPropertyTypeAPI();
-      const to_converted_ = response_propertyType?.result?.map((item) => {
-        return { value: item.propertyType._id, label: item.propertyType.name };
-      });
-      setPropertyType(to_converted_);
-      const fetchPriorityResponse = await fetchPriority();
-      setPriorityCount(fetchPriorityResponse.result)
-      const response_sidebar = await fetchSideBanners();
-      setSidebar(response_sidebar.result);
-      // get not availbe sidebar ids
-      const response_not_avaible_sidebar = await fetchNotavailbeSidebar();
-      setNotAvailableSidebarIds(response_not_avaible_sidebar?.result)
-
-    } catch (error) {
-      errorToast(error.response.data.message || error.message || "error occur");
-    }
-  };
-
-  const removeImage = () => {
-    setFormData({ ...formData, preview: "" });
-    setImage("");
-  };
+  const navigate = useNavigate();
+  const [userData, setUserData] = useState([]);
 
   useEffect(() => {
-    fetchdata();
-  }, [refresh]);
+    // Make multiple API calls concurrently using Promise.all
+    const fetchData = async () => {
+      try {
+        const responses = await Promise.all([
+          axios.get(`${SERVER_URL}/city/`), // Replace with your first API URL
+          axios.get(`${SERVER_URL}/developer`), // Replace with your second API URL
+          axios.get(`${SERVER_URL}/priority`), // Replace with your second API URL
+        ]);
+
+        console.log(responses, 'res')
+
+        // Set the data from both API calls
+        setCities(responses[0].data.result);
+        setDevelopers(responses[1].data.result);
+        setExistPriorities(responses[2].data.result);
+        setIsLoading(false);
+
+      } catch (error) {
+        errorToast(error?.response?.data?.message || error?.message || 'Error occurred while fetching data')
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []); // Empty dependency array means this effect runs only once, after the first render
+
+  const [isDraft, setIsDraft] = useState(false);  // State to track if the draft is active
+
+  // Button Styles
+  const buttonStyles = "w-24 h-10 text-sm font-semibold rounded-lg transition-all duration-300 ease-in-out";
+  const activeStyle = "bg-black text-white";
+  const inactiveStyle = "bg-white text-black border-2 border-black opacity-60";
+
+  const handleToggle = (setFieldValue) => {
+    setFieldValue("draft", !isDraft);
+    setIsDraft((prevState) => !prevState); // Toggle between true and false
+  };
 
 
-  const priorityList = [1,2,3,4,5,6,7,8,9,10,11,12];
+
+  const handleSubmit = async (event, { resetForm }) => {
+
+    try {
+
+       setIsLoading(true);
+const data = {};
+const obj = Object.keys(event);
+for (const element of obj) {
+  event[element] && (data[element] = event[element])
+}
+
+      if (data.cities) {
+        data.cities = data.cities.map(city => city._id)
+      }
+
+         if(data.developer){
+        data.developer = data.developer.id;
+      }
+
+     
+
+      if (event.imageFile) {
+        const imageData = await uploadImage(event.imageFile, 'projects_upload');
+        data.imageFile = imageData;
+      }
+      
+
+  
+      if (event.imageFiles && event.imageFiles.length > 0) {
+        const uploadedImages = [];
+        for (const image of event.imageFiles) {
+          const imageData = await uploadImage(image, 'projects_sub_upload');
+          uploadedImages.push(imageData);
+        }
+        data.imageFiles = uploadedImages;
+      }
+      
+ 
+
+    await addingPropertyAPI(data);
+    resetForm();
+    handleClear();
+    setIsDraft(false);  // Reset the draft state here after form reset
+    successToast('Successfully added');
+
+    console.log(data.priority)
+    console.log(Boolean(data.priority),'----------------------------------------------------------------')
+
+    if(data.priority){
+      // const result = existPriorities.filter((item)=> {
+      //   console.log(item);
+      //   console.log(data.priority);
 
 
-  const handlePriority = (prioty) =>{
-    setPriority(!priority);
-    setFormData({ ...formData, priority: prioty });
+      //   console.log(item !== data.priority,'99')
+      // });
+      //   console.log(existPriorities,'existPriorities')
+      //   console.log(result,'result')
+      setExistPriorities(prevState => [...prevState, data.priority])
+    }
+
+
+
+    } catch (error) {
+      errorToast(error?.response?.data?.message || error?.message  || 'Error')
+    } finally {
+      setIsLoading(false);
+    }
   }
 
-
+  console.log(existPriorities,'existPriorities')
+  // console.log(priorityValue,'prioritiesValue')
   return (
-    <form onSubmit={handleSubmit} className="flex flex-wrap">
-      <div className="">
-        {/* Proprety Title */}
-        <div className="flex mt-3 flex-col gap-2 mx-3">
-          <label
-            htmlFor="propretyHeadline"
-            className="sf-medium font-medium text-sm text-[#000000]"
-          >
-            Proprety Title
-          </label>
-          <input
-            disabled={isLoading}
-            autoComplete=""
-            value={formData.propretyHeadline}
-            name="propretyHeadline"
-            onChange={handleChange}
-            type="text"
-            id="propretyHeadline"
-            placeholder="Parkside Hills"
-            className="border border-[#E4E4E4] py-4 px-5 rounded-[10px] sf-normal text-sm text-[#666666]  outline-none"
-          />
-        </div>
+    <Formik
+      initialValues={{
+        projectTitle:  "",
+        priceInAED:  "",
 
-        {/* Price */}
-        <div className="flex mt-3 flex-col gap-2 mx-3">
-          <label
-            htmlFor="price"
-            className="sf-medium font-medium text-sm text-[#000000]"
-          >
-            Price (From in AED)
-          </label>
-          <input
-            disabled={isLoading}
-            autoComplete=""
-            name="price"
-            value={formData.price}
-            onChange={handleChange}
-            type="text"
-            id="price"
-            placeholder="4M"
-            className="border border-[#E4E4E4] py-4 px-5 rounded-[10px] sf-normal font-extralight text-sm text-[#666666]  outline-none"
-          />
-        </div>
+        handoverDate: "",
+        beds:  "",
+        propertyType: [],
+        cities:[],
+        facilities:[],
+        address:  "",
+        description: "",
+        developer: "",
+        mapLink:'',
+        paymentOptions:[],
+        imageFile:'',
+        nearbyAreas:'',
+        priority: "",
+        projectNumber: "",
+        isChecked:false,
+      }}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+    >
+      {({ setFieldValue, values,errors }) => (
+        <Form className="flex-wrap flex">
+          <div className="max-w-[600px] w-full">
+            <div className="flex-1">
+              {/* Project Title */}
+              <div className="flex flex-col gap-2 ">
+                <label
+                  htmlFor="projectTitle"
+                  className="sf-medium font-medium text-sm text-[#000000]"
+                >
+                  Project Title <span className="text-lg text-red-600">*</span>
+                </label>
+                <Field
+                  disabled={isLoading}
+                  name="projectTitle"
+                  type="text"
+                  // innerRef={projectTitleRef}
+                  value={values.projectTitle}
+                  placeholder="Down Town"
+                  className="border border-[#E4E4E4] py-4 px-5 rounded-[10px] font-extralight sf-normal text-sm text-[#666666] outline-none"
+                />
+                <ErrorMessage
+                  name="projectTitle"
+                  component="div"
+                  className="text-red-500 text-sm"
+                />
+              </div>
 
-        {/* Handover Date */}
-        <div className="flex mt-3 flex-col gap-2 mx-3">
-          <label
-            htmlFor="handoverDate"
-            className="sf-medium font-medium text-sm text-[#000000]"
-          >
-            Handover Date
-          </label>
-          <input
-            autoComplete=""
-            disabled={isLoading}
-            name="handoverDate"
-            value={formData.handoverDate}
-            onChange={handleChange}
-            type="date"
-            id="handoverDate"
-            placeholder="June 2025"
-            className="border border-[#E4E4E4] py-4 px-5 rounded-[10px] sf-normal font-extralight text-sm text-[#666666]  outline-none"
-          />
-        </div>
+              {/* Price In AED */}
+              <div className="flex mt-3 flex-col gap-2 ">
+                <label
+                  htmlFor="priceInAED"
+                  className="sf-medium font-medium text-sm text-[#000000]"
+                >
+                  Price In AED <span className="text-lg text-red-600">*</span>
+                </label>
+                <Field
+                  disabled={isLoading}
+                  name="priceInAED"
+                  type="text"
+                  // innerRef={priceInAEDRef}
+                  placeholder="1000000"
+                  className="border border-[#E4E4E4] py-4 px-5 rounded-[10px] sf-normal font-extralight text-sm text-[#666666] outline-none"
+                />
+                <ErrorMessage
+                  name="priceInAED"
+                  component="div"
+                  className="text-red-500 text-sm"
+                />
+              </div>
 
-        {/* Beds */}
-        <div className="flex mt-3 flex-col gap-2 mx-3">
-          <label
-            htmlFor="beds"
-            className="sf-medium font-medium text-sm text-[#000000]"
-          >
-            Beds
-          </label>
-          <input
-            autoComplete=""
-            name="beds"
-            disabled={isLoading}
-            value={formData.beds}
-            onChange={handleChange}
-            type="text"
-            id="beds"
-            placeholder="1,2,3,Studio"
-            className="border border-[#E4E4E4] py-4 px-5 rounded-[10px] sf-normal font-extralight font-extralight text-sm text-[#666666]  outline-none"
-          />
-        </div>
 
-          {/* Property Type */}
-          <div className="flex mt-3 flex-col gap-2 mx-3">
-          <label
-            htmlFor="propertyType"
-            className="sf-medium font-medium text-sm text-[#000000]"
-          >
-            Property Type
-          </label>
+              {/* Handover Date */}
+              <div className="flex mt-3  flex-col gap-2">
+                <label
+                  htmlFor="handoverDate"
+                  className="sf-medium font-medium text-sm text-[#000000]"
+                >
+                  Handover Date <span className="text-lg text-red-600">*</span>
+                </label>
+                <DatePicker
+                  disabled={isLoading}
+                  selected={values.handoverDate}
+                  onChange={(date) => setFieldValue("handoverDate", date)}
+                  minDate={new Date()} // Restrict to future dates
+                  placeholderText="Select a date"
+                  className="border border-[#E4E4E4] py-4 px-5 w-full rounded-[10px] font-extralight sf-normal text-sm text-[#666666] outline-none"
+                />
+                <ErrorMessage
+                  name="handoverDate"
+                  component="div"
+                  className="text-red-500 text-sm"
+                />
+              </div>
 
-          <Select
-            name="propertyType"
-            onChange={handlePropertyType}
-            closeMenuOnSelect={false}
-            components={animatedComponents}
-            isMulti
-            className="sf-medium font-medium text-sm"
-            options={propertyType}
-          />
+              {/* Beds */}
+              <div className="flex mt-3 flex-col gap-2 ">
+                <label
+                  htmlFor="beds"
+                  className="sf-medium font-medium text-sm text-[#000000]"
+                >
+                  Beds <span className="text-lg text-red-600">*</span>
+                </label>
+                <Field
+                  disabled={isLoading}
+                  name="beds"
+
+                  type="text"
+                  placeholder="3 Beds or Studio"
+                  className="border border-[#E4E4E4] py-4 px-5 rounded-[10px] font-extralight sf-normal text-sm text-[#666666] outline-none"
+                />
+                <ErrorMessage
+                  name="beds"
+                  component="div"
+                  className="text-red-500 text-sm"
+                />
+              </div>
+
+
+
+              {/* Property Type */}
+              <PropertyTypeDropdown
+                clearForms={clearForms}
+                name="propertyType"
+                value={values.propertyType}
+                onChange={setFieldValue}
+                isLoading={isLoading}
+              />
+
+
+              {/*  */}
+              <CitiesDropdown
+                name="cities"
+                clearForms={clearForms}
+                value={values.cities}
+                onChange={setFieldValue}
+                isLoading={isLoading}
+                options={cities}
+              />
+
+
+
+              <AddressInput
+                clearForms={clearForms}
+                name='address'
+                onChange={setFieldValue} // Pass the handler to the AddressInput component
+                value={values.address} // Pass the current address value
+                placeholder="Enter your address" // Custom placeholder text
+                maxLength={300} // Optional: Customize max length
+              />
+
+              <DescriptionInput
+
+                name="description"
+                value={values.description}
+                onChange={setFieldValue}
+                placeholder="Provide a detailed description"
+             
+                isLoading={isLoading}
+              />
+
+
           
-        </div>
+<MapEmbedder
+name={'mapLink'}
+        value={values.mapLink}
+        onChange={setFieldValue}
+        clearForm={clearForms}
+      />
 
 
-        {/* Cities */}
-        <div className="flex flex-col mt-3 gap-2 mx-3 relative">
-          {/* <label
-            htmlFor="email"
-            className="sf-medium font-medium text-sm text-[#000000]"
-          >
-            Cities
-          </label>
-          <div
-            onClick={() => setOptionsCities(!optionsCities)}
-            className="flex cursor-pointer border w-full border-[#E4E4E4] py-4 px-5 rounded-[10px] sf-normal font-extralight text-sm text-[#666666]  outline-none"
-          >
-            <span>{formData.cityName ? formData.cityName : "Select City"}</span>
-            <span className="absolute right-5 top-12">
-              {optionsCities ? <FaAngleUp /> : <FaAngleDown />}
-            </span>
-          </div>
-          {optionsCities && (
-            <div className="z-20 absolute rounded-[10px] top-24 bg-white w-full border p-3">
-              {data &&
-                data.map((item, i) => (
-                  <p
-                    key={i}
-                    onClick={() => handleCity(item.cityName, item._id)}
-                    className="py-1 cursor-pointer"
-                  >
-                    {item.cityName}
-                  </p>
-                ))}
-            </div>
-          )} */}
-            <label
-            htmlFor="email"
-            className="sf-medium font-medium text-sm text-[#000000]"
-          >
-            Cities
-          </label>
+              <DevelopersDropdown
+                name="developer"
+                clearForms={clearForms}
 
-<Select
-            name=""
-            onChange={handleCitiesChanges}
-            closeMenuOnSelect={false}
-            components={animatedComponents}
-            isMulti
-            className="sf-medium font-medium text-sm"
-            options={optionsCities}
-          />
-        </div>
+                value={values.developer}
+                onChange={setFieldValue}
+                isLoading={isLoading}
+                options={developers}
+              />
 
-        {/* Google Map */}
-        <div className="flex  mt-3 justify-center items-center">
-          <div className="flex flex-col gap-2 mx-3 w-full">
-            <label
-              htmlFor="googleMapLink"
-              className="sf-medium font-medium text-sm text-[#000000]"
-            >
-              Google Map
-            </label>
-            <textarea
-              disabled={isLoading}
-              placeholder="Google Map Embed Link,"
-              onChange={handleChange}
-              value={formData.googleMapLink}
-              name="googleMapLink"
-              id="googleMapLink"
-              cols="30"
-              rows="6"
-              className="border border-[#E4E4E4] py-4 px-5 rounded-[10px] sf-normal font-extralight text-sm text-[#666666]  outline-none"
-            ></textarea>
-          </div>
-          <div className="">
-            <iframe
-              ref={frameOfLocation}
-              // src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14185.324610322421!2d75.59100095716197!3d12.100691766322257!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba4499ba0b48f91%3A0x3e6d558a663dd7a3!2s!5e0!3m2!1sen!2sin!4v1710042486885!5m2!1sen!2sin"
-              className="border w-40 h-40 rounded-full"
-              allowFullScreen=""
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            ></iframe>
-          </div>
-        </div>
 
-        {/* Address */}
-        <div className="flex  mt-3 flex-col gap-2 mx-3">
-          <label
-            htmlFor="address"
-            className="sf-medium font-medium text-sm text-[#000000]"
-          >
-            Address
-          </label>
-          <textarea
-            name="address"
-            disabled={isLoading}
-            onChange={handleChange}
-            value={formData.address}
-            id="address"
-            cols="30"
-            rows="15"
-            className="border border-[#E4E4E4] py-4 px-5 rounded-[10px] sf-normal text-sm text-[#666666]  outline-none"
-          ></textarea>
-        </div>
+              <FacilitiesAndAmenities
+                name="facilities"
+                clear={clearForms}
+                value={values.facilities}
+                onChange={setFieldValue}
+              />
 
-        {/* Description */}
-        <div className="flex   mt-3 flex-col gap-2 mx-3">
-          <label
-            htmlFor="description"
-            className="sf-medium font-medium text-sm text-[#000000]"
-          >
-            Description
-          </label>
-          <textarea
-            name="description"
-            disabled={isLoading}
-            onChange={handleChange}
-            value={formData.description}
-            id="description"
-            cols="30"
-            rows="15"
-            className="border border-[#E4E4E4] py-4 px-5 rounded-[10px] sf-normal font-extralight text-sm text-[#666666]  outline-none"
-          ></textarea>
-        </div>
+              <PaymentOptions
+                name="paymentOptions"
+                value={values.paymentOptions}
+                onChange={setFieldValue}
+                clearForm={clearForms}
 
-        {/* Developer */}
-        <div className="flex  mt-3 flex-col gap-2 mx-3 relative">
-          <label
-            htmlFor="developerRef"
-            className="sf-medium font-medium text-sm text-[#000000]"
-          >
-            Developer
-          </label>
-          <div
-            onClick={() => setOptionsDeveloper(!optionsDeveloper)}
-            className="flex cursor-pointer border w-full border-[#E4E4E4] py-4 px-5 rounded-[10px] sf-normal font-extralight text-sm text-[#666666]  outline-none"
-          >
-            <span>
-              {formData.developerName
-                ? formData.developerName
-                : "Select Developer"}
-            </span>
-            <span className="absolute right-5 top-12">
-              {optionsDeveloper ? <FaAngleUp /> : <FaAngleDown />}
-            </span>
-          </div>
-          {optionsDeveloper && (
-            <div className="z-20 absolute max-h-[300px] h-fit  overflow-auto rounded-[10px] top-24 bg-white w-full border p-3">
-              {developers &&
-                developers.map((item) => (
-                  <p
-                    key={item._id}
-                    onClick={() =>
-                      handleDevelopers(item.developerName, item._id)
-                    }
-                    className="py-1 cursor-pointer"
-                  >
-                    {item.developerName}
-                  </p>
-                ))}
-            </div>
-          )}
-        </div>
+              />
 
-        {/* Facilities And Amenities */}
-        <div className="flex  mt-3 flex-col gap-2 mx-3 relative">
-          <label
-            htmlFor="FacilitiesAndAmenities"
-            className="sf-medium font-medium text-sm text-[#000000]"
-          >
-            Facilities And Amenities
-          </label>
-          {dynamicFacilitiesForm.map((item, index) => {
-            return (
-              <div
-                className="w-full flex justify-center items-center gap-2"
-                key={index}
-              >
-                <input
-                  key={index}
-                  value={item}
-                  name="FacilitiesAndAmenities"
-                  onChange={(e) => handleDynamicForm(e, index)}
-                  type="text"
-                  id="FacilitiesAndAmenities"
-                  placeholder="Type here..."
-                  className="border w-full border-[#E4E4E4] py-4 px-5 rounded-[10px] sf-normal text-sm text-[#666666]  outline-none"
+        
+              <MainImageUploader
+  name="imageFile"
+  onChange={(_, file) => setFieldValue(_, file)} // Updates Formik with the file object
+  preferredFormat="webp"
+  clearForms={clearForms}
+  value={values.imageFile} // Binds Formik value to the uploader
+/>
+<ErrorMessage
+  name="imageFile"
+  component="div"
+  className="text-red-500 font-medium text-xs ps-3 pt-1"
+/>
+              {/* {console.log(values.imageFile,'values.imageFile')} */}
+              <AdvancedImageUploader
+                onChange={setFieldValue}
+                name={'imageFiles'}
+                preferredFormat="webp"
+                clearForm={clearForms}
+                clearTheImageMultipleStatus={clearTheImageMultipleStatus}
+              />
+
+              <div>
+                < VideoUploader
+                name='projectVideo'
+                clearForms={clearForms}
+                  onChange={setFieldValue}
                 />
-                <span
-                  onClick={() =>
-                    removeDynamicForm("FacilitiesAndAmenities", index)
-                  }
-                  className="text-white p-3 rounded-full hover:bg-slate-600 cursor-pointer bg-black text-lg block"
-                >
-                  <IoMdRemove />
-                </span>
+                <ErrorMessage name="projectVideo" component="div" className="error" />
               </div>
-            );
-          })}
-          <div
-            onClick={handleDynamicFacilitiesMoreFields}
-            className="flex cursor-pointer justify-center items-center border w-full border-[#E4E4E4] py-4 px-5 rounded-[10px] sf-normal font-extralight text-sm text-[#666666]  outline-none"
-          >
-            <span className="text-black text-lg ">
-              <IoMdAdd />
-            </span>
-          </div>
-        </div>
 
-        {/* Payment Plan */}
-        <div className="flex   mt-3 flex-col gap-2 mx-3 relative">
-          <label
-            htmlFor="PaymentPlan"
-            className="sf-medium font-medium text-sm text-[#000000]"
-          >
-            Payment Plan
-          </label>
-          {dynamicPaymentPlan.map((item, index) => {
-            return (
-              <div
-                className="w-full flex justify-center items-center gap-2"
-                key={index}
-              >
-                <input
-                  key={index}
-                  value={item}
-                  autoComplete=""
-                  onChange={(e) => handleDynamicForm(e, index)}
-                  name="PaymentPlan"
+
+              <NearbyAreas
+                name="nearbyAreas"
+                value={values.nearbyAreas}
+                onChange={setFieldValue}
+                clearForm={clearForms}
+              />
+<PriorityDropdown
+priorityValue={priorityValue}
+  existingPriorities={existPriorities} // Pass the existing priorities including the selected one
+  name="priority"
+  priorities={Array.from({ length: 12 }, (_, i) => i + 1)} // Array of priorities
+  value={values.priority}
+  onChange={setFieldValue}
+  clearForms={clearForms} // Pass the clearFormFields function here
+/>
+
+
+              {/* Error Message */}
+              <ErrorMessage name='priorities' component="div" className="text-red-500 text-sm mt-2" />
+
+              <AdsOptionDropdown
+              clearForms={clearForms}
+                isLoading={isLoading}
+                name={'adsOptions'}
+                onChange={setFieldValue}
+              />
+
+
+
+
+              {/* Project Number */}
+              <div className="flex mt-6 flex-col gap-2 ">
+                <label
+                  htmlFor="projectNumber"
+                  className="sf-medium font-medium text-sm text-[#000000]"
+                >
+                  Project Number
+                </label>
+                <Field
                   type="text"
-                  id="PaymentPlan"
-                  placeholder="Type here..."
-                  className=" w-full border border-[#E4E4E4] py-4 px-5 rounded-[10px] sf-normal text-sm text-[#666666]  outline-none"
+                  disabled={isLoading}
+                  name={'projectNumber'}
+                  value={values.projectNumber}
+                  className="border border-[#E4E4E4] py-4 px-4 rounded-[10px] font-normal text-sm text-[#333333] w-full outline-none focus:ring-2 focus:ring-black transition-all duration-300"
+                  placeholder="Enter Project Number"
                 />
-                <span
-                  onClick={() => removeDynamicForm("PaymentPlan", index)}
-                  className="text-white p-3 rounded-full hover:bg-slate-600 cursor-pointer bg-black text-lg block"
-                >
-                  <IoMdRemove />
-                </span>
-              </div>
-            );
-          })}
-          <div
-            onClick={handleDynamicPaymentPlanMoreFields}
-            className="flex cursor-pointer justify-center items-center border w-full border-[#E4E4E4] py-4 px-5 rounded-[10px] sf-normal font-extralight text-sm text-[#666666]  outline-none"
-          >
-            <span className="text-black text-lg ">
-              <IoMdAdd />
-            </span>
-          </div>
-        </div>
-
-        <div className="ms-3  mt-3 mb-4 sf-medium">
-          <input
-            type="checkbox"
-            checked={isChecked}
-            onChange={handleCheckboxChange}
-          />
-          <span className="ms-3">Post Payment Handover Plan</span>
-        </div>
-      </div>
-
-      <div className="px-4">
-        {/*  Main image */}
-        <h1 className="mb-3 text-4xl font-medium sf-medium">Media</h1>
-        <h2 className="sf-medium  font-medium text-sm mb-3">Main Image</h2>
-        <div className="flex gap-3 items-center">
-          <div className="w-80 h-64 relative  rounded-[20px] overflow-hidden">
-            <img
-              src={formData.preview || PlaceHolder}
-              alt="placeholder"
-              className="w-full h-full object-cover "
-            />
-            {formData.preview && (
-              <span
-                onClick={removeImage}
-                className=" absolute top-2 left-3  cursor-pointer"
-              >
-                {" "}
-                <CiCircleRemove className="text-red-600 " size={24} />{" "}
-              </span>
-            )}
-          </div>
-
-          <div className="">
-            <UploadingImage
-              isLoading={isLoading}
-              onError={(error) => {
-                errorToast(error);
-              }}
-              previewUrl={(e) => {
-                setFormData({ ...formData, preview: e });
-              }}
-              selectedFile={(file) => setImage(file)}
-            />
-          </div>
-        </div>
-
-        {/* small image */}
-        <div className="mt-6 flex items-center gap-3">
-          <div className="flex gap-2  max-w-md flex-wrap">
-            {
-              selectedFiles.length > 0 &&
-              selectedFiles.map((file,index) => {
-                return (
-                  <div className="relative" key={index}>
-                    <img
-                      src={URL.createObjectURL(file)}
-                      alt="placeholder"
-                      className="w-20 h-20  rounded-[10px]  object-cover "
-                    />
-                  </div>
-                );
-              })}
-          </div>
-          <div
-            onClick={uploadSmallImageButton}
-            className="w-16 h-11 bg-[#000000] text-[#ffffff] hover:bg-[#666666] flex justify-center items-center rounded-[4px] cursor-pointer"
-          >
-            <span> + </span>
-          </div>
-          <input
-            ref={uploadSmallImage}
-            type="file"
-            multiple
-            accept="image/jpg, image/jpeg, image/png"
-            onChange={handleFileSelect}
-            className="hidden"
-          />
-        </div>
-
-        {/* Video */}
-        <div className="mt-5 flex flex-col gap-2 mx-3">
-          <label
-            htmlFor="videoLink"
-            className="sf-medium font-medium text-sm text-[#000000]"
-          >
-            Video Link
-          </label>
-          <input
-            autoComplete=""
-            value={formData.videoLink}
-            name="videoLink"
-            onChange={handleChange}
-            type="url"
-            id="videoLink"
-            placeholder="URL - "
-            className="border border-[#E4E4E4] py-4 px-5 rounded-[10px] sf-normal font-extralight text-sm text-[#666666]  outline-none"
-          />
-        </div>
-
-        <iframe
-          ref={frameOfVideo}
-          src={formData.videoLink}
-          title="YouTube video player"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen
-          className="mt-4 w-full h-[300px]"
-        ></iframe>
-
-        {/*  Areas Nearby */}
-        <div className="mt-3 lg:mt-20 flex flex-col gap-2 mx-3 relative">
-          <label
-            htmlFor="AreasNearby"
-            className="sf-medium font-medium text-sm text-[#000000]"
-          >
-            Areas Nearby
-          </label>
-          {dynamicAreasNearBy.map((item, index) => {
-            return (
-              <div
-                className="w-full flex justify-center items-center gap-2"
-                key={index}
-              >
-                <input
-                  key={index}
-                  autoComplete=""
-                  value={item}
-                  onChange={(e) => handleDynamicForm(e, index)}
-                  name="AreasNearby"
-                  type="text"
-                  id="AreasNearby"
-                  placeholder="Type here..."
-                  className="w-full border border-[#E4E4E4] py-4 px-5 rounded-[10px] sf-normal font-extralight text-sm text-[#666666]  outline-none"
+                <ErrorMessage
+                  name="projectNumber"
+                  component="div"
+                  className="text-red-500 text-sm"
                 />
-                <span
-                  onClick={() => removeDynamicForm("AreasNearby", index)}
-                  className="text-white p-3 rounded-full hover:bg-slate-600 cursor-pointer bg-black text-lg block"
-                >
-                  <IoMdRemove />
-                </span>
               </div>
-            );
-          })}
-          <div
-            onClick={handleDynamicAreasNearByFormMoreFields}
-            className="flex cursor-pointer justify-center items-center border w-full border-[#E4E4E4] py-4 px-5 rounded-[10px] sf-normal text-sm text-[#666666]  outline-none"
-          >
-            <span className="text-black text-lg ">
-              <IoMdAdd />
-            </span>
-          </div>
-        </div>
 
 
+              <PostHandoverOption
+                name="isChecked"
+                value={values.isChecked}
+                onChange={setFieldValue}
+              clearForms={clearForms}
+
+              />
 
 
-        {/* Priority */}
-        <div className="flex mt-3 flex-col gap-2 mx-3 relative">
-          <label
-            htmlFor="priority"
-            className="sf-medium font-medium text-sm text-[#000000]"
-          >
-            Priority
-          </label>
-          <div
-            onClick={() => setPriority(!priority)}
-            className="flex cursor-pointer border w-full border-[#E4E4E4] py-4 px-5 rounded-[10px] sf-normal font-extralight text-sm text-[#666666]  outline-none"
-          >
-            <span>{formData.priority ? formData.priority : "Select anyone"}</span>
-            <span className="absolute right-5 top-12">
-              {priority ? <FaAngleUp /> : <FaAngleDown />}
-            </span>
-          </div>
-          {priority && (
-            <div className="z-20 absolute rounded-[10px] top-24 bg-white w-full border p-3">
-              {priorityList &&
-                priorityList.map((item, i) => (
-                 priorityCount && priorityCount?.find((i)=> parseInt(i) === parseInt(item) ) ? <p
-                 key={i}
-                 
-                 className="cursor-not-allowed py-1 text-red-400"
-               >
-                 {item} Not available
-               </p> :  <p
-                    key={i}
-                    onClick={() => handlePriority(item)}
-                    className="py-1 cursor-pointer"
-                  >
-                    {item}
-                  </p>
-                ))}
-            </div>
-          )}
-        </div>
+              <div className="flex gap-4">
+                {/* Draft Button */}
+                <motion.button
+                type="button"
+                  onClick={() => handleToggle(setFieldValue)}
+                  
+                  className={`${buttonStyles} ${isDraft ? activeStyle : inactiveStyle}`}
+                  initial={{ opacity: 1 }}
+                  animate={{ opacity: isDraft ? 1 : 0.6 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {isDraft ? "Draft On" : "Draft Off"}
+                </motion.button>
 
 
+              </div>
 
-
-        <br />
-
-
-
-         {/* Sidebar */}
-         <div className="flex flex-col gap-2 mx-3 relative">
-          <label
-            htmlFor="developerRef"
-            className="sf-medium font-medium text-sm text-[#000000]"
-          >
-            Ads
-          </label>
-          <div
-            onClick={() => setOptionsAdsStatus(!OptionsAdsStatus)}
-            className="flex cursor-pointer border w-full border-[#E4E4E4] py-4 px-5 rounded-[10px] sf-normal font-extralight text-sm text-[#666666]  outline-none"
-          >
-            <span>
-              {formData.sideBarName
-                ? formData.sideBarName
-                : "Select Ads"}
-            </span>
-            <span className="absolute right-5 top-12">
-              {OptionsAdsStatus ? <FaAngleUp /> : <FaAngleDown />}
-            </span>
-          </div>
-          {OptionsAdsStatus && (
-            <div className={`z-20 absolute rounded-[10px] top-24  bg-white w-full border p-3`}>
-              {sidebar &&
-                sidebar.map((item) => (
-                  <p
-                    key={item._id}
-                    onClick={() =>{
-
-                      notAvailableSidebarIds.includes(item._id) ? true :
-
-                      setFormData({...formData,sideBarRef:item._id,sideBarName:item.name})
-                      setOptionsAdsStatus(!OptionsAdsStatus)
-                    }
-                    }
-                    className={`py-1  ${notAvailableSidebarIds.includes(item._id) ? 'text-red-500 cursor-not-allowed' : 'text-black cursor-pointer'}`}
-                  >
-                     {item.name} {notAvailableSidebarIds.includes(item._id) && 'taken' }
-                  </p>
-                ))}
-            </div>
-          )}
-        </div>
-
-
-
-           {/* Project No */}
-           <div className="flex mt-3 flex-col gap-2 mx-3">
-          <label
-            htmlFor="projectNo"
-            className="sf-medium font-medium text-sm text-[#000000]"
-          >
-            Project No
-          </label>
-          <input
-            disabled={isLoading}
-            autoComplete=""
-            value={formData.projectNo}
-            name="projectNo"
-            onChange={handleChange}
-            type="text"
-            id="projectNo"
-            placeholder="No."
-            className="border border-[#E4E4E4] py-4 px-5 rounded-[10px] sf-normal text-sm text-[#666666]  outline-none"
-          />
-        </div>
-
+              <div>
 
         
 
-        {/* submit */}
+              </div>
 
-        <div className="p-3 mt-3   poppins-semibold text-lg">
-          <button disabled={isLoading} type="submit" className="w-52 h-11 bg-[#000000] text-[#ffffff] hover:bg-[#666666] flex justify-center items-center rounded-[4px] cursor-pointer">
-            
-              {isLoading ? "Loading..." : "Submit"}
-            
-          </button>
-        </div>
-      </div>
-    </form>
+
+              {/* Submit */}
+              <div className="p-3 poppins-semibold text-lg">
+                <button
+                  disabled={isLoading}
+                  type="submit"
+                  className="w-52 h-11 bg-[#000000] text-[#ffffff] hover:bg-[#666666] flex justify-center items-center rounded-[4px] cursor-pointer"
+                >
+                  {isLoading ? "Loading..." : "Save"}
+                </button>
+              </div>
+            </div>
+          </div>
+
+
+           {/* Debug */}
+           {/* <div className="mt-4">
+            <pre>{JSON.stringify(values, null, 2)}</pre>
+            <pre>{JSON.stringify(errors, null, 2)}</pre>
+          </div> */}
+
+          <div className="flex-1 sticky flex-wrap top-2 h-full px-5">
+            <PropertiesCard
+              navigate={navigate}
+              item={values}
+            />
+
+          </div>
+        </Form>
+      )}
+    </Formik>
   );
 }
 
 export default AddProperties;
+
+
+
+
+
+
+
+const PostHandoverOption = ({ name, value, onChange,clearForms }) => {
+  const [isChecked, setIsChecked] = useState(value || false);
+
+  const handleCheckboxToggle = () => {
+    const newValue = !isChecked;
+    setIsChecked(newValue);
+    onChange(name, newValue);
+  };
+
+  useEffect(()=>{
+    setIsChecked(value);
+    onChange(name, '');
+  },[clearForms])
+  return (
+    <div className="flex items-center gap-4 my-8">
+      {/* Checkbox */}
+      <input
+        type="checkbox"
+        checked={isChecked}
+        onChange={handleCheckboxToggle}
+        className="w-5 h-5 cursor-pointer accent-black"
+      />
+      <label className="text-sm text-[#333333] font-medium">
+        Post-Handover Option
+      </label>
+    </div>
+  );
+};
+
+
+
+
+const VideoUploader = ({ onChange ,name,clearForms}) => {
+  const [youtubeUrl, setYoutubeUrl] = useState("");
+  const [cutYoutubeUrl, setCutYoutubeUrl] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  // Extract and validate YouTube link
+  const extractYoutubeUrl = (url) => {
+    const regex = /(?:https?:\/\/)?(?:www\.)?youtube\.com\/(?:embed|watch\?v=)([^\s&?]+)/;
+    const match = url.match(regex);
+
+    if (match && match[0]) {
+      return `https://www.youtube.com/embed/${match[1]}`;
+    }
+    return "";
+  };
+
+  const handleYoutubeChange = (e) => {
+    const value = e.target.value;
+    const validUrl = extractYoutubeUrl(value);
+    setYoutubeUrl(value);
+    setCutYoutubeUrl(validUrl);
+
+    if (!validUrl) {
+      setErrorMessage("Invalid YouTube URL.");
+    } else {
+      setErrorMessage("");
+    }
+
+    onChange(name,validUrl); // Pass the cleaned URL to the parent component
+  };
+
+    // Reset the form when clearForms prop changes
+    useEffect(() => {
+     
+        setYoutubeUrl("");
+        setCutYoutubeUrl("");
+        setErrorMessage("");
+        onChange(name, ""); // Notify the parent of the cleared state
+      
+    }, [clearForms]);
+  
+
+
+  return (
+    <div className="video-uploader mt-8">
+      <label className="block sf-medium font-medium text-sm mb-2">YouTube Video URL</label>
+      <input
+        type="text"
+        className="border sf-medium font-medium text-sm border-gray-300 p-2 rounded-md w-full"
+        value={youtubeUrl}
+        onChange={handleYoutubeChange}
+        placeholder="Enter YouTube URL"
+      />
+      {errorMessage && (
+        <p className="text-red-500 text-sm mt-2">{errorMessage}</p>
+      )}
+      {cutYoutubeUrl && (
+        <div className="mt-4">
+          <label className="block text-sm font-medium mb-2">YouTube Video:</label>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <iframe
+              width="560"
+              height="315"
+              src={cutYoutubeUrl}
+              frameBorder="0"
+              allow="autoplay; encrypted-media"
+              allowFullScreen
+              title="YouTube Video"
+            ></iframe>
+          </motion.div>
+        </div>
+      )}
+    </div>
+  );
+};

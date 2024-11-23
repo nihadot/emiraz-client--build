@@ -32,11 +32,13 @@ function City({ item, refresh, setRefresh }) {
   return (
     <div className='w-52 max-w-52  border pb-3 rounded-[10px] mb-4'>
         <div className="w-52 h-[200px] relative">
-            <img src={`${MAIN_IMAG_URL}/${item.mainImgaeLink}`} className='object-cover w-full h-full rounded-[10px]' alt="" />
+            <img src={item?.imageFile?.secure_url} className='object-cover w-full h-full rounded-[10px]' alt="" />
             <div className="absolute top-3 left-3 w-full ">
                 <p className='bg-[#666666] text-center poppins-semibold text-[#ffffff]  px-2 w-fit py-2 text-[10px] rounded-[40px]'>{item.emirateName}</p>
                 <h1 className='text-2xl text-[#ffffff]  poppins-semibold'>{item.cityName}</h1>
             </div>
+            { item.priority &&  <span className="flex absolute top-2 right-2 rounded-full w-9 h-9 bg-black z-40 text-white justify-center items-center">{item.priority}</span>}
+
         </div>
         <div className="mt-4  flex gap-2 w-full px-2.5">
             <button onClick={()=>navigate(`/admin/edit-citiy/${item._id}`,{ state: item })}  className='flex-1 py-2.5 rounded poppins-semibold text-[10px] bg-[#D2D2D2] text-[#000000]' >Edit</button>

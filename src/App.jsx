@@ -28,6 +28,10 @@ import {
   AgencyLoginPage,
   AgencyDashboard,
   AgencyEnquiriesPage,
+  AdminEditPropertyPage,
+  AdminPropertyEditDetailsPage,
+  AdminPropertyEditImagesPage,
+  AdminPropertyOtherEditPage,
 
   // users
   UserHome,
@@ -67,11 +71,15 @@ import {
   AdminAddAgencyPage,
   AdminEditAgencyPage,
   AdminViewAgencyPage,
+  AdminEditPage,
+
 } from './Routes';
 import { Toaster } from 'react-hot-toast';
 import { useEffect, useState } from 'react';
 import Offline from './components/Offline/Offline';
 import 'react-phone-input-2/lib/style.css';
+
+import Dummy from "./Dummy"
 
 function App() {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
@@ -94,6 +102,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path='/admin-login' element={<LoginPage />} />
+          <Route path='dummy' element={<Dummy />} />
 
           <Route path='/admin' element={<AdminLayout />}>
             {/* agency */}
@@ -122,7 +131,12 @@ function App() {
             <Route path='manage-projects' element={<ManageProperties />} />
             <Route path='add-properties' element={<AddProperties />} />
             <Route path='edit-properties' element={<EditProperties />} />
-            <Route path='edit-property/:id' element={<EditProperty />} />
+            <Route path='edit-property-page/:userId' element={<AdminEditPropertyPage />} />
+            <Route path='edit-details/:userId' element={<AdminPropertyEditDetailsPage />} />
+            <Route path='edit-images/:userId' element={<AdminPropertyEditImagesPage />} />
+            <Route path='edit-assignments/:projectId' element={<AdminPropertyOtherEditPage />} />
+            
+            <Route path='edit-property/:id' element={<AdminEditPage />} />
             <Route path='add-city' element={<AddCityPage />} />
             <Route path='edit-cities' element={<EditCitiesPage />} />
             <Route path='edit-citiy/:id' element={<EditCityPage />} />

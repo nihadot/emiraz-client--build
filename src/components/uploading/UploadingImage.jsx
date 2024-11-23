@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 
 function UploadingImage({
-  maxSize = 10 * 1024 * 1024,
+  maxSize = 1 * 1024 * 1024,
   onError,
   isLoading,
   previewUrl,
@@ -18,6 +18,8 @@ function UploadingImage({
     } else {
       onError("File size exceeds the limit, maximu is 1MB");
     }
+
+    event.target.value = null;
   };
 
   return (
