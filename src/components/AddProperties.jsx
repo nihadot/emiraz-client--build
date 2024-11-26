@@ -30,31 +30,7 @@ import AdsDropdown from "./AddProject/AdsDropdown";
 
 
 
-const validationSchema = Yup.object().shape({
-  projectTitle: Yup.string()
-    .required("Project Title is required")
-    .min(3, "Project Title must be at least 3 characters")
-    .max(50, "Project Title cannot exceed 50 characters"),
-  priceInAED: Yup.string().required("Price is required"),
-  handoverDate: Yup.date()
-    .required("Handover Date is required")
-    .min(new Date(), "Only future dates are allowed"), // Restrict past dates
-  beds: Yup.string()
-    .required("Beds information is required"),
-  // .matches(/^\d+|[A-Za-z\s]+$/, "Beds must be a number or text"), // Validate as number or text
-  cities: Yup.array()
-    .min(1, "At least one city must be selected")
-    .required("Cities are required"),
-  propertyType: Yup.array().min(1, "At least one property")
-    .required("Property Type is required"),
-    developer: Yup.object()
-    .nullable()
-    .required("Selecting a developer is required"), // Validation for the developer field
-      imageFile: Yup.mixed()
-    .required("Image is required")
-  //  ,
 
-});
 
 
 // Check if it's available
@@ -76,7 +52,31 @@ function AddProperties() {
   };
   const [existPriorities, setExistPriorities] = useState([]);
   const [priorityValue, setPriorityValue] = useState({status:false,value:''});
-
+  const validationSchema = Yup.object().shape({
+    projectTitle: Yup.string()
+      .required("Project Title is required")
+      .min(3, "Project Title must be at least 3 characters")
+      .max(250, "Project Title cannot exceed 250 characters"),
+    priceInAED: Yup.string().required("Price is required"),
+    handoverDate: Yup.date()
+      .required("Handover Date is required")
+      .min(new Date(), "Only future dates are allowed"), // Restrict past dates
+    beds: Yup.string()
+      .required("Beds information is required"),
+    // .matches(/^\d+|[A-Za-z\s]+$/, "Beds must be a number or text"), // Validate as number or text
+    cities: Yup.array()
+      .min(1, "At least one city must be selected")
+      .required("Cities are required"),
+    propertyType: Yup.array().min(1, "At least one property")
+      .required("Property Type is required"),
+      developer: Yup.object()
+      .nullable()
+      .required("Selecting a developer is required"), // Validation for the developer field
+        imageFile: Yup.mixed()
+      .required("Image is required")
+    //  ,
+  
+  });
   const navigate = useNavigate();
   const [userData, setUserData] = useState([]);
   const [adsOptions,setAdsOptions] = useState([]);
@@ -131,7 +131,7 @@ function AddProperties() {
     }
   };
 
-  
+
   const [isDraft, setIsDraft] = useState(false);  // State to track if the draft is active
 
   // Button Styles

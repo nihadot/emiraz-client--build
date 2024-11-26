@@ -50,7 +50,7 @@ function AddProperties() {
     projectTitle: Yup.string()
       .required("Project Title is required")
       .min(3, "Project Title must be at least 3 characters")
-      .max(50, "Project Title cannot exceed 50 characters"),
+      .max(250, "Project Title cannot exceed 250 characters"),
     priceInAED: Yup.string().required("Price is required"),
     handoverDate: Yup.date()
       .required("Handover Date is required")
@@ -61,7 +61,7 @@ function AddProperties() {
   
   
   });
-  
+
 
   useEffect(() => {
 
