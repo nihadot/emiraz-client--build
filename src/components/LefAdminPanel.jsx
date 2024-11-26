@@ -48,7 +48,7 @@ function LefAdminPanel() {
 
   return (
     <>
-    <div className={`${style} z-50 fixed md:overflow-clip overflow-scroll top-1 left-0 ease-out duration-1000 max-w-60 h-[99vh] rounded-e-[50px] bg-[#000000] text-white`}>
+    <div className={` z-50 fixed md:overflow-clip overflow-scroll top-0 left-0 ease-out duration-1000 max-w-60 h-screen  bg-[#000000] text-white`}>
         <div className="pt-14 px-6">
             <img src={ImageSVG} alt="logo" className='w-44 h-12 object-contain'  />
         </div>
