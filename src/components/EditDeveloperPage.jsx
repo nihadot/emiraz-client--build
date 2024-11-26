@@ -5,7 +5,7 @@ import PlaceHolder from "../assets/placeholder/placeholder-image.png";
 import { errorToast, successToast } from "../toast";
 import UploadingImage from "./uploading/UploadingImage";
 import { CiCircleRemove } from "react-icons/ci";
-import { FaAngleDown, FaAngleUp } from "react-icons/fa";
+import { FaAngleDown, FaAngleUp, FaEye, FaEyeSlash } from "react-icons/fa";
 import { addingDeveloper, fetchCityPrioritesAPI, fetchDeveloperByIdAPI, fetchDevelopersPrioritesAPI, updateDeveloper } from "../api";
 import { CLOUDINARY_NAME, CLOUDINARY_PERSISTENT } from "../api/localstorage-varibles";
 import axios from "axios";
@@ -14,6 +14,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 function AddUser() {
   const [isLoading, setIsLoading] = useState(false);
+  const [togglePassword,setTogglePassword] = useState('password');
 
   const [priority, setPriority] = useState(false);
   const [priorityCount, setPriorityCount] = useState([]);
@@ -210,16 +211,18 @@ function AddUser() {
               </div>
 
               {/* Password */}
-              <div className="flex mt-3 flex-col gap-2">
+              <div className="flex relative  mt-3 flex-col gap-2">
                 <label htmlFor="password" className="font-medium text-sm">
                   Password <span className="text-lg text-red-600">*</span>
                 </label>
                 <Field
                   name="password"
-                  type="password"
+                  type={togglePassword}
                   placeholder="Enter password"
                   className="border py-4 px-5 rounded-[10px]  text-sm"
                 />
+                 { togglePassword === 'password' ?  <FaEye className="absolute top-14 right-4" onClick={()=>setTogglePassword('text')} /> :
+                <FaEyeSlash className="absolute top-14 right-4" onClick={()=>setTogglePassword('password')}/>}
                 <ErrorMessage name="password" component="div" className="text-red-500 text-sm" />
               </div>
 

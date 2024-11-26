@@ -33,7 +33,7 @@ function BlogCard( {item, refresh, setRefresh} ) {
   return (
     <div className='max-w-[360px]  w-[360px] 400px:w-[355px] 640px:w-[-webkit-fill-available] 1300px:w-[380px]  rounded-2xl border px-4 py-4'>
         <div className="w-full h-48 rounded-[10px] overflow-hidden">
-            <img src={`${MAIN_IMAG_URL}/${item.mainImgaeLink}`} className=' w-full h-full object-cover' alt="" />
+            <img src={item?.imageFile?.secure_url} className=' w-full h-full object-cover' alt="" />
         </div>
         <div className="poppins-medium text-2xl text-center mt-1">
             <h1>{item.blogTitle.length > 24 ? item.blogTitle.slice(0,24)+'...' : item.blogTitle }</h1>

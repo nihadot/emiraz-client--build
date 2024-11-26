@@ -6,11 +6,14 @@ import BlackLogoForWhite from "../../assets/logo/ps_logo.png";
 import { HamburgerSVG, HamburgBlackWhiteBg, Search } from "../../assets/icons";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { IoMdClose } from "react-icons/io";
-import { fetchPropertyTypeAPI, searchAPI } from "../../api";
+import { fetchPropertyTypeAPI, searchAPI, SERVER_URL } from "../../api";
 import Lazyloading from "../Lazyloading/Lazyloading";
 import Placeholder from "../../assets/placeholder/placeholder-image.png";
 import axios from "axios";
 import { errorToast } from "../../toast";
+import { useDispatch } from "react-redux";
+import { searchResult } from "../../features/searchSlice";
+import _ from "lodash";
 
 function Header() {
   const navigate = useNavigate();
@@ -73,7 +76,6 @@ function Header() {
 
     try {
       const response = await searchAPI(encodeURIComponent(searchQuery))
-      console.log(response,'response')
       if(response.result){
         navigate(`/property/${response?.result?.propretyHeadline?.trim().toLowerCase().replace(/\s+/g, "-")}/${response?.result?._id}`,{state: response?.result});
       }
@@ -82,6 +84,33 @@ function Header() {
       setIsFormSubmitLoading(false);
     }
   };
+
+  const dispatch = useDispatch();
+
+  useEffect(()=>{
+
+
+  const fetchSearchResults = _.debounce(async(searchQuery)=>{
+    try {
+      const response = await axios.get(`${SERVER_URL}/property/search`,{
+        params:{
+          q:searchQuery
+        }
+      })
+      const data = response.data.result;
+    dispatch(searchResult(data));
+// 
+    //  setProperties(data);
+    } catch (error) {
+      // setProperties([]);
+    }
+  },300);
+
+  fetchSearchResults(query);
+
+
+    // console.log(query,'--search')
+  },[query]);
 
   return (
     <>
@@ -144,7 +173,51 @@ function Header() {
               ></span>
             </li>
 
-            {data &&
+
+
+            <li className="px-5 flex items-center">
+              <Link to={"/property-type/villa"}>Villa</Link>{" "}
+              <span
+                className={`ms-6 w-[1px] h-4 ${
+                  pathName ? "bg-slate-50" : "bg-black"
+                }  block`}
+              ></span>
+            </li>
+
+
+
+            <li className="px-5 flex items-center">
+              <Link to={"/property-type/apartment"}>Apartment</Link>{" "}
+              <span
+                className={`ms-6 w-[1px] h-4 ${
+                  pathName ? "bg-slate-50" : "bg-black"
+                }  block`}
+              ></span>
+            </li>
+
+
+
+            <li className="px-5 flex items-center">
+              <Link to={"/property-type/penthouse"}>Penthouse</Link>{" "}
+              <span
+                className={`ms-6 w-[1px] h-4 ${
+                  pathName ? "bg-slate-50" : "bg-black"
+                }  block`}
+              ></span>
+            </li>
+
+
+
+            <li className="px-5 flex items-center">
+              <Link to={"/property-type/townhouse"}>Townhouse</Link>{" "}
+              <span
+                className={`ms-6 w-[1px] h-4 ${
+                  pathName ? "bg-slate-50" : "bg-black"
+                }  block`}
+              ></span>
+            </li>
+
+            {/* {data &&
               data.map((item, index) => {
                 if (index < 4) {
                   return (
@@ -168,7 +241,7 @@ function Header() {
                     </li>
                   );
                 }
-              })}
+              })} */}
 
             <li>
               <div
@@ -179,11 +252,12 @@ function Header() {
                 <input
                   className={` sf-normal text-[14px] placeholder:text-black pe-2 outline-none border-none `}
                   type="text"
-                  placeholder="Enter Project No"
+                  placeholder='Search properties...'
+
                   value={query}
             onChange={(e) => setQuery(e.target.value)}
                 />
-                <img onClick={handleSubmit} src={Search} alt="" className="cursor-pointer h-[25px]" />
+                <img src={Search} alt="" className="cursor-pointer h-[25px]" />
               </div>
             </li>
           </ul>
@@ -227,7 +301,62 @@ function Header() {
                   }`}
                 ></span>
               </li>
-              {data &&
+
+
+
+
+              <li className="px-2 mx-4 py-2.5 cursor-pointer flex items-start flex-col ">
+                <Link to={"/property-type/villa"} aria-label="Blog page route">
+                Villa
+                </Link>
+                <span
+                  className={`w-full h-[2px] mt-3 ${
+                    pathName ? "bg-white" : "bg-black"
+                  }`}
+                ></span>
+              </li>
+
+
+
+
+              <li className="px-2 mx-4 py-2.5 cursor-pointer flex items-start flex-col ">
+                <Link to={"/property-type/apartment"} aria-label="Blog page route">
+                Apartment
+                </Link>
+                <span
+                  className={`w-full h-[2px] mt-3 ${
+                    pathName ? "bg-white" : "bg-black"
+                  }`}
+                ></span>
+              </li>
+
+
+
+
+
+              <li className="px-2 mx-4 py-2.5 cursor-pointer flex items-start flex-col ">
+                <Link to={"/property-type/penthouse"} aria-label="Blog page route">
+                Penthouse
+                </Link>
+                <span
+                  className={`w-full h-[2px] mt-3 ${
+                    pathName ? "bg-white" : "bg-black"
+                  }`}
+                ></span>
+              </li>
+
+              
+
+
+              <li className="px-2 mx-4 py-2.5 cursor-pointer flex items-start flex-col ">
+                <Link to={"/property-type/townhouse"} aria-label="Blog page route">
+                Townhouse
+                </Link>
+            
+              </li>
+
+              
+              {/* {data &&
                 data.map((item, index) => {
                   if (index < 4) {
                     return (
@@ -252,7 +381,41 @@ function Header() {
                       </li>
                     );
                   }
-                })}
+                })} */}
+
+{/* 
+
+<li className=' flex items-center'>
+              <Link to={'/property-type/villa'}>Villa</Link>{' '}
+              <span
+                className={`mx-8 w-[1px] h-4 ${
+                  pathName ? 'bg-slate-50' : 'bg-black'
+                }  block`}
+              ></span>
+            </li> */}
+
+
+{/* 
+            <li className=' flex items-center'>
+              <Link to={'/property-type/apartment'}>Apartment</Link>{' '}
+              <span
+                className={`mx-8 w-[1px] h-4 ${
+                  pathName ? 'bg-slate-50' : 'bg-black'
+                }  block`}
+              ></span>
+            </li> */}
+
+
+            {/* <li className=' flex items-center'>
+              <Link to={'/property-type/penthouse'}>Penthouse</Link>{' '}
+              <span
+                className={`mx-8 w-[1px] h-4 ${
+                  pathName ? 'bg-slate-50' : 'bg-black'
+                }  block`}
+              ></span>
+            </li> */}
+
+
 
               {/* <li className="px-2 mx-4 pt-1 mb-3 cursor-pointer ">
                 <div

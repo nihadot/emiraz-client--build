@@ -94,7 +94,7 @@ const seo_site_url = `${window.location.href}`;
                           key={item._id}
                         >
                           <Lazyloading
-                            src={`${MAIN_IMAG_URL}/${item?.mainImgaeLink}`}
+                            src={item?.imageFile?.secure_url}
                             alt={item?.developerName}
                             className={"my-10  object-contain max-h-[120px]"}
                           />

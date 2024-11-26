@@ -24,8 +24,8 @@ import {
 } from "./api-end-points";
 import { ADMIN_TOKEN, AGENCY_TOKEN } from "./localstorage-varibles";
 
-export const SERVER_URL = `http://localhost:4000/api/v1`;
-// export const SERVER_URL = 'https://www.propertyseller.ae/api/v1';
+// export const SERVER_URL = `http://localhost:4000/api/v1`;
+export const SERVER_URL = 'https://www.propertyseller.ae/api/v1';
 export const MAIN_IMAG_URL = `${SERVER_URL}/mainImage`;
 export const SMALL_IMAG_URL = `${SERVER_URL}/smallImage`;
 // const MAIN_IMAG_URL = `${SERVER_URL}/mainImgae/`
@@ -150,9 +150,9 @@ export const getPropertiesByCity = async (id) => {
 };
 
 // ========GET=PROPERTIES=BY=PROPERTY TYPE ID=======//
-export const getPropertiesByProjectsId = async (id) => {
+export const getPropertiesByProjectsId = async (name) => {
   try {
-    const response = await axios.get(`${SERVER_URL}/${PROPERTY}/property-type/${id}`);
+    const response = await axios.get(`${SERVER_URL}/${PROPERTY}/property-type/${name}`);
     return response.data;
   } catch (error) {
     throw error || "An error occurred during login.";
@@ -475,9 +475,9 @@ export const getBlogById = async (id) => {
 };
 // ==========================//
 // ========UPDATE=BLOG========//
-export const updateBlog = async (data) => {
+export const updateBlog = async (data,id) => {
   try {
-    const response = await axios.put(`${SERVER_URL}/${BLOG}/`, data, {
+    const response = await axios.put(`${SERVER_URL}/${BLOG}/${id}`, data, {
       headers: { Authorization: `Bearer ${localStorage.getItem(ADMIN_TOKEN)}` },
     });
     return response.data;

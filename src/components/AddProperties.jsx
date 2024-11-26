@@ -12,7 +12,7 @@ import DescriptionInput from "./AddProject/DescriptionInput";
 import DevelopersDropdown from "./AddProject/DevelopersDropdown";
 import AdvancedImageUploader from "./AddProject/AdvancedImageUploader";
 import NearbyAreas from "./AddProject/NearbyAreas";
-import AdsOptionDropdown from "./AddProject/AdsOptionDropdown";
+// import AdsOptionDropdown from "./AddProject/";
 import FacilitiesAndAmenities from "./AddProject/FacilitiesAndAmenities";
 import { errorToast, successToast } from "../toast";
 import axios from "axios";
@@ -23,29 +23,11 @@ import { useNavigate } from "react-router-dom";
 import { CLOUDINARY_NAME, CLOUDINARY_PERSISTENT } from "../api/localstorage-varibles";
 import PaymentOptions from "./PaymentOptions";
 import PriorityDropdown from "./PriorityDropdown";
+import AdsDropdown from "./AddProject/AdsDropdown";
 
-const { createFFmpeg, fetchFile } = await import('@ffmpeg/ffmpeg');
 
 
-const uploadImage = async (image, folder) => {
-  const formData = new FormData();
-  formData.append("file", image);
-  formData.append("upload_preset", CLOUDINARY_PERSISTENT);
-  formData.append("folder", folder);
 
-  try {
-    const response = await axios.post(`https://api.cloudinary.com/v1_1/${CLOUDINARY_NAME}/image/upload`, formData);
-    return {
-      asset_id: response.data.asset_id,
-      secure_url: response.data.secure_url,
-      url: response.data.url,
-      public_id: response.data.public_id,
-    };
-  } catch (error) {
-    console.error('Error uploading image:', error);
-    throw new Error('Image upload failed');
-  }
-};
 
 
 const validationSchema = Yup.object().shape({
@@ -97,6 +79,7 @@ function AddProperties() {
 
   const navigate = useNavigate();
   const [userData, setUserData] = useState([]);
+  const [adsOptions,setAdsOptions] = useState([]);
 
   useEffect(() => {
     // Make multiple API calls concurrently using Promise.all
@@ -106,6 +89,7 @@ function AddProperties() {
           axios.get(`${SERVER_URL}/city/`), // Replace with your first API URL
           axios.get(`${SERVER_URL}/developer`), // Replace with your second API URL
           axios.get(`${SERVER_URL}/priority`), // Replace with your second API URL
+          axios.get(`${SERVER_URL}/sidebar`), // Replace with your second API URL
         ]);
 
         console.log(responses, 'res')
@@ -114,6 +98,7 @@ function AddProperties() {
         setCities(responses[0].data.result);
         setDevelopers(responses[1].data.result);
         setExistPriorities(responses[2].data.result);
+        setAdsOptions(responses[3].data.result);
         setIsLoading(false);
 
       } catch (error) {
@@ -125,6 +110,28 @@ function AddProperties() {
     fetchData();
   }, []); // Empty dependency array means this effect runs only once, after the first render
 
+
+  const uploadImage = async (image, folder) => {
+    const formData = new FormData();
+    formData.append("file", image);
+    formData.append("upload_preset", CLOUDINARY_PERSISTENT);
+    formData.append("folder", folder);
+  
+    try {
+      const response = await axios.post(`https://api.cloudinary.com/v1_1/${CLOUDINARY_NAME}/image/upload`, formData);
+      return {
+        asset_id: response.data.asset_id,
+        secure_url: response.data.secure_url,
+        url: response.data.url,
+        public_id: response.data.public_id,
+      };
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      throw new Error('Image upload failed');
+    }
+  };
+
+  
   const [isDraft, setIsDraft] = useState(false);  // State to track if the draft is active
 
   // Button Styles
@@ -136,7 +143,6 @@ function AddProperties() {
     setFieldValue("draft", !isDraft);
     setIsDraft((prevState) => !prevState); // Toggle between true and false
   };
-
 
 
   const handleSubmit = async (event, { resetForm }) => {
@@ -158,6 +164,9 @@ for (const element of obj) {
         data.developer = data.developer.id;
       }
 
+      if(data.adsOptions){
+        data.adsOptions = data.adsOptions._id
+      }
      
 
       if (event.imageFile) {
@@ -209,6 +218,8 @@ for (const element of obj) {
     }
   }
 
+
+
   console.log(existPriorities,'existPriorities')
   // console.log(priorityValue,'prioritiesValue')
   return (
@@ -232,6 +243,7 @@ for (const element of obj) {
         priority: "",
         projectNumber: "",
         isChecked:false,
+        adsOptions: [],
       }}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
@@ -465,15 +477,26 @@ priorityValue={priorityValue}
               {/* Error Message */}
               <ErrorMessage name='priorities' component="div" className="text-red-500 text-sm mt-2" />
 
-              <AdsOptionDropdown
+              {/* <AdsDropdown
               clearForms={clearForms}
                 isLoading={isLoading}
                 name={'adsOptions'}
                 onChange={setFieldValue}
+                value={values.adsOptions}
+                options={adsOptions}
+
+              /> */}
+
+
+
+              <AdsDropdown
+                name="adsOptions"
+                clearForms={clearForms}
+                value={values.adsOptions}
+                onChange={setFieldValue}
+                isLoading={isLoading}
+                options={adsOptions}
               />
-
-
-
 
               {/* Project Number */}
               <div className="flex mt-6 flex-col gap-2 ">
@@ -506,6 +529,8 @@ priorityValue={priorityValue}
               clearForms={clearForms}
 
               />
+
+
 
 
               <div className="flex gap-4">
@@ -554,10 +579,10 @@ priorityValue={priorityValue}
           </div> */}
 
           <div className="flex-1 sticky flex-wrap top-2 h-full px-5">
-            <PropertiesCard
+          { values.projectTitle && values.priceInAED && values.handoverDate &&  values.beds && values.propertyType.length > 0 && values.cities.length > 0 && values.developer && values.imageFile &&   <PropertiesCard
               navigate={navigate}
               item={values}
-            />
+            />}
 
           </div>
         </Form>

@@ -27,7 +27,6 @@ const PriorityDropdown = ({ name, value, onChange, clearForms, existingPrioritie
   // Filter priorities: Remove already existing priorities from the available ones
   useEffect(() => {
       const prioritiesList = priorities.filter(item => !existingPriorities.includes(item));
-      console.log(prioritiesList,'prioritiesList')
       setData(prioritiesList); // Update the data state with filtered priorities
   
   }, [existingPriorities, priorities]);
@@ -57,7 +56,7 @@ const PriorityDropdown = ({ name, value, onChange, clearForms, existingPrioritie
 
       {/* Animated Options */}
       <AnimatePresence>
-        {isOpen && (
+        {isOpen && data.length > 0  && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}

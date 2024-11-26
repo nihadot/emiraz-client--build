@@ -65,9 +65,9 @@ function UserBlogDetails() {
             <div className="mt-4 mx-6">
               <Header />
             </div>
-            <section className="  mt-[24px]  px-[24px] w-full lg:px-[80px]">
+            <section className="  mt-[24px] px-6  lg:px-20 xl:px-28 w-full ">
               <div className="">
-                <div className="block lg:flex w-full lg:gap-3  ">
+                <div className="block lg:flex w-full h-full   lg:gap-3  ">
                   <div className="flex-none lg:flex-[70%] lg:w-[749px] ">
                     <BlogBody item={blog} />
                   </div>
@@ -86,7 +86,7 @@ function UserBlogDetails() {
                                   key={item._id}
                                 >
                                   <Lazyloading
-                                    src={`${MAIN_IMAG_URL}/${item.mainImgaeLink}`}
+                                    src={item?.imageFile?.secure_url}
                                     className="w-full h-full object-cover"
                                   />
                                 </div>
@@ -134,11 +134,9 @@ export default UserBlogDetails;
 
 const BlogBody = ({ item }) => {
   return (
-    <div className="">
+    <div className=" mb-20">
       <Lazyloading
-        src={`${
-          MAIN_IMAG_URL ? MAIN_IMAG_URL + "/" + item.mainImgaeLink : Placeholder
-        }`}
+        src={item?.imageFile?.secure_url}
         className="rounded-[20px] w-full h-[322px] md:h-[514px] xl:w-full  object-cover "
         alt={item.blogTitle}
       />

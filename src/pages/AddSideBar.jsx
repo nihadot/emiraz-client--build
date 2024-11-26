@@ -4,6 +4,8 @@ import { errorToast, successToast } from "../toast";
 import UploadingImage from "../components/uploading/UploadingImage";
 import { CiCircleRemove } from "react-icons/ci";
 import { addSideBanner } from "../api";
+import { CLOUDINARY_NAME, CLOUDINARY_PERSISTENT } from "../api/localstorage-varibles";
+import axios from "axios";
 function AddSideBar() {
   // --------------------------------------------
   const [isLoading, setIsLoading] = useState(false);
@@ -19,16 +21,38 @@ function AddSideBar() {
       setIsLoading(true);
       e.preventDefault();
 
-      const formDataFields = new FormData();
+      let data = {};
 
-      formDataFields.append("name", name);
-      formDataFields.append("title", title);
-      
-      if (image) {
-        formDataFields.append("mainImgaeLink", image);
+      if(!name){
+        errorToast("Please enter a name");
+        return;
+      }
+      if(!image){
+        errorToast("Please select an image");
+        return;
       }
 
-        await addSideBanner(formDataFields);
+      data.name = name;
+
+
+        const formData = new FormData();
+        formData.append("file", image);
+        formData.append("upload_preset", CLOUDINARY_PERSISTENT); // Replace with your actual preset
+        formData.append("folder", "city_images"); // Replace with your specific folder name
+        const response = await axios.post(`https://api.cloudinary.com/v1_1/${CLOUDINARY_NAME}/image/upload`,formData);
+        const imageFile = {
+          public_id : response.data.public_id,
+          secure_url : response.data.secure_url,
+          url : response.data.url,
+          bytes : response.data.bytes,
+          width : response.data.width,
+          height : response.data.height,
+        }
+        data.imageFile = imageFile;
+
+
+
+        await addSideBanner(data);
       successToast("Successfully added");
       setImage("");
       setName("")
@@ -36,13 +60,9 @@ function AddSideBar() {
       setFormData({ preview: "" });
       setIsLoading(false);
     } catch (error) {
-      if (error.response && error.response.data) {
-        errorToast(error.response.data.message);
-        setIsLoading(false);
-      } else {
-        errorToast("An error occurred during login.");
-        setIsLoading(false);
-      }
+      const errorMsg = error.response?.data?.message || error?.message || "An error occurred during the operation.";
+      errorToast(errorMsg);
+      setIsLoading(false);
     }
   };
 

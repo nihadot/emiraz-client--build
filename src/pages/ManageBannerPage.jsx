@@ -1,8 +1,12 @@
+import { useNavigate } from "react-router-dom";
 import ManageBanner from "../components/ManageBanner";
 import ManageBannerClients from "../components/ManageBannerClients";
 import ManageSideBanner from "../components/ManageSideBanner";
+import { IoMdAdd } from "react-icons/io";
 
 function ManageBannerPage() {
+
+  const navigate = useNavigate();
   return (
     <div>
       <div className="">
@@ -12,13 +16,17 @@ function ManageBannerPage() {
         <div className="mb-2">
           <ManageBanner />
         </div>
-        <div className="mb-2">
+        {/* <div className="mb-2">
           <ManageBannerClients />
-        </div>
+        </div> */}
         <div className="mb-2">
           <ManageSideBanner />
         </div>
-        
+
+        <div onClick={()=>navigate('/admin/view-all-ads')} className="flex h-20 lg:h-16   items-center  flex-1 justify-between px-6 rounded-[10px] bg-[#000000] text-[#FFFFFF]">
+            <span className="">View All Ads</span>
+            <span><IoMdAdd/></span>
+        </div>
       </div>
     </div>
   );

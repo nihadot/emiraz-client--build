@@ -4,6 +4,8 @@ import { errorToast, successToast } from "../toast";
 import { addingBlog } from "../api";
 import { CiCircleRemove } from "react-icons/ci";
 import UploadingImage from "./uploading/UploadingImage";
+import { CLOUDINARY_NAME, CLOUDINARY_PERSISTENT } from "../api/localstorage-varibles";
+import axios from "axios";
 
 function AddBlog() {
   // const { isLoading } = useSelector((state) => state.blog);
@@ -33,17 +35,59 @@ function AddBlog() {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
-      setLoading(true);
-      const formDataFields = new FormData();
-      formDataFields.append("blogTitle", formData.blogTitle);
-      formDataFields.append("blogBody", formData.blogBody);
-      formDataFields.append("date", formData.date);
 
-      if (image) {
-        formDataFields.append("mainImgaeLink", image);
+      setLoading(true);
+
+      if(!formData.blogTitle){
+        errorToast("Please enter a blog title");
+        return false;
       }
 
-      await addingBlog(formDataFields);
+      if(!formData.blogBody){
+        errorToast("Please enter a blog body");
+        return false;
+      }
+
+      if(!formData.date){
+        errorToast("Please enter a date");
+        return false;
+      }
+
+      if(!image){
+        errorToast("Please select an image");
+        return false;
+      }
+
+      const data = {
+        blogTitle: formData.blogTitle,
+        blogBody: formData.blogBody,
+        date: formData.date,
+        imageFile: image,
+      }
+
+      if(image){
+        // if (values.image) {
+          const formData = new FormData();
+          formData.append("file", image);
+          formData.append("upload_preset", CLOUDINARY_PERSISTENT); // Replace with your actual preset
+          formData.append("folder", "city_images"); // Replace with your specific folder name
+          const response = await axios.post(`https://api.cloudinary.com/v1_1/${CLOUDINARY_NAME}/image/upload`,formData);
+          const imageFile = {
+            public_id : response.data.public_id,
+            secure_url : response.data.secure_url,
+            url : response.data.url,
+            bytes : response.data.bytes,
+            width : response.data.width,
+            height : response.data.height,
+          }
+          data.imageFile = imageFile;
+        //  } 
+      }
+
+
+     
+
+      await addingBlog(data);
       successToast("Successfully added");
       setFormData({
         blogBody: "",

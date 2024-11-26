@@ -40,7 +40,7 @@
 
 
 import React, { useState, useMemo } from 'react';
-console.log(`[Render] first code: ${new Date().toLocaleTimeString()}`);
+// console.log(`[Render] first code: ${new Date().toLocaleTimeString()}`);
 
 function App() {
   console.log("Component executed");

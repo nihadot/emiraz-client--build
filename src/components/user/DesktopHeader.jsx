@@ -113,7 +113,7 @@ function DesktopHeader() {
               ></span>
             </li>
 
-            {data &&
+            {/* {data &&
               data.map((item, index) => {
                 if (index < 4) {
                   return (
@@ -135,11 +135,54 @@ function DesktopHeader() {
                     </li>
                   );
                 }
-              })}
+              })} */}
 
-            <li className='px-2 flex items-center'>
-              <Link to={'/our-developers'}>Developers</Link>{' '}
+
+<li className=' flex items-center'>
+              <Link to={'/property-type/villa'}>Villa</Link>{' '}
+              <span
+                className={`mx-8 w-[1px] h-4 ${
+                  pathName ? 'bg-slate-50' : 'bg-black'
+                }  block`}
+              ></span>
             </li>
+
+
+
+            <li className=' flex items-center'>
+              <Link to={'/property-type/apartment'}>Apartment</Link>{' '}
+              <span
+                className={`mx-8 w-[1px] h-4 ${
+                  pathName ? 'bg-slate-50' : 'bg-black'
+                }  block`}
+              ></span>
+            </li>
+
+
+            <li className=' flex items-center'>
+              <Link to={'/property-type/penthouse'}>Penthouse</Link>{' '}
+              <span
+                className={`mx-8 w-[1px] h-4 ${
+                  pathName ? 'bg-slate-50' : 'bg-black'
+                }  block`}
+              ></span>
+            </li>
+
+
+            <li className=' flex items-center'>
+              <Link to={'/property-type/townhouse'}>Townhouse</Link>{' '}
+              {/* <span
+                className={`mx-8 w-[1px] h-4 ${
+                  pathName ? 'bg-slate-50' : 'bg-black'
+                }  block`}
+              ></span> */}
+            </li>
+
+            
+
+            {/* <li className='px-2 flex items-center'>
+              <Link to={'/our-developers'}>Developers</Link>{' '}
+            </li> */}
           </ul>
           {/* desktop */}
 
@@ -181,7 +224,63 @@ function DesktopHeader() {
                   }`}
                 ></span>
               </li>
-              {data &&
+
+
+
+              <li className='px-2 mx-4 py-2.5 cursor-pointer flex items-start flex-col '>
+                <Link to={'/property-type/villa'} aria-label='Blog page route'>
+                Villa
+                </Link>
+                <span
+                  className={`w-full h-[2px] mt-3 ${
+                    pathName ? 'bg-white' : 'bg-black'
+                  }`}
+                ></span>
+              </li>
+
+
+
+              <li className='px-2 mx-4 py-2.5 cursor-pointer flex items-start flex-col '>
+                <Link to={'/property-type/apartment'} aria-label='Blog page route'>
+                Apartment
+                </Link>
+                <span
+                  className={`w-full h-[2px] mt-3 ${
+                    pathName ? 'bg-white' : 'bg-black'
+                  }`}
+                ></span>
+              </li>
+
+
+
+              <li className='px-2 mx-4 py-2.5 cursor-pointer flex items-start flex-col '>
+                <Link to={'/property-type/penthouse'} aria-label='Blog page route'>
+                Penthouse
+                </Link>
+                <span
+                  className={`w-full h-[2px] mt-3 ${
+                    pathName ? 'bg-white' : 'bg-black'
+                  }`}
+                ></span>
+              </li>
+
+
+
+
+              <li className='px-2 mx-4 py-2.5 cursor-pointer flex items-start flex-col '>
+                <Link to={'/property-type/townhouse'} aria-label='Blog page route'>
+                Townhouse
+                </Link>
+                {/* <span
+                  className={`w-full h-[2px] mt-3 ${
+                    pathName ? 'bg-white' : 'bg-black'
+                  }`}
+                ></span> */}
+              </li>
+
+
+
+              {/* {data &&
                 data.map((item, index) => {
                   if (index < 4) {
                     return (
@@ -206,7 +305,30 @@ function DesktopHeader() {
                       </li>
                     );
                   }
-                })}
+                })} */}
+
+
+
+
+
+            {/* <li className=' flex items-center'>
+              <Link to={'/property-type/penthouse'}>Penthouse</Link>{' '}
+              <span
+                className={`mx-8 w-[1px] h-4 ${
+                  pathName ? 'bg-slate-50' : 'bg-black'
+                }  block`}
+              ></span>
+            </li>
+ */}
+{/* 
+            <li className=' flex items-center'>
+              <Link to={'/property-type/townhouse'}>Townhouse</Link>{' '}
+              {/* <span
+                className={`mx-8 w-[1px] h-4 ${
+                  pathName ? 'bg-slate-50' : 'bg-black'
+                }  block`}
+              ></span> */}
+            {/* </li> */}
 
               {/* <li className="px-2 mx-4 pt-1 mb-3 cursor-pointer ">
                 <div

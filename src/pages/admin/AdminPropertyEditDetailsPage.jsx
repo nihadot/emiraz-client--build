@@ -17,21 +17,7 @@ import MapEmbedder from "../../components/AddProject/MapEmbedder";
 
 
 
-const validationSchema = Yup.object().shape({
-  projectTitle: Yup.string()
-    .required("Project Title is required")
-    .min(3, "Project Title must be at least 3 characters")
-    .max(50, "Project Title cannot exceed 50 characters"),
-  priceInAED: Yup.string().required("Price is required"),
-  handoverDate: Yup.date()
-    .required("Handover Date is required")
-    .min(new Date(), "Only future dates are allowed"), // Restrict past dates
-  beds: Yup.string()
-    .required("Beds information is required"),
-  // .matches(/^\d+|[A-Za-z\s]+$/, "Beds must be a number or text"), // Validate as number or text
 
-
-});
 
 
 function AddProperties() {
@@ -57,9 +43,29 @@ function AddProperties() {
     mapLink:'',
     projectNumber: "",
     isChecked:false,
+    projectVideo:''
   });
 
+  const validationSchema = Yup.object().shape({
+    projectTitle: Yup.string()
+      .required("Project Title is required")
+      .min(3, "Project Title must be at least 3 characters")
+      .max(50, "Project Title cannot exceed 50 characters"),
+    priceInAED: Yup.string().required("Price is required"),
+    handoverDate: Yup.date()
+      .required("Handover Date is required")
+      .min(new Date(), "Only future dates are allowed"), // Restrict past dates
+    beds: Yup.string()
+      .required("Beds information is required"),
+    // .matches(/^\d+|[A-Za-z\s]+$/, "Beds must be a number or text"), // Validate as number or text
+  
+  
+  });
+  
+
   useEffect(() => {
+
+    console.log(state,'states')
 
     if(state){
         setUserData({
@@ -71,7 +77,8 @@ function AddProperties() {
             description:state.description,
             mapLink:state.mapLink,
             projectNumber:state.projectNumber,
-            isChecked:state.isChecked
+            isChecked:state.isChecked,
+            projectVideo :state.projectVideo,
         })
     }
     // Make multiple API calls concurrently using Promise.all
@@ -148,6 +155,7 @@ navigate('/admin/edit-properties')
         mapLink:'',
         projectNumber: "",
         isChecked:false,
+        projectVideo:'',
         ...userData
       }}
       enableReinitialize
@@ -286,11 +294,14 @@ name={'mapLink'}
                <div>
                 < VideoUploader
                 name='projectVideo'
+                value={values?.projectVideo}
                 clearForms={clearForms}
                   onChange={setFieldValue}
                 />
                 <ErrorMessage name="projectVideo" component="div" className="error" />
               </div> 
+
+              {console.log(values,'valuesss')}
 
 
 
@@ -306,10 +317,7 @@ name={'mapLink'}
                   Project Number
                 </label>
 
-                <pre className="flex flex-wrap">
-                    {JSON.stringify(userData)}
-                    {console.log(userData,'userdata.json')}
-                </pre>
+         
                 <Field
                 
                 disabled={isLoading}
@@ -445,8 +453,8 @@ const PostHandoverOption = ({ name, value, onChange, clearForms }) => {
 
 
 
-const VideoUploader = ({ onChange ,name,clearForms}) => {
-  const [youtubeUrl, setYoutubeUrl] = useState("");
+const VideoUploader = ({ onChange,value ,name,clearForms}) => {
+  const [youtubeUrl, setYoutubeUrl] = useState( value ||"");
   const [cutYoutubeUrl, setCutYoutubeUrl] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -486,12 +494,19 @@ const VideoUploader = ({ onChange ,name,clearForms}) => {
       
     }, [clearForms]);
   
+    useEffect(() => {
+      if (value) {
+        const newCutLink = extractYoutubeUrl(value);
+        setCutYoutubeUrl(newCutLink); // Set initial cutLink
+        // if (newCutLink) setIsValid(true); // Validate if the initial value is valid
+      }
+    }, [value]);
 
 
   return (
     <div className="video-uploader mt-8">
       <label className="block sf-medium font-medium text-sm mb-2">YouTube Video URL</label>
-      <input
+      <Field
         type="text"
         className="border sf-medium font-medium text-sm border-gray-300 p-2 rounded-md w-full"
         value={youtubeUrl}

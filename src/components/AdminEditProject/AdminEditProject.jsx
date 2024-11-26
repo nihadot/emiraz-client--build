@@ -120,15 +120,7 @@ function AdminEditProject() {
 
   // merge priorities and cities
   useEffect(() => {
-    // const combinedArray = [...state.prioritiesArray, ...state.citiesArray];
-    // console.log(data.citiesInfo,'data.citiesInfo')
-    // console.log(data?.citiesInfo, 'combinedArray')
-    // if(data?.citiesInfo?.length > 0 ){
-    // console.log(data.citiesInfo,'data.citiesInfo')
-    // const citiesIds = data?.citiesInfo?.map((item)=> item._id+'' )
-    // const filteredCities = combinedArray.filter((item)=> !(citiesIds.includes(item._id+'')))
-    // setCities(filteredCities);
-    // }
+   
 
     setAllCities([...state.prioritiesArray, ...state.citiesArray]);
   }, [state.citiesArray, state.prioritiesArray, data?.citiesInfo]);
@@ -187,7 +179,6 @@ function AdminEditProject() {
   };
 
   useEffect(() => {
-    console.log(allCities, 'allCities')
     console.log(existingCity, 'existingCity')
     if (allCities?.length > 0) {
       const existingCityIds = existingCity.map((item) => item._id + '');

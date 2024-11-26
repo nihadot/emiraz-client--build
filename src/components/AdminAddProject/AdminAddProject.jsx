@@ -58,13 +58,8 @@ function AdminAddProject() {
 
       
 
-
-      // form fi
-
       const { preview,projectImages,projectImagesPreview, ...otherValues } = values;
-  // console.log(values,'---')
-  //     return true
-         //  image is required
+ 
          if(!values.projectImage){
           return errorToast('Image is required');
         }
@@ -119,14 +114,6 @@ function AdminAddProject() {
       setLoadingState({ ...loadingState, formSubmitting: false });
 
     }
-
-  
-
-
-
-    // console.log('Form data:', values);
-    // setTimeout(() => {
-    // }, 1000);
   };
 
 

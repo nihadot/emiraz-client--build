@@ -32,6 +32,8 @@ import {
   AdminPropertyEditDetailsPage,
   AdminPropertyEditImagesPage,
   AdminPropertyOtherEditPage,
+  AdminPropertyAdsViewPage,
+  AdminViewAllAdsPage,
 
   // users
   UserHome,
@@ -135,6 +137,8 @@ function App() {
             <Route path='edit-details/:userId' element={<AdminPropertyEditDetailsPage />} />
             <Route path='edit-images/:userId' element={<AdminPropertyEditImagesPage />} />
             <Route path='edit-assignments/:projectId' element={<AdminPropertyOtherEditPage />} />
+            <Route path='ads/view-ads/:projectId' element={<AdminPropertyAdsViewPage />} />
+            <Route path='view-all-ads' element={<AdminViewAllAdsPage />} />
             
             <Route path='edit-property/:id' element={<AdminEditPage />} />
             <Route path='add-city' element={<AddCityPage />} />
@@ -186,6 +190,7 @@ function App() {
               path='edit-property-type/:id'
               element={<EditPropertyTypePage />}
             />
+            
           </Route>
 
           {/* developer */}
@@ -197,7 +202,7 @@ function App() {
           <Route path='/blog' element={<UserBlog />} />
           <Route path='/blog/:id/:name' element={<UserBlogDetails />} />
           <Route
-            path='/property-type/:id/:name'
+            path='/property-type/:name'
             element={<UserAllProjects />}
           />
           <Route path='/property/:name/:id' element={<UserViewProjects />} />

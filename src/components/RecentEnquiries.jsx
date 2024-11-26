@@ -364,8 +364,8 @@ function RecentEnquiries({ searchTerm, selectedFilter,selectedFilterDeveloper,se
                 </div>
                 <div className=' w-full text-center capitalize'>{item?.name}</div>
                 <div className=' w-full text-center'>+{item?.number}</div>
-                <div className=' w-full text-center capitalize'>{item?.propertyName}</div>
-                <div className=' w-full text-center capitalize'>{item?.developerName}</div>
+                <div className=' w-full text-center capitalize'>{item?.propertyDetails?.projectTitle}</div>
+                <div className=' w-full text-center capitalize'>{item?.developerDetails?.developerName}</div>
                 <div className='relative text-center capitalize flex items-center cursor-pointer justify-center w-[40px]'> 
                   <FaPen onClick={()=>setToggleNoteBox({id:item._id,status:true})} />
                   { toggleNoteBox.status && toggleNoteBox.id === item._id && <NoteBox refresh={refresh} setRefresh={setRefresh} note={item.note} id={item._id} setToggleNoteBox={setToggleNoteBox}/>}

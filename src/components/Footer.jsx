@@ -68,27 +68,45 @@ function Footer() {
                     Blog
                   </p>
                 </Link>
-                {data &&
-                  data.map((item, index) => {
-                    if (index < 4) {
-                      return (
-                        <Link
-                          key={item.propertyType._id}
-                          to={`/property-type/${item.propertyType._id}/${item.propertyType.name}`}
-                        >
-                          <p
-                            className={`${
-                              index < 3
-                                ? "mb-3 sm:mb-0 text-white text-[10px] sm:text-[14px]  ps-4 pe-3"
-                                : "mb-3 sm:mb-0 text-white text-[10px] sm:text-[14px]  pe-0"
-                            } `}
-                          >
-                            {item.propertyType.name}
-                          </p>
-                        </Link>
-                      );
-                    }
-                  })}
+
+
+
+                <Link to={"/property-type/villa"}>
+                  <p className="mb-3 sm:mb-0 text-white text-[10px] sm:text-[14px]  ps-4 pe-3">
+                  Villa
+                  </p>
+                </Link>
+
+
+                <Link to={"/property-type/apartment"}>
+                  <p className="mb-3 sm:mb-0 text-white text-[10px] sm:text-[14px]  ps-4 pe-3">
+                  Apartment
+                  </p>
+                </Link>
+
+
+
+                <Link to={"/property-type/penthouse"}>
+                  <p className="mb-3 sm:mb-0 text-white text-[10px] sm:text-[14px]  ps-4 pe-3">
+                  Penthouse
+                  </p>
+                </Link>
+
+
+                <Link to={"/property-type/townhouse"}>
+                  <p className="mb-3 sm:mb-0 text-white text-[10px] sm:text-[14px]  ps-4 pe-3">
+                  Townhouse
+                  </p>
+                </Link>
+
+
+                <Link to={"/our-developers"}>
+                  <p className="mb-3 sm:mb-0 text-white text-[10px] sm:text-[14px]  ps-4 pe-3">
+                  Developers
+                  </p>
+                </Link>
+
+
               </div>
               <div className="flex gap-4 items-center sm:hidden ps-2.5 me-5">
                 <a
@@ -175,7 +193,7 @@ function Footer() {
                 Blog
               </p>
             </Link>
-            {data &&
+            {/* {data &&
               data.map((item, index) => {
                 if (index < 4) {
                   return (
@@ -195,7 +213,43 @@ function Footer() {
                     </Link>
                   );
                 }
-              })}
+              })} */}
+
+
+<Link to={"/property-type/villa"}>
+              <p className="mb-3 sm:mb-0 text-white text-[14px] sm:text-[14px] border-0 sm:border-r border-white pe-7">
+              Villa
+              </p>
+            </Link>
+
+
+            <Link to={"/property-type/apartment"}>
+              <p className="mb-3 sm:mb-0 text-white text-[14px] sm:text-[14px] border-0 sm:border-r border-white pe-7">
+              Apartment
+              </p>
+            </Link>
+
+            <Link to={"/property-type/penthouse"}>
+              <p className="mb-3 sm:mb-0 text-white text-[14px] sm:text-[14px] border-0 sm:border-r border-white pe-7">
+              Penthouse
+              </p>
+            </Link>
+
+
+            <Link to={"/property-type/townhouse"}>
+              <p className="mb-3 sm:mb-0 text-white text-[14px] sm:text-[14px] border-0 sm:border-r border-white pe-7">
+              Townhouse
+              </p>
+            </Link>
+
+
+            <Link to={"/our-developers"}>
+              <p className="mb-3 sm:mb-0 text-white text-[14px] sm:text-[14px] border-0 sm:border-r border-white pe-7">
+              Developers
+              </p>
+            </Link>
+
+
           </div>
           <div className="flex flex-col gap-1">
 

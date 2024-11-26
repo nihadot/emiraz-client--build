@@ -79,7 +79,7 @@ function UserAllCities() {
                   >
                     <div className="relative rounded-[10px] overflow-hidden  h-[200px]">
                       <Lazyloading
-                        src={`${MAIN_IMAG_URL}/${item.mainImgaeLink}`}
+                        src={item?.imageFile?.secure_url}
                         alt={item.cityName}
                         className="w-full h-full object-cover"
                       />
@@ -95,7 +95,7 @@ function UserAllCities() {
                     </div>
                     <p className="py-4 px-6 text-[15px] poppins-medium capitalize">
                       {" "}
-                      { item?.count === 0 ? 'Not available' : item?.count === 1 ? `${item?.count} Project available`: `${item?.count} Projects available`}
+                      { item?.propertyCount === 0 ? 'Not available' : item?.propertyCount === 1 ? `${item?.propertyCount} Project available`: `${item?.propertyCount} Projects available`}
                     </p>
                   </div>
                 );
@@ -116,7 +116,7 @@ function UserAllCities() {
                   >
                     <div className="relative rounded-[10px] overflow-hidden  h-[200px]">
                       <Lazyloading
-                        src={`${MAIN_IMAG_URL}/${item.mainImgaeLink}`}
+                       src={item?.imageFile?.secure_url}
                         alt={item.cityName}
                         className="w-full h-full object-cover"
                       />
@@ -131,7 +131,7 @@ function UserAllCities() {
                       </div>
                     </div>
                     <p className="py-4 capitalize px-6 text-[15px] poppins-medium">
-                    { item?.count === 0 ? 'Not available' : item?.count === 1 ? `${item?.count} Project available`: `${item?.count} Projects available`}
+                    { item?.propertyCount === 0 ? 'Not available' : item?.propertyCount === 1 ? `${item?.propertyCount} Project available`: `${item?.propertyCount} Projects available`}
                     </p>
                   </div>
                 );

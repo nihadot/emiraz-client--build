@@ -11,14 +11,17 @@ import { errorToast, successToast } from "../../toast";
 // import CitiesDropdown from "../../components/AddProject/CitiesDropdown";
 import DevelopersDropdown from "../../components/AddProject/DevelopersDropdown";
 // import FacilitiesAndAmenities from "../../components/AddProject/FacilitiesAndAmenities";
-import PaymentOptions from "../../components/PaymentOptions";
-import NearbyAreas from "../../components/AddProject/NearbyAreas";
+// import PaymentOptions from "../../components/PaymentOptions";
+// import NearbyAreas from "../../components/AddProject/NearbyAreas";
 import PriorityDropdown from "../../components/PriorityDropdown";
 import AdsOptionDropdown from "../../components/AddProject/AdsOptionDropdown";
 import PropertyTypeDropdown from "./PropertyTypeDropdown";
 import CitiesDropdown from "./CitiesDropdown";
 import { FaTrash } from "react-icons/fa";
 import FacilitiesAndAmenities from "./FacilitiesAndAmenities";
+import NearbyAreas from "./NearbyAreas";
+import PaymentOptions from "./PaymentOptions";
+import AdsDropdown from "./AdsDropdown";
 // import PropertyTypeDropdown from "./PropertyTypeDropdown";
 
 
@@ -41,6 +44,8 @@ function AdminPropertyOtherEditPage() {
   };
 
   const [facilities, setFacilities] = useState([]);
+  const [paymentOptions, setPaymentOptions] = useState([]);
+  const [nearbyAreasState, setNearAreaSate] = useState([]);
 
 
   const [existPriorities, setExistPriorities] = useState([]);
@@ -57,6 +62,10 @@ function AdminPropertyOtherEditPage() {
     paymentOptions:[],
     nearbyAreas:'',
     priority: "",
+    draft:false,
+    isSold : false,
+    adsOptions:'',
+    adsDetails:{},
   });
   const { state } = useLocation();
 console.log(state,'state')
@@ -71,11 +80,17 @@ console.log(state,'state')
             facilities: state.facilities,
             propertyType: state.propertyType,
             cityDetails: state.cityDetails,
-            developerDetails : state.developerDetails
+            developerDetails : state.developerDetails,
+            draft : state.draft,
+            isSold : state.isSold,
+            adsOptions: state.adsOptions,
+            adsDetails: state.adsDetails,
         });
 
-        setFacilities(state.facilities);
 
+        setFacilities(state.facilities);
+        setPaymentOptions(state.paymentOptions);
+        setNearAreaSate(state.nearbyAreas);
     }
   },[])
  
@@ -87,6 +102,8 @@ console.log(state,'state')
           axios.get(`${SERVER_URL}/city/`), // Replace with your first API URL
           axios.get(`${SERVER_URL}/developer`), // Replace with your second API URL
           axios.get(`${SERVER_URL}/priority`), // Replace with your second API URL
+          axios.get(`${SERVER_URL}/sidebar`), // Replace with your second API URL
+
         ]);
 
 
@@ -94,6 +111,8 @@ console.log(state,'state')
         setCities(responses[0].data.result);
         setDevelopers(responses[1].data.result);
         setExistPriorities(responses[2].data.result);
+        setAdsOptions(responses[3].data.result);
+
         setIsLoading(false);
 
       } catch (error) {
@@ -106,6 +125,7 @@ console.log(state,'state')
   }, []); // Empty dependency array means this effect runs only once, after the first render
 
   const [isDraft, setIsDraft] = useState(false);  // State to track if the draft is active
+  const [isSold, setIsSold] = useState(false);  // State to track if the draft is active
 
   // Button Styles
   const buttonStyles = "w-24 h-10 text-sm font-semibold rounded-lg transition-all duration-300 ease-in-out";
@@ -117,6 +137,18 @@ console.log(state,'state')
     setIsDraft((prevState) => !prevState); // Toggle between true and false
   };
 
+  const handleSoldToggle = (setFieldValue) => {
+    setFieldValue("isSold", !isSold);
+    setIsSold((prevState) => !prevState); // Toggle between true and false
+  };
+
+  useEffect(()=>{
+    userData.draft  ? setIsDraft(true) : setIsDraft(false)
+  },[userData])
+
+  useEffect(()=>{
+    userData.isSold  ? setIsSold(true) : setIsSold(false)
+  },[userData])
 
   const handleSubmit = async (event, { resetForm }) => {
 
@@ -132,8 +164,16 @@ console.log(state,'state')
        setIsLoading(true);
 const data = {};
 const obj = Object.keys(event);
+
 for (const element of obj) {
-  event[element] && (data[element] = event[element])
+  if (event[element]) {
+    if (Array.isArray(event[element]) && event[element].length === 0) {
+      // Skip empty arrays
+      continue;
+    }
+    // Add non-empty values to data
+    data[element] = event[element];
+  }
 }
 
       if (data.cities) {
@@ -143,6 +183,9 @@ for (const element of obj) {
          if(data.developer){
         data.developer = data.developer.id;
       }
+    
+     data.draft = event.draft;
+     data.isSold = event.isSold;
 
     console.log('[Data]: => ', data)
     const response = await axios.put(`${SERVER_URL}/property/update-other-options/${projectId}`, data, {
@@ -168,6 +211,8 @@ for (const element of obj) {
       setIsLoading(false);
     }
   }
+
+  const [adsOptions,setAdsOptions] = useState([]);
 
   const handleDeleteCity =async({_id:id},type)=>{
 
@@ -221,6 +266,48 @@ for (const element of obj) {
   }
 
 
+  const handlePriorityDelete = async(item)=>{
+    const status = window.confirm('Are you sure you want to delete this?');
+    if(!status){
+     return true;
+    }
+     try {
+ 
+ 
+         const response = await axios.delete(`${SERVER_URL}/property/delete/priority/${projectId}/${item}`, {
+           headers: { Authorization: `Bearer ${localStorage.getItem(ADMIN_TOKEN)}` },
+         });
+         console.log('[Response]: => ', response);
+         navigate('/admin/edit-properties');
+         successToast('Deleted successfully');
+       } catch (error) {
+         errorToast(error?.response?.data?.message || error?.message || 'Error occurred while deleting property');
+       } finally {
+         setIsLoading(false);
+       }
+  }
+
+  
+  const handleAdsDelete = async()=>{
+    const status = window.confirm('Are you sure you want to delete this?');
+    if(!status){
+     return true;
+    }
+     try {
+ 
+ 
+         const response = await axios.delete(`${SERVER_URL}/property/delete/ads/${projectId}`, {
+           headers: { Authorization: `Bearer ${localStorage.getItem(ADMIN_TOKEN)}` },
+         });
+         console.log('[Response]: => ', response);
+         navigate('/admin/edit-properties');
+         successToast('Deleted successfully');
+       } catch (error) {
+         errorToast(error?.response?.data?.message || error?.message || 'Error occurred while deleting property');
+       } finally {
+         setIsLoading(false);
+       }
+  }
   return (
     <Formik
       initialValues={{
@@ -237,7 +324,7 @@ for (const element of obj) {
       }}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
-      ed
+      
     >
       {({ setFieldValue, values,errors }) => (
         <Form className="flex-wrap flex">
@@ -296,6 +383,7 @@ for (const element of obj) {
 
 <div className="flex justify-center  gap-3 mt-3 w-fit items-center  capitalize sf-bold border-[#E4E4E4] py-3 px-4 rounded-[10px] font-normal text-sm text-[#333333] cursor-pointer outline-none relative bg-white ">Already existing : </div>
 <div className=" flex gap-3">
+  {console.log(userData,'userData')}
             {userData?.cityDetails?.map((item,index)=> {
                 return(
                     <div className="flex justify-center  gap-3 mt-3 w-fit items-center border capitalize sf-medium border-[#E4E4E4] py-3 px-4 rounded-[10px] font-normal text-sm text-[#333333] cursor-pointer outline-none relative bg-white ">
@@ -378,11 +466,13 @@ for (const element of obj) {
                 value={values.paymentOptions}
                 onChange={setFieldValue}
                 clearForm={clearForms}
+                existingData={paymentOptions}
 
               />
 
         
               <NearbyAreas
+              existingData={nearbyAreasState}
                 name="nearbyAreas"
                 value={values.nearbyAreas}
                 onChange={setFieldValue}
@@ -398,16 +488,35 @@ priorityValue={priorityValue}
   clearForms={clearForms} // Pass the clearFormFields function here
 />
 
+                    { userData && userData.priority && <div className="flex justify-center  gap-3 mt-3 w-fit items-center  capitalize sf-bold border-[#E4E4E4] py-3 px-4 rounded-[10px] font-normal text-sm text-[#333333] cursor-pointer outline-none relative bg-white ">Already existing : </div>}
+
+{ userData && userData.priority &&  <div className="flex justify-center  gap-3 mt-3 mb-5 w-fit items-center border capitalize sf-medium border-[#E4E4E4] py-3 px-4 rounded-[10px] font-normal text-sm text-[#333333] cursor-pointer outline-none relative bg-white ">
+             <div className="capitalize rounded">{userData?.priority}</div>
+             <Link onClick={()=>handlePriorityDelete(userData?.priority)} className="text-slate-50 bg-red-600/90 w-5 h-5 flex justify-center items-center rounded-full text-[10px]"> ✕</Link>
+
+             </div>}
+
+
 
               {/* Error Message */}
               <ErrorMessage name='priorities' component="div" className="text-red-500 text-sm mt-2" />
 
-              <AdsOptionDropdown
-              clearForms={clearForms}
-                isLoading={isLoading}
-                name={'adsOptions'}
+              <AdsDropdown
+                name="adsOptions"
+                clearForms={clearForms}
+                value={values.adsOptions}
                 onChange={setFieldValue}
+                isLoading={isLoading}
+                options={adsOptions}
               />
+
+{ userData && userData.adsDetails && <div className="flex justify-center  gap-3 mt-3 w-fit items-center  capitalize sf-bold border-[#E4E4E4] py-3 px-4 rounded-[10px] font-normal text-sm text-[#333333] cursor-pointer outline-none relative bg-white ">Already existing : </div>}
+
+       { userData && userData.adsDetails &&  <div className="flex justify-center  gap-3 mt-3 mb-5 w-fit items-center border capitalize sf-medium border-[#E4E4E4] py-3 px-4 rounded-[10px] font-normal text-sm text-[#333333] cursor-pointer outline-none relative bg-white ">
+                    <div className="capitalize rounded">{userData?.adsDetails?.name}</div>
+                    <Link onClick={()=>handleAdsDelete(userData?.adsDetails._id)} className="text-slate-50 bg-red-600/90 w-5 h-5 flex justify-center items-center rounded-full text-[10px]"> ✕</Link>
+
+                    </div>}
 
 
 
@@ -424,6 +533,27 @@ priorityValue={priorityValue}
                   transition={{ duration: 0.3 }}
                 >
                   {isDraft ? "Draft On" : "Draft Off"}
+                </motion.button>
+
+
+              </div>
+
+
+
+
+              <div className="flex gap-4 mt-6">
+                {/* Sold Button */}
+                <motion.button
+                type="button"
+                  onClick={() => handleSoldToggle(setFieldValue)}
+                  
+                  className={`${buttonStyles} ${isSold ? activeStyle : inactiveStyle}`}
+                  initial={{ opacity: 1 }}
+                  animate={{ opacity: isSold ? 1 : 0.6 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {isSold ? "Sold" : "Not Sold"}
                 </motion.button>
 
 
@@ -450,12 +580,7 @@ priorityValue={priorityValue}
           </div>
 
 
-           {/* Debug */}
-           <div className="mt-4">
-            <pre>{JSON.stringify(values, null, 2)}</pre>
-            <pre>{JSON.stringify(errors, null, 2)}</pre>
-          </div>
-
+      
           <div className="flex-1 sticky flex-wrap top-2 h-full px-5">
      
           </div>

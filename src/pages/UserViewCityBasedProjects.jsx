@@ -102,7 +102,7 @@ function UserAllProjects() {
             <h1 className="px-6 md:px-20 lg:px-28 text-center mt-4 sf-medium-600 text-[35px] uppercase sm:text-[70px]">
               {nameOfPropertyType}
             </h1>
-            <section className="">
+            <section className="mb-20">
             <div className="  mx-6 flex flex-col justify-center items-center lg:mx-20 xl:mx-28 ">
             <div className="  mt-6 w-full grid sm:grid-cols-2 grid-cols-1 md:grid-cols-3  mb-5 gap-7 max-w-[1300px]">
               {currentProperties.map((item, index) => (

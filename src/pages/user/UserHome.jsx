@@ -316,7 +316,7 @@ function UserHome() {
                       >
                         <div className="relative rounded-[10px] overflow-hidden  h-[200px]">
                           <Lazyloading
-                            src={`${MAIN_IMAG_URL}/${item.mainImgaeLink}`}
+                            src={item.imageFile?.secure_url}
                             alt={item.cityName}
                             className="w-full h-full object-cover"
                           />
@@ -331,11 +331,11 @@ function UserHome() {
                           </div>
                         </div>
                         <p className="py-4 capitalize px-6 text-[15px] poppins-medium">
-                          {item?.count === 0
+                          {item?.propertyCount === 0
                             ? "Not available"
-                            : item?.count === 1
-                            ? `${item?.count} Project available`
-                            : `${item?.count} Projects available`}
+                            : item?.propertyCount === 1
+                            ? `${item?.propertyCount} Project available`
+                            : `${item?.propertyCount} Projects available`}
                         </p>
                       </div>
                     );
@@ -371,18 +371,19 @@ function UserHome() {
                         "
                             >
                               <Lazyloading
-                                src={`${MAIN_IMAG_URL}/${item.mainImgaeLink}`}
+                                                            src={item?.imageFile?.secure_url}
+
                                 alt={item.cityName}
                                 className="w-full h-[200px] rounded-[10px] object-cover"
                               />
                               <div className="bg-gradient-to-b from-black to-black absolute top-0 w-full h-full opacity-20 z-20"></div>
                             </div>
                             <p className="px-3 pt-4 capitalize">
-                              {item?.count === 0
+                              {item?.propertyCount === 0
                                 ? "Not available"
-                                : item?.count === 1
-                                ? `${item?.count} Project available`
-                                : `${item?.count} Projects available`}
+                                : item?.propertyCount === 1
+                                ? `${item?.propertyCount} Project available`
+                                : `${item?.propertyCount} Projects available`}
                             </p>
                             <div className="px-3 py-3 absolute top-0 w-full h-full z-30">
                               <span className="block text-white w-fit bg-[#666666] text-[10px] rounded-[40px] px-3 py-2">
@@ -413,7 +414,7 @@ function UserHome() {
             {/* cities */}
 
             {/* blogs */}
-            <section className="max-w-[1300px] w-full mt-0 sm:mt-14">
+            <section className="max-w-[1300px] w-full mt-0 sm:mt-14 sm:mb-20">
               <div className=" sf-medium-600 flex items-center justify-between ">
                 <h1 className="hidden sm:flex flex-col leading-tight ">
                   <span className=" text-[20px] lg:text-[50px] text-[#666666]">
@@ -448,7 +449,7 @@ function UserHome() {
                             key={item._id}
                           >
                             <Lazyloading
-                              src={`${MAIN_IMAG_URL}/${item.mainImgaeLink}`}
+                              src={item?.imageFile?.secure_url}
                               className="w-full h-full object-cover"
                               alt={item.blogTitle}
                             />

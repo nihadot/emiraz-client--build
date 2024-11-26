@@ -28,7 +28,7 @@ function UploadingImage({
         disabled={isLoading}
         ref={uploadImage}
         type="file"
-        accept="image/jpg, image/jpeg, image/png"
+        accept="image/jpg, image/jpeg, image/png, image/webp"
         onChange={hanldeUploading}
         className="hidden"
       />

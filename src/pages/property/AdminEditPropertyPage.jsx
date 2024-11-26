@@ -7,7 +7,7 @@ const AdminEditPropertyPage = () => {
   const { state } = useLocation();
   const { userId } = useParams();
 
-
+console.log(state,'state : ')
   return (
     <motion.div
       className="h-screen text-black flex flex-col items-start"
@@ -61,7 +61,7 @@ const AdminEditPropertyPage = () => {
               whileTap={{ scale: 0.95 }}
               className="w-60 h-14 bg-gray-50 rounded-lg flex items-center justify-between px-4 text-left text-black shadow hover:shadow-lg transition"
             >
-              <span className="text-lg font-medium">Assignments</span>
+              <span className="text-lg font-medium">Other Options</span>
               <span className="text-xl font-bold">→</span>
             </motion.div>
           </Link>

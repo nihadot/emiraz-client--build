@@ -41,11 +41,13 @@ import AdminEditPropertyPage from "./pages/property/AdminEditPropertyPage"
 import AdminPropertyEditDetailsPage from "./pages/admin/AdminPropertyEditDetailsPage"
 import AdminPropertyEditImagesPage from "./pages/admin/AdminPropertyEditImagesPage"
 import AdminPropertyOtherEditPage from "./pages/admin/AdminPropertyOtherEditPage"
+import AdminViewAllAdsPage from "./pages/admin/AdminViewAllAdsPage"
 // sidebar
 import ViewSideBar from "./pages/ViewSideBar";
 import AddSideBar from "./pages/AddSideBar";
 import EditSideBar from "./pages/EditSideBar";
 import ViewSoldProjectsPage from "./pages/ViewSoldProjectsPage"
+import AdminPropertyAdsViewPage from "./pages/admin/AdminPropertyAdsViewPage"
 // -------------------
 
 // USER ROUTES
@@ -124,6 +126,8 @@ export {
   AdminPropertyEditDetailsPage,
   AdminPropertyEditImagesPage,
   AdminPropertyOtherEditPage,
+  AdminPropertyAdsViewPage,
+  AdminViewAllAdsPage,
 
   // USER ROUTES
   UserHome,

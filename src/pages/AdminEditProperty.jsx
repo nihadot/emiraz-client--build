@@ -48,55 +48,12 @@ import NearbyAreas from "../components/AddProject/NearbyAreas";
 import AdvancedImageUploader from "../components/AddProject/AdvancedImageUploader";
 import DevelopersDropdown from "../components/AddProject/DevelopersDropdown";
 
-const { createFFmpeg, fetchFile } = await import('@ffmpeg/ffmpeg');
 
 
-const uploadImage = async (image, folder) => {
-  const formData = new FormData();
-  formData.append("file", image);
-  formData.append("upload_preset", CLOUDINARY_PERSISTENT);
-  formData.append("folder", folder);
-
-  try {
-    const response = await axios.post(`https://api.cloudinary.com/v1_1/${CLOUDINARY_NAME}/image/upload`, formData);
-    return {
-      asset_id: response.data.asset_id,
-      secure_url: response.data.secure_url,
-      url: response.data.url,
-      public_id: response.data.public_id,
-    };
-  } catch (error) {
-    console.error('Error uploading image:', error);
-    throw new Error('Image upload failed');
-  }
-};
 
 
-const validationSchema = Yup.object().shape({
-  projectTitle: Yup.string()
-    .required("Project Title is required")
-    .min(3, "Project Title must be at least 3 characters")
-    .max(50, "Project Title cannot exceed 50 characters"),
-  priceInAED: Yup.string().required("Price is required"),
-  handoverDate: Yup.date()
-    .required("Handover Date is required")
-    .min(new Date(), "Only future dates are allowed"), // Restrict past dates
-  beds: Yup.string()
-    .required("Beds information is required"),
-  // .matches(/^\d+|[A-Za-z\s]+$/, "Beds must be a number or text"), // Validate as number or text
-  cities: Yup.array()
-    .min(1, "At least one city must be selected")
-    .required("Cities are required"),
-  propertyType: Yup.array().min(1, "At least one property")
-    .required("Property Type is required"),
-    developer: Yup.object()
-    .nullable()
-    .required("Selecting a developer is required"), // Validation for the developer field
-      imageFile: Yup.mixed()
-    .required("Image is required")
-  //  ,
 
-});
+
 
 
 // Check if it's available
@@ -112,6 +69,53 @@ function AddProperties() {
             setData(state);
         }
     },[])
+
+    const validationSchema = Yup.object().shape({
+      projectTitle: Yup.string()
+        .required("Project Title is required")
+        .min(3, "Project Title must be at least 3 characters")
+        .max(50, "Project Title cannot exceed 50 characters"),
+      priceInAED: Yup.string().required("Price is required"),
+      handoverDate: Yup.date()
+        .required("Handover Date is required")
+        .min(new Date(), "Only future dates are allowed"), // Restrict past dates
+      beds: Yup.string()
+        .required("Beds information is required"),
+      // .matches(/^\d+|[A-Za-z\s]+$/, "Beds must be a number or text"), // Validate as number or text
+      cities: Yup.array()
+        .min(1, "At least one city must be selected")
+        .required("Cities are required"),
+      propertyType: Yup.array().min(1, "At least one property")
+        .required("Property Type is required"),
+        developer: Yup.object()
+        .nullable()
+        .required("Selecting a developer is required"), // Validation for the developer field
+          imageFile: Yup.mixed()
+        .required("Image is required")
+      //  ,
+    
+    });
+
+
+    const uploadImage = async (image, folder) => {
+      const formData = new FormData();
+      formData.append("file", image);
+      formData.append("upload_preset", CLOUDINARY_PERSISTENT);
+      formData.append("folder", folder);
+    
+      try {
+        const response = await axios.post(`https://api.cloudinary.com/v1_1/${CLOUDINARY_NAME}/image/upload`, formData);
+        return {
+          asset_id: response.data.asset_id,
+          secure_url: response.data.secure_url,
+          url: response.data.url,
+          public_id: response.data.public_id,
+        };
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        throw new Error('Image upload failed');
+      }
+    };
 
   const [isLoading, setIsLoading] = useState(false);
   const [clearCityStatus, setClearCityStatus] = useState(false);

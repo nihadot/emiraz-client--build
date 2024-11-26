@@ -92,7 +92,7 @@ function SearchSection({handleSearchQuery}) {
             false ? 'border-none' : ' border shadow-sm'
           }  relative  text-black h-[45px] ps-4 overflow-hidden bg-white w-[280px] lg:w-[260px] rounded-[50px] flex justify-start items-center `}
         >
-          <img onClick={handleSubmit} src={Search} alt='' className='cursor-pointer h-[20px] w-6' />
+          <img src={Search} alt='' className='cursor-pointer h-[20px] w-6' />
 
           <input
             className={`w-full ms-2 sf-normal text-[14px] bg-transparent placeholder:text-[#404040] outline-none border-none `}
@@ -170,6 +170,48 @@ function SearchSection({handleSearchQuery}) {
 
 )
 })}
+
+
+
+        <div onClick={()=>navigate(`/property-type/villa`)} className='rounded-[5px] sf-normal justify-center items-center text-[12px] h-[85px] flex-col px-3 pt-3  flex border-[##D4D4D4] border'>
+          <img
+            src={villa}
+            alt=''
+            className='w-[32px] h-[32px] object-contain'
+          />
+          <p className='sf-normal text-[12px] pt-1 capitalize'>Villa</p>
+        </div>
+
+
+        <div onClick={()=>navigate(`/property-type/apartment`)} className='rounded-[5px] sf-normal justify-center items-center text-[12px] h-[85px] flex-col px-3 pt-3  flex border-[##D4D4D4] border'>
+          <img
+            src={apartment}
+            alt=''
+            className='w-[32px] h-[32px] object-contain'
+          />
+          <p className='sf-normal text-[12px] pt-1 capitalize'>Apartment</p>
+        </div>
+
+
+        <div onClick={()=>navigate(`/property-type/penthouse`)} className='rounded-[5px] sf-normal justify-center items-center text-[12px] h-[85px] flex-col px-3 pt-3  flex border-[##D4D4D4] border'>
+          <img
+            src={pentHouse}
+            alt=''
+            className='w-[32px] h-[32px] object-contain'
+          />
+          <p className='sf-normal text-[12px] pt-1 capitalize'>Penthouse</p>
+        </div>
+
+
+        <div onClick={()=>navigate(`/property-type/townhouse`)} className='rounded-[5px] sf-normal justify-center items-center text-[12px] h-[85px] flex-col px-3 pt-3  flex border-[##D4D4D4] border'>
+          <img
+            src={townhouse}
+            alt=''
+            className='w-[32px] h-[32px] object-contain'
+          />
+          <p className='sf-normal text-[12px] pt-1 capitalize'>Townhouse</p>
+        </div>
+
 </div>
 
       </div>

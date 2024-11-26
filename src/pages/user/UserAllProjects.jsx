@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "../../components/user/Header";
 import Footer from "../../components/Footer";
 import {
@@ -13,6 +13,7 @@ import { SuccessLabel } from "../../assets/images";
 import Loader from "../../components/Loader/Loader";
 import { Helmet } from "react-helmet";
 import Modal from "../../components/Register/Modal";
+import { useSelector } from "react-redux";
 
 
 function UserAllProjects() {
@@ -27,18 +28,26 @@ function UserAllProjects() {
   const [loading, setLoading] = React.useState(false);
   const [propertyUniqueID, setPropertyUniqueID] = React.useState("");
 
+  const value = useSelector((item)=> item.search );
+
+  // console.log(value,'value')
+
+  useEffect(()=>{
+    setProperties(value?.result)
+  },[value?.result])
+
   React.useEffect(() => {
     setLoading(true);
-      fetchData(idOfPropertyType);
+      fetchData(nameOfPropertyType);
 
-  }, [idOfPropertyType]); // Fetch data only once when component mounts
+  }, [nameOfPropertyType]); // Fetch data only once when component mounts
 
 
-  const fetchData = async (id) => {
+  const fetchData = async (name) => {
     try {
       setLoading(true);
    
-        const propertiesData = await getPropertiesByProjectsId(id);
+        const propertiesData = await getPropertiesByProjectsId(name);
         console.log(propertiesData,'propertiesData')
         setProperties(propertiesData.result);
      

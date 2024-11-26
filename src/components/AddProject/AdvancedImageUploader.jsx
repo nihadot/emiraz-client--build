@@ -79,8 +79,6 @@ const AdvancedImageUploader = ({clearForm, onChange, preferredFormat = "jpeg",na
 
     useEffect(()=>{
       setImages([]);
-      // console.log('clearForm')
-      // onChange(,null);
     },[clearForm]);
   
     return (

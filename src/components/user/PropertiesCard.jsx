@@ -32,13 +32,13 @@ function PropertiesCard({ item, handleRegister, navigate }) {
     }
   };
 
-  const result = item.propertyType.map((i, index) => {
+  const propertyTypesResult = item?.propertyType?.map((i, index) => {
     return (
       <p key={index}>
-        {i.name} {item.propertyType?.length > index + 1 && ","}
+        {i} {item?.propertyType?.length > index + 1 && ","}
       </p>
     );
-  });
+  }) ;
   useEffect(() => {
     const indicators = document.querySelectorAll(".swiper-pagination");
 
@@ -66,6 +66,10 @@ function PropertiesCard({ item, handleRegister, navigate }) {
     // console.log(indicators,'indicators')
   }, []);
 
+
+  const formattedDate = item?.handoverDate
+  ? new Date(item.handoverDate).toISOString().split('T')[0] // Extract YYYY-MM-DD
+  : 'N/A';
   return (
     <div className="card-container  rounded-[10px] overflow-hidden">
       <div className="card-slider relative rounded-[10px] overflow-hidden">
@@ -80,28 +84,28 @@ function PropertiesCard({ item, handleRegister, navigate }) {
           modules={[Navigation, Pagination, Mousewheel, Keyboard]}
           className="mySwiper"
         >
-          {item.mainImgaeLink && (
+          {item?.imageFile && (
             <SwiperSlide className="relative">
             { item.isSold && <div className="w-full h-full bg-black/60 absolute z-50 text-white flex justify-center items-center sf-bold text-[35px]">Sold Out</div>}
               <Lazyloading
                 src={`${
-                  item?.mainImgaeLink
-                    ? MAIN_IMAG_URL + "/" + item?.mainImgaeLink
+                  item?.imageFile
+                    ? item?.imageFile?.secure_url
                     : PlaceHolder
                 }`}
                 className="w-full h-full object-cover"
-                alt={item?.propretyHeadline}
+                alt={item?.projectTitle}
               />
             </SwiperSlide>
           )}
-          {item?.smallImage?.map((i, index) => {
+          {item?.imageFiles?.map((i, index) => {
             return (
               <SwiperSlide key={index} className="relative">
               { item.isSold && <div className="w-full h-full bg-black/60 absolute z-50 text-white flex justify-center items-center sf-bold text-[35px]">Sold Out</div>}
                 <Lazyloading
-                  src={`${i ? SMALL_IMAG_URL + "/" + i : PlaceHolder}`}
+                  src={ i?.secure_url || PlaceHolder}
                   className="w-full rounded-[10px] h-full object-cover"
-                  alt={item?.propretyHeadline}
+                  alt={item?.projectTitle}
                 />
               </SwiperSlide>
             );
@@ -129,8 +133,8 @@ function PropertiesCard({ item, handleRegister, navigate }) {
           <div
             onClick={() =>
               handleShare(
-                item.propretyHeadline,
-                `item/${item.propretyHeadline
+                item.projectTitle,
+                `item/${item.projectTitle
                   .trim()
                   .toLowerCase()
                   .replace(/\s+/g, "-")}/${item._id}`
@@ -147,7 +151,7 @@ function PropertiesCard({ item, handleRegister, navigate }) {
           <div className="">
             <div className="  flex items-center w-[170px]  bg-[#000000] text-[#ffffff]  h-[20px] justify-center gap-3  rounded-[3px] ">
               <p className="uppercase poppins font-semibold text-[10px]">
-                HandOver Date : {item?.handoverDate}
+              HandOver Date : {formattedDate}
               </p>
             </div>
             {item?.isChecked && (
@@ -161,8 +165,8 @@ function PropertiesCard({ item, handleRegister, navigate }) {
           <div
             onClick={() =>
               handleShare(
-                item?.propretyHeadline,
-                `property/${item?.propretyHeadline
+                item?.projectTitle,
+                `property/${item?.projectTitle
                   .trim()
                   .toLowerCase()
                   .replace(/\s+/g, "-")}/${item?._id}`
@@ -176,7 +180,7 @@ function PropertiesCard({ item, handleRegister, navigate }) {
       </div>
       <div className="px-5 py-3 poppins-medium">
         <div className="text-[#545454] font-normal text-xs  flex justify-between items-center">
-          <div className="capitalize flex gap-0.5">{result}</div>
+          <div className="capitalize flex gap-0.5">{propertyTypesResult}</div>
           <div className="flex gap-2 justify-center items-center">
             <FaBed color="#545454" size={18} />
             <span className="font-normal text-[10px]">{item?.beds}</span>
@@ -187,26 +191,30 @@ function PropertiesCard({ item, handleRegister, navigate }) {
             className="overflow-hidden w-full whitespace-nowrap"
             style={{ textOverflow: "ellipsis" }}
           >
-            {item?.propretyHeadline}
+            {item?.projectTitle}
           </h1>
         </div>
         <div className="poppins-semibold text-[#000000] text-base mt-3">
           <h1 className="font-medium">
             Starting from{" "}
-            <span className="font-bold text-xl">{item?.price}</span>
+            <span className="font-bold text-xl">{item.priceInAED}</span>
           </h1>
         </div>
+
+        {console.log(item,'items')}
 
         <div className="flex justify-start items-center gap-1 mt-3">
           <IoLocationSharp  size={19} className="-ms-1 ps-0" color="#545454" />
           <p className="font-normal poppins text-xs text-[#545454]">
             {item?.address}
+
           </p>
         </div>
         <div className="flex items-center gap-1 mt-3">
           <FaBuilding color="#545454" size={15} />
           <p className="font-semibold text-[10px] poppins">
-            {item?.developerInfo?.developerName}
+          {  item?.developerDetails?.developerName }
+
           </p>
         </div>
 
@@ -214,7 +222,7 @@ function PropertiesCard({ item, handleRegister, navigate }) {
           <button
             onClick={() => {
               navigate(
-                `/property/${item?.propretyHeadline?.trim().toLowerCase().replace(/\s+/g, "-")}/${item._id}`,
+                `/property/${item?.projectTitle?.trim().toLowerCase().replace(/\s+/g, "-")}/${item._id}`,
                 {
                   state: item,
                 }

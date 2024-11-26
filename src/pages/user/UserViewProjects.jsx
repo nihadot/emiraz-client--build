@@ -1,5 +1,5 @@
 import './index.css';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Header from '../../components/user/Header';
 import Footer from '../../components/Footer';
 import { BedIcon, SuccessLabel, TypeIcon } from '../../assets/images';
@@ -94,7 +94,7 @@ function UserViewProjects() {
   };
 
   const nextIndexOfMianImage = () => {
-    if (property?.smallImage?.length > indexOf + 1) {
+    if (fullImages.length > indexOf + 1) {
       setIndexOf(indexOf + 1);
     }
   };
@@ -104,22 +104,38 @@ function UserViewProjects() {
     }
   };
 
+  const [fullImages,setFullImages] = useState([]);
+
   const fetchdata = async () => {
     try {
       const allProperties = await getProperties();
       setProperties(allProperties.result);
       const property = await getPropertyById(id);
-      if (
-        property.result &&
-        property.result.length > 0 &&
-        property.result[0].mainImgaeLink
-      ) {
-        const propertiesNewArray = { ...property.result[0] };
-        propertiesNewArray.smallImage.unshift(propertiesNewArray.mainImgaeLink);
-        setProperty(propertiesNewArray);
-      } else {
+      // if (
+        // property.result &&
+        // property.result.length > 0 &&
+        // property.result[0].mainImgaeLink
+
+        const images = []
+
+        if(property?.result[0]?.imageFile){
+          images.push(property.result[0].imageFile);
+        }
+
+        if(property?.result[0].imageFiles){
+          images.push(...property.result[0].imageFiles);
+        }
+
+        console.log(images,'images')
+      // ) {
+        // const propertiesNewArray = { ...property.result[0] };
+        // propertiesNewArray.smallImage.unshift(propertiesNewArray.mainImgaeLink);
         setProperty(property.result[0]);
-      }
+        console.log(property.result[0],'000')
+        setFullImages(images);
+      // } else {
+        // setProperty(property.result[0]);
+      // }
       const sideBanner = await fetchSideBanners();
 
       setSideBanner(sideBanner.result);
@@ -158,8 +174,8 @@ function UserViewProjects() {
     }
   };
   const handleNext = () => {
-    if (property?.smallImage?.length - 1 === index) {
-      setIndex(property?.smallImage?.length - 1);
+    if (fullImages.length - 1 === index) {
+      setIndex(fullImages.length - 1);
     } else {
       setIndex(index + 1);
     }
@@ -254,6 +270,13 @@ function UserViewProjects() {
     }
   };
 
+  const propertyTypesResult = property?.propertyType?.map((i, index) => {
+    return (
+      <p key={index}>
+        {i} {property?.propertyType?.length > index + 1 && ","}
+      </p>
+    );
+  }) ;
  
 
   const result = property?.propertyType?.map((i, index) => {
@@ -264,9 +287,21 @@ function UserViewProjects() {
     );
   });
 
+  // const [fullImages,setFullImages] = useState([]);
+
+  // useEffect(()=>{
+  //  console.log(property,'property')
+  // },[property])
+
+
   const seo_description = property?.description;
-  const seo_title = property?.propretyHeadline;
+  const seo_title = property?.projectTitle;
   const seo_site_url = `${window.location.href}`;
+
+
+  const formattedDate = property?.handoverDate
+  ? new Date(property.handoverDate).toISOString().split('T')[0] // Extract YYYY-MM-DD
+  : 'N/A';
 
   return (
     <>
@@ -307,15 +342,15 @@ function UserViewProjects() {
                       <div className='w-full h-full' onClick={handleToggleImagePoppup}>
                         <Lazyloading
                           src={
-                            property?.smallImage?.length > 0
-                              ? index === 0
-                                ? `${MAIN_IMAG_URL}/${property?.smallImage[index]}`
-                                : `${SMALL_IMAG_URL}/${property?.smallImage[index]}`
-                              : Placeholder
+                            // fullImages.length > 0 ? (fullImages.length - 1) === index && fullImages[index-1]?.secure_url : fullImages[index]?.secure_url
+                            // Placeholder
+                            // index > fullImages.length ? fullImages[fullImages.length - 1]?.secure_url :  fullImages[index]?.secure_url
+                            fullImages.length > 0 && fullImages[index]?.secure_url || Placeholder
                           }
                           alt='loading'
                           className='object-cover w-full h-full rounded-[20px]'
                         />
+                        {/* {console.log(index > fullImages.length,fullImages[fullImages.length - 1],'index')} */}
                       </div>
 
                       {/* bg image overlap top section */}
@@ -324,8 +359,8 @@ function UserViewProjects() {
                           <div className=' flex absolute w-full md:hidden justify-between  z-30 px-4 top-4 left-0 '>
                             <div className=''>
                               <div className='  flex items-center w-[170px]  bg-[#000000] text-[#ffffff]  h-[20px] justify-center gap-3  rounded-[3px] '>
-                                <p className='uppercase poppins font-semibold text-[10px]'>
-                                  HANDOVER DATE : {property.handoverDate}
+                                <p className='uppercase poppins  font-semibold text-[10px]'>
+                                HandOver Date : {formattedDate}
                                 </p>
                               </div>
                               {property?.isChecked && (
@@ -339,8 +374,8 @@ function UserViewProjects() {
                             <div
                               onClick={() =>
                                 handleShare(
-                                  property.propretyHeadline,
-                                  `property/${property.propretyHeadline
+                                  property.projectTitle,
+                                  `property/${property.projectTitle
                                     .trim()
                                     .toLowerCase()
                                     .replace(/\s+/g, '-')}/${property._id}`
@@ -357,7 +392,7 @@ function UserViewProjects() {
                             <div className=''>
                               <div className='  flex items-center w-[170px]  bg-[#000000] text-[#ffffff]  h-[20px] justify-center gap-3  rounded-[3px] '>
                                 <p className='uppercase poppins font-semibold text-[10px]'>
-                                  HandOver Date : {property?.handoverDate}
+                                  HandOver Date : {formattedDate}
                                 </p>
                               </div>
                               {property?.isChecked && (
@@ -371,8 +406,8 @@ function UserViewProjects() {
                             <div
                               onClick={() =>
                                 handleShare(
-                                  property.propretyHeadline,
-                                  `property/${property.propretyHeadline
+                                  property.projectTitle,
+                                  `property/${property.projectTitle
                                     .trim()
                                     .toLowerCase()
                                     .replace(/\s+/g, '-')}/${property._id}`
@@ -426,7 +461,7 @@ function UserViewProjects() {
                               src={CameraSVGIcons}
                             />
                             <p className=' text-[8px]'>
-                              Show {property?.smallImage?.length} Photos
+                              Show {fullImages.length} Photos
                             </p>
                           </div>
                           <div
@@ -479,29 +514,36 @@ function UserViewProjects() {
                     {/* ---mobile view ( images and videos ) -- */}
                     <div className='md:hidden flex gap-3 my-4 justify-center items-center '>
                       <Lazyloading
-                        src={
-                          property?.smallImage
-                            ? property?.smallImage.length === index + 1
-                              ? `${MAIN_IMAG_URL}/${property?.smallImage[0]}`
-                              : `${SMALL_IMAG_URL}/${
-                                  property?.smallImage[index + 1]
-                                }`
-                            : Placeholder
-                        }
+                        // src={
+                        //   property?.smallImage
+                        //     ? property?.smallImage.length === index + 1
+                        //       ? `${MAIN_IMAG_URL}/${property?.smallImage[0]}`
+                        //       : `${SMALL_IMAG_URL}/${
+                        //           property?.smallImage[index + 1]
+                        //         }`
+                        //     : Placeholder
+                        // }
+
+
+                        src={ fullImages.length - 1 === index ?  fullImages[fullImages.length - 1]?.secure_url || Placeholder :  fullImages[index+1]?.secure_url || Placeholder}
                         alt='loading'
                         className=' h-[82px]  object-cover  w-[82px] rounded-[10px]'
                       />
 
                       <Lazyloading
-                        src={
-                          property?.smallImage?.length > 2
-                            ? index + 2 >= property?.smallImage?.length
-                              ? Placeholder
-                              : `${SMALL_IMAG_URL}/${
-                                  property?.smallImage[index + 2]
-                                }`
-                            : Placeholder
-                        }
+                        // src={
+                        //   property?.smallImage?.length > 2
+                        //     ? index + 2 >= property?.smallImage?.length
+                        //       ? Placeholder
+                        //       : `${SMALL_IMAG_URL}/${
+                        //           property?.smallImage[index + 2]
+                        //         }`
+                        //     : Placeholder
+                        // }
+                        // 
+                        src={ fullImages.length - 1 === index ?  fullImages[fullImages.length - 1]?.secure_url || Placeholder :  fullImages[index+2]?.secure_url || Placeholder}
+                     
+
                         alt='loading'
                         className=' h-[82px] object-cover  w-[82px] rounded-[10px]'
                       />
@@ -513,7 +555,7 @@ function UserViewProjects() {
                         <iframe
                           style={{ pointerEvents: 'none' }}
                           className=' flex h-[82px]  object-cover   w-[82px] rounded-[10px]'
-                          src={property.videoLink}
+                          src={property.projectVideo}
                         ></iframe>
                       </div>
                     </div>
@@ -525,7 +567,7 @@ function UserViewProjects() {
                       <div className='  flex-[60%] '>
                         {/* property headline */}
                         <h1 className='text-[30px]  390px:leading-[46px] leading-[43px] lg:leading-[58px] capitalize h-fit lg:text-[40px] lg:me-3 md:mt-5 390px:font-medium font-semibold '>
-                          {property?.propretyHeadline}
+                          {property?.projectTitle}
                         </h1>
                         {/* property headline */}
 
@@ -557,7 +599,7 @@ function UserViewProjects() {
                             />
                             <span className='capitalize font-medium flex gap-2 text-[10px] lg:text-[15px]'>
                               <span>Type :</span>
-                              <span className='flex gap-1'> {result}</span>
+                              <span className='flex gap-1'> {propertyTypesResult}</span>
                             </span>
                           </div>
                         </div>
@@ -578,7 +620,7 @@ function UserViewProjects() {
                         <div className='' onClick={handleMap}>
                           <iframe
                             style={{ pointerEvents: 'none' }}
-                            src={property.googleMapLink}
+                            src={property.mapLink}
                             className='border-none w-[120px] h-[120px] rounded-full'
                             allowFullScreen=''
                             referrerPolicy='no-referrer-when-downgrade'
@@ -602,7 +644,7 @@ function UserViewProjects() {
                     {/* description */}
                     <div className='max-w-[740px] poppins-medium '>
                       <p className='text-[16px] sf-bold mt-4 '>
-                        Project No: {property?.projectNo}
+                        Project No: {property?.projectNumber}
                       </p>
                       <h1 className='sf-medium lg:text-[30px] text-[25px] my-3 text-black'>
                         Description
@@ -626,7 +668,7 @@ function UserViewProjects() {
                     {/* {isVisibleVideoScreenIs && (
                       <iframe
                         className="mt-3 mb-6 block md:hidden h-[200px] object-cover   w-[100%] rounded-[10px]"
-                        src={property.videoLink}
+                        src={property.projectVideo}
                         frameBorder="0"
                       ></iframe>
                     )} */}
@@ -662,8 +704,8 @@ function UserViewProjects() {
                         Areas and Things Nearby
                       </h1>
                       <div className='grid grid-cols-2 md:grid-cols-3 '>
-                        {property.areasNearBy &&
-                          property.areasNearBy.map((item, index) => {
+                        {property.nearbyAreas &&
+                          property.nearbyAreas.map((item, index) => {
                             return (
                               <div
                                 key={index}
@@ -686,7 +728,7 @@ function UserViewProjects() {
                         Payment Plan
                       </h1>
                       <div className='grid  grid-cols-1 md:grid-cols-2 md:gap-3'>
-                        {property?.paymentPlan?.map((item, index) => {
+                        {property?.paymentOptions?.map((item, index) => {
                           return (
                             <div
                               key={index}
@@ -752,19 +794,24 @@ function UserViewProjects() {
                   {/* right side */}
                   <div className='hidden 1030px:block flex-[30%] relative  rounded-[20px]'>
                     <Lazyloading
+                      // src={
+                      //   property?.smallImage
+                      //     ? property?.smallImage.length === index + 1
+                      //       ? `${MAIN_IMAG_URL}/${property?.smallImage[0]}`
+                      //       : `${SMALL_IMAG_URL}/${
+                      //           property?.smallImage[index + 1]
+                      //         }`
+                      //     : Placeholder
+                      // }
+
+
                       src={
-                        property?.smallImage
-                          ? property?.smallImage.length === index + 1
-                            ? `${MAIN_IMAG_URL}/${property?.smallImage[0]}`
-                            : `${SMALL_IMAG_URL}/${
-                                property?.smallImage[index + 1]
-                              }`
-                          : Placeholder
+                         fullImages.length -1 === index ?  fullImages[fullImages.length - 1]?.secure_url : fullImages[index+1]?.secure_url || Placeholder
                       }
                       alt='loading'
                       className=' h-[82px] mb-5 sm:h-[246px] object-cover  w-[82px] sm:w-[280px] lg:w-[415px] rounded-[10px]'
                     />
-                    <Lazyloading
+                    {/* <Lazyloading
                       src={
                         property?.smallImage?.length > 2
                           ? index + 2 >= property?.smallImage?.length
@@ -776,7 +823,7 @@ function UserViewProjects() {
                       }
                       alt='loading'
                       className=' h-[82px] sm:hidden   object-cover  w-[82px] sm:w-[280px]   rounded-[10px]'
-                    />
+                    /> */}
 
                     <div
                       onClick={handleYoutubeVideo}
@@ -785,7 +832,7 @@ function UserViewProjects() {
                       <iframe
                         style={{ pointerEvents: 'none' }}
                         className=' hidden h-[82px] md:block object-cover lg:w-[415px]  w-[82px] sm:w-[280px] sm:h-[246px] rounded-[10px]'
-                        src={property.videoLink}
+                        src={property.projectVideo}
                       ></iframe>
                     </div>
 
@@ -854,7 +901,7 @@ function UserViewProjects() {
                           modules={[Autoplay]}
                           className='mySwiper'
                         >
-                          {adsState &&
+                          {/* {adsState &&
                             adsState
                               .filter(i => {
                                 if (i.property) return true;
@@ -865,7 +912,7 @@ function UserViewProjects() {
                                     className='cursor-pointer'
                                     onClick={() =>
                                       navigate(
-                                        `/property/${item.property.propretyHeadline}/${item.property._id}`
+                                        `/property/${item.property.projectTitle}/${item.property._id}`
                                       )
                                     }
                                     key={index}
@@ -877,7 +924,28 @@ function UserViewProjects() {
                                     />
                                   </SwiperSlide>
                                 );
-                              })}
+                              })} */}
+
+
+
+                              {
+                                  <SwiperSlide
+                                  className='cursor-pointer'
+                                  // onClick={() =>
+                                  //   navigate(
+                                  //     `/property/${property.property.projectTitle}/${item.property._id}`
+                                  //   )
+                                  // }
+                                  key={index}
+                                >
+                                  {console.log(property,'---')}
+                                  <Lazyloading
+                                    src={property?.adsDetails?.imageFile?.secure_url}
+                                    className='w-full h-full object-cover'
+                                    alt='banner'
+                                  />
+                                </SwiperSlide>
+                              }
                         </Swiper>
                       </div>
                     }
@@ -893,8 +961,30 @@ function UserViewProjects() {
                   <h1 className='text-center sf-medium lg:font-bold lg:text-[40px] text-[25px] mt-0 my-0 text-black'>
                     Similar Projects
                   </h1>
+
+                  <div className="md:hidden flex my-10">
+                  {
+                                  <SwiperSlide
+                                  className='cursor-pointer'
+                                  // onClick={() =>
+                                  //   navigate(
+                                  //     `/property/${property.property.projectTitle}/${item.property._id}`
+                                  //   )
+                                  // }
+                                  key={index}
+                                >
+                                  {console.log(property,'---')}
+                                  <Lazyloading
+                                    src={property?.adsDetails?.imageFile?.secure_url}
+                                    className='w-full h-full object-cover'
+                                    alt='banner'
+                                  />
+                                </SwiperSlide>
+                              }
+                  </div>
                   <div className='flex flex-col justify-center items-center '>
-            <div className="mt-5 w-full grid sm:grid-cols-2 grid-cols-1 md:grid-cols-3  mb-5 gap-7 max-w-[1300px]">
+            <div className="mt-5 mb-20
+             w-full grid sm:grid-cols-2 grid-cols-1 md:grid-cols-3   gap-7 max-w-[1300px]">
                    
                       {properties &&
                         properties
@@ -980,18 +1070,21 @@ function UserViewProjects() {
                       }
                     />
                   </h1>
+                  {console.log(indexOf,'00')}
                   <div className='h-screen flex-col flex pt-[100px] lg:pt-3 items-center  px-5 lg:px-28'>
                     <div className='w-[100%] h-[318px] md:h-[450px] mb-5 xl:h-[591px] justify-center  rounded-[20px] object-cover overflow-hidden flex'>
-                      {property?.smallImage?.length > 0 && (
+                      {fullImages?.length > 0 && (
                         <div className='relative'>
                           <Lazyloading
-                            src={` ${
-                              indexOf === 0
-                                ? MAIN_IMAG_URL + '/' + property?.smallImage[0]
-                                : SMALL_IMAG_URL +
-                                  '/' +
-                                  property?.smallImage[indexOf]
-                            }`}
+                            // src={` ${
+                            //   indexOf === 0
+                            //     ? MAIN_IMAG_URL + '/' + property?.smallImage[0]
+                            //     : SMALL_IMAG_URL +
+                            //       '/' +
+                            //       property?.smallImage[indexOf]
+                            // }`}
+                            src={ fullImages[indexOf]?.secure_url }
+
                             className='select-none cursor-text w-full h-full rounded-[20px] overflow-hidden md:w-[981px] object-cover '
                             alt=''
                           />
@@ -1007,16 +1100,18 @@ function UserViewProjects() {
                       </div>
 
                       <div className=' flex-1  overflow-auto lg:w-fit justify-center items-center flex  gap-2 h-full '>
-                        {property?.smallImage?.map((item, index) => {
+                        {fullImages?.map((item, index) => {
                           return (
                             <Lazyloading
                               onClick={() => setIndexOf(index)}
                               key={index}
-                              src={`${
-                                index === 0
-                                  ? MAIN_IMAG_URL + '/' + item
-                                  : SMALL_IMAG_URL + '/' + item
-                              }`}
+                              // src={`${
+                              //   index === 0
+                              //     ? MAIN_IMAG_URL + '/' + item
+                              //     : SMALL_IMAG_URL + '/' + item
+                              // }`}
+                              src={fullImages[index]?.secure_url || Placeholder} 
+                              // src={Placeholder}
                               className={`${
                                 indexOf === index && 'border-[3px] border-black'
                               } w-[82px] select-none cursor-pointer h-[82px] object-cover rounded-[10px]`}
@@ -1056,7 +1151,7 @@ function UserViewProjects() {
                   <iframe
                     style={{ userSelect: 'none' }}
                     className=' flex h-[318px] md:h-[645px] iframe-custom-class w-[90%]  lg:w-[1077px]'
-                    src={property.videoLink}
+                    src={property.projectVideo}
                   ></iframe>
                 </div>
               )}
@@ -1078,7 +1173,7 @@ function UserViewProjects() {
                     />
                   </h1>
                   <iframe
-                    src={property.googleMapLink}
+                    src={property?.mapLink}
                     className='flex iframe-custom-class h-[580px] md:h-[645px] w-[90%]  lg:w-[1077px]'
                     allowFullScreen=''
                     referrerPolicy='no-referrer-when-downgrade'

@@ -44,7 +44,7 @@ function ManagePropertiesAndCities() {
           </span>
         </div>
       </div>
-      <div className="flex gap-2 sf-medium font-medium text-2xl">
+      {/* <div className="flex gap-2 sf-medium font-medium text-2xl">
         <div
           onClick={() => navigate("/admin/add-property-type")}
           className="flex h-20 lg:h-16   items-center  flex-1 justify-between px-6 rounded-[10px] bg-[#000000] text-[#FFFFFF] cursor-pointer"
@@ -62,12 +62,12 @@ function ManagePropertiesAndCities() {
             <IoMdAdd />
           </span>
         </div>
-      </div>
+      </div> */}
       
 
 
-      <div className="flex gap-2 sf-medium font-medium text-2xl">
-        <div
+      {/* <div className="flex gap-2 sf-medium font-medium text-2xl"> */}
+        {/* <div
           onClick={() => navigate("/admin/sold-projects")}
           className="flex h-20 lg:h-16   items-center  flex-1 justify-between px-6 rounded-[10px] bg-[#000000] text-[#FFFFFF] cursor-pointer"
         >
@@ -75,7 +75,7 @@ function ManagePropertiesAndCities() {
           <span>
             <IoMdAdd />
           </span>
-        </div>
+        </div> */}
         {/* <div className="cursor-pointer flex h-20 lg:h-16   items-center  flex-1 justify-between px-6 rounded-[10px] bg-[#000000] text-[#FFFFFF]">
           <span onClick={() => navigate("/admin/view-property-type")} className="">
             Edit / Manage Property Type
@@ -84,7 +84,7 @@ function ManagePropertiesAndCities() {
             <IoMdAdd />
           </span>
         </div> */}
-      </div>
+      {/* </div> */}
 
 
     </div>

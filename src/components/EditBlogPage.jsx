@@ -1,22 +1,25 @@
 import React, { useRef, useState } from "react";
 import PlaceHolder from "../assets/placeholder/placeholder-image.png";
 import { errorToast, successToast } from "../toast";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { editBlogSuccess, setError, setLoading } from "../features/blogSlice";
 import { MAIN_IMAG_URL, updateBlog } from "../api";
 import { CiCircleRemove } from "react-icons/ci";
 import UploadingImage from "./uploading/UploadingImage";
+import { CLOUDINARY_NAME, CLOUDINARY_PERSISTENT } from "../api/localstorage-varibles";
+import axios from "axios";
 
 function EditBlogPage() {
   const { state } = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isLoading,setIsLoading] = useState(false);
-
+  const {id} = useParams();
   // --------------------------------------------
 
   const [image, setImage] = useState("");
+  const [newImage, setNewImage] = useState("");
   // -----------------------------------------------------
   const [formData, setFormData] = useState({
     blogTitle: "",
@@ -39,38 +42,88 @@ function EditBlogPage() {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
-      setIsLoading(true)
-      const formDataFields = new FormData();
-      formDataFields.append("blogTitle", formData.blogTitle);
-      formDataFields.append("blogBody", formData.blogBody);
-      formDataFields.append("date", formData.date);
+// console.log(formData,'formdta')
+// console.log(newImage,'formdta')
+  //  return true;
+      setIsLoading(true);
 
-      if (image) {
-        formDataFields.append("mainImgaeLink", image);
+
+
+      if(!formData.blogTitle){
+        errorToast("Please enter a blog title");
+        return false;
       }
 
-      formDataFields.append("_id", formData._id);
+      if(!formData.blogBody){
+        errorToast("Please enter a blog body");
+        return false;
+      }
+
+      if(!formData.date){
+        errorToast("Please enter a date");
+        return false;
+      }
+
+      // if(!formData.imageFile && newImage ){
+      //   errorToast("Please select an image");
+      //   return false;
+      // }
+      const data = {
+        blogTitle: formData.blogTitle,
+        blogBody: formData.blogBody,
+        date: formData.date,
+        imageFile: image,
+      }
+
+
+      if(newImage){
+        // if (values.image) {
+          const formData = new FormData();
+          formData.append("file", newImage);
+          formData.append("upload_preset", CLOUDINARY_PERSISTENT); // Replace with your actual preset
+          formData.append("folder", "city_images"); // Replace with your specific folder name
+          const response = await axios.post(`https://api.cloudinary.com/v1_1/${CLOUDINARY_NAME}/image/upload`,formData);
+          const imageFile = {
+            public_id : response.data.public_id,
+            secure_url : response.data.secure_url,
+            url : response.data.url,
+            bytes : response.data.bytes,
+            width : response.data.width,
+            height : response.data.height,
+          }
+          data.imageFile = imageFile;
+        //  } 
+      }
+
+      
+
+
+      // if (newImage) {
+      //   formDataFields.append("mainImgaeLink", image);
+      // }
+
+      // formDataFields.append("_id", formData._id);
       dispatch(setLoading());
-      await updateBlog(formDataFields);
+      await updateBlog(data,id);
       dispatch(editBlogSuccess());
       successToast("Updated");
       navigate("/admin/edit-blogs");
       setIsLoading(false)
     } catch (error) {
-      if (error.response && error.response.data) {
-        dispatch(setError(error.response.data.message));
-        errorToast(error.response.data.message);
-      } else {
-        dispatch(setError("An error occurred during login."));
-        errorToast("An error occurred during login.");
-      }
+      // if (error.response && error.response.data) {
+        // dispatch(setError(error.response.data.message));
+        // errorToast(error.response.data.message);
+      // } else {
+        // dispatch(setError("An error occurred during login."));
+        errorToast(error?.response?.data?.message || error?.message || "An error occurred during login.");
+      // }
       setIsLoading(false)
     }
   };
 
   React.useEffect(() => {
     setFormData({ ...state });
-    setImage(state.mainImgaeLink);
+    setImage(state.imageFile);
   }, [state]);
 
   return (
@@ -154,7 +207,7 @@ function EditBlogPage() {
                 formData.preview
                   ? formData.preview
                   : image
-                  ? `${MAIN_IMAG_URL}/${image}`
+                  ? image?.secure_url
                   : PlaceHolder
               }
               alt="placeholder"
@@ -179,7 +232,7 @@ function EditBlogPage() {
               previewUrl={(e) => {
                 setFormData({ ...formData, preview: e });
               }}
-              selectedFile={(file) => setImage(file)}
+              selectedFile={(file) => setNewImage(file)}
             />
           </div>
         </div>

@@ -13,25 +13,6 @@ import { SERVER_URL } from "../../api";
 
 
 
-const uploadImage = async (image, folder) => {
-  const formData = new FormData();
-  formData.append("file", image);
-  formData.append("upload_preset", CLOUDINARY_PERSISTENT);
-  formData.append("folder", folder);
-
-  try {
-    const response = await axios.post(`https://api.cloudinary.com/v1_1/${CLOUDINARY_NAME}/image/upload`, formData);
-    return {
-      asset_id: response.data.asset_id,
-      secure_url: response.data.secure_url,
-      url: response.data.url,
-      public_id: response.data.public_id,
-    };
-  } catch (error) {
-    console.error('Error uploading image:', error);
-    throw new Error('Image upload failed');
-  }
-};
 
 
 const validationSchema = Yup.object().shape({
@@ -69,7 +50,26 @@ const { userId } = useParams();
 
   // Button Styles
 
-
+  const uploadImage = async (image, folder) => {
+    const formData = new FormData();
+    formData.append("file", image);
+    formData.append("upload_preset", CLOUDINARY_PERSISTENT);
+    formData.append("folder", folder);
+  
+    try {
+      const response = await axios.post(`https://api.cloudinary.com/v1_1/${CLOUDINARY_NAME}/image/upload`, formData);
+      return {
+        asset_id: response.data.asset_id,
+        secure_url: response.data.secure_url,
+        url: response.data.url,
+        public_id: response.data.public_id,
+      };
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      throw new Error('Image upload failed');
+    }
+  };
+  
 
   const handleSubmit = async (event, { resetForm }) => {
 
