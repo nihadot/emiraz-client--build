@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import Cards from "../components/Cards";
-import { deleteProperties, getProperties } from "../api";
+import { deleteProperties, getProperties, SERVER_URL } from "../api";
 import { errorToast } from "../toast";
 import SearchSection from "./SearchSection";
+import axios from "axios";
+import { ADMIN_TOKEN } from "../api/localstorage-varibles";
 
 function EditProperties() {
   const [data, setData] = useState([]); // Data to be displayed (local + remote)
@@ -93,6 +95,21 @@ function EditProperties() {
     return searchMatch && developerMatch;
   });
 
+  const handlePublish = async(id)=>{
+
+    const response = await axios.put(`${SERVER_URL}/property/update/to-publish/${id}`,{}, {
+      headers: { Authorization: `Bearer ${localStorage.getItem(ADMIN_TOKEN)}` },
+    });
+
+    try {
+      setRefresh(!refresh);
+    } catch (error) {
+      errorToast(
+        error?.response?.data?.message || error?.message || "Error occurred!"
+      );
+    }
+  }
+
   return (
     <div className="">
       <div className="sticky z-50 top-0 bg-white flex justify-between py-6">
@@ -110,12 +127,14 @@ function EditProperties() {
       <div className="grid h-fit grid-cols-3 gap-2 flex-wrap">
         {filteredData?.map((item) => (
           <Cards
+          publish
             view
             handleDelete={handleDelete}
             refresh={refresh}
             setRefresh={setRefresh}
             key={item._id}
             item={item}
+            handlePublish={handlePublish}
           />
         ))}
       </div>

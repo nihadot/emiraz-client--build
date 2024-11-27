@@ -152,7 +152,7 @@ console.log(state,'state')
 
   const handleSubmit = async (event, { resetForm }) => {
 
-    console.log(event,'er')
+    // console.log(event,'er')
     // console.log(state)
     // if(!state?.propertyType?.length > 0) errorToast('Please select a property type')
         // if(!state?.cities?.length > 0) errorToast('Please select a city')
@@ -183,8 +183,18 @@ for (const element of obj) {
          if(data.developer){
         data.developer = data.developer.id;
       }
+
+
+      // console.log(data,'ddd')
+      if(data.adsOptions){  
+        data.adsDetails = data.adsOptions._id
+
+      }
     
      data.draft = event.draft;
+    //  if()
+    // console.log(event,'event')
+    // return true
      data.isSold = event.isSold;
 
     console.log('[Data]: => ', data)

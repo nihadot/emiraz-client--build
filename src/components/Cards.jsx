@@ -24,7 +24,7 @@ import { useEffect } from "react";
 import { GiReceiveMoney } from "react-icons/gi";
 import { useNavigate } from "react-router-dom";
 
-function PropertiesCard({ view,item,handleDelete,disableDelete = false }) {
+function PropertiesCard({handlePublish,publish, view,item,handleDelete,disableDelete = false }) {
 
 
   const formattedDate = item?.handoverDate
@@ -270,6 +270,22 @@ function PropertiesCard({ view,item,handleDelete,disableDelete = false }) {
           >
             Delete
           </button>
+
+
+
+        { publish  && item.draft &&   <button
+          
+          disabled={!view}
+            className={`flex-1 ${ !view && 'opacity-20' } py-2.5 rounded font-semibold text-[10px] ${disableDelete ? 'bg-black/45' : 'bg-[#13b228]'} text-[#ffffff]`}
+            onClick={() => {
+              const status = confirm("Are you want to publish this?");
+              if (status) {
+                handlePublish(item._id);
+              }
+            }}
+          >
+            Publish
+          </button>}
         </div>
       </div>
     </div>

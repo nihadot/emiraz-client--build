@@ -6,6 +6,7 @@ import { BedIcon, SuccessLabel, TypeIcon } from '../../assets/images';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   MAIN_IMAG_URL,
+  SERVER_URL,
   SMALL_IMAG_URL,
   addingEnquiry,
   fetchSideBanners,
@@ -43,6 +44,7 @@ import { PiShareFatThin } from 'react-icons/pi';
 
 import PhoneInput from 'react-phone-input-2';
 import Modal from '../../components/Register/Modal';
+import axios from 'axios';
 
 function UserViewProjects() {
   const [properties, setProperties] = React.useState([]);
@@ -63,9 +65,22 @@ function UserViewProjects() {
       navigate('/all-projects');
     }
     fetchdata();
+    // fetchAds();
 
     window.scrollTo(0, 0);
   }, [navigate]);
+
+const [ads,setAds] = useState([]);
+
+  // const fetchAds = async()=>{
+  //   try {
+  //     const response = await axios.get(`${SERVER_URL}/sidebar`);
+  // //   const response = await getCities();
+  //   setAds(response.data.result);
+  // } catch (error) {
+  //   errorToast(error?.response?.data?.message || error?.message || 'Error occurred');
+  // }
+  // }
 
   const handleShare = (title, url) => {
     if (navigator.share) {
@@ -108,9 +123,8 @@ function UserViewProjects() {
 
   const fetchdata = async () => {
     try {
-      const allProperties = await getProperties();
-      setProperties(allProperties.result);
       const property = await getPropertyById(id);
+    
       // if (
         // property.result &&
         // property.result.length > 0 &&
@@ -126,26 +140,33 @@ function UserViewProjects() {
           images.push(...property.result[0].imageFiles);
         }
 
-        console.log(images,'images')
+ 
       // ) {
         // const propertiesNewArray = { ...property.result[0] };
         // propertiesNewArray.smallImage.unshift(propertiesNewArray.mainImgaeLink);
         setProperty(property.result[0]);
-        console.log(property.result[0],'000')
+   
         setFullImages(images);
+
+
+        const allProperties = await getProperties();
+        setProperties(allProperties.result);
       // } else {
         // setProperty(property.result[0]);
       // }
       const sideBanner = await fetchSideBanners();
 
-      setSideBanner(sideBanner.result);
+      console.log(sideBanner.result,'sidebarrner')
+      // setSideBanner(sideBanner.result);
       setLoading(false);
 
       const sideBarResultFiltered =
         sideBanner.result &&
         sideBanner.result.filter(
-          item => item.property && item.property._id !== id
+          item => item._id+'' !== property.result[0].adsOptions+''
         );
+
+        console.log(sideBarResultFiltered,'sideBarResultFiltered')
 
       // Function to shuffle the array
       function shuffleArray(array) {
@@ -928,8 +949,9 @@ function UserViewProjects() {
 
 
 
-                              {
-                                  <SwiperSlide
+                              { adsState.length > 0 && adsState.map((item)=>{
+                                return(
+<SwiperSlide
                                   className='cursor-pointer'
                                   // onClick={() =>
                                   //   navigate(
@@ -940,11 +962,14 @@ function UserViewProjects() {
                                 >
                                   {console.log(property,'---')}
                                   <Lazyloading
-                                    src={property?.adsDetails?.imageFile?.secure_url}
+                                    src={item?.imageFile?.secure_url}
                                     className='w-full h-full object-cover'
                                     alt='banner'
                                   />
                                 </SwiperSlide>
+                                )
+                              })
+                                  
                               }
                         </Swiper>
                       </div>
