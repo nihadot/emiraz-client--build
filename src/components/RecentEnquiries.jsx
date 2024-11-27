@@ -134,7 +134,6 @@ function RecentEnquiries({ searchTerm, selectedFilter,selectedFilterDeveloper,se
     
 
     if (selectedFilterAgency) {
-      console.log(selectedFilterAgency,'selectedFilterAgency')
       if(selectedFilterAgency._id === 'all'){
         filteredProperties = filteredProperties.filter(item => true == true);
       }else{

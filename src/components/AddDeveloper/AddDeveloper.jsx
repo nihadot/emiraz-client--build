@@ -38,8 +38,7 @@ function AddDeveloper() {
       if(!values.developerImage){
         return errorToast('Image is required');
       }
-      console.log(values,'developers values ')
-
+      
       // Filter out empty, null, or undefined fields from otherValues
       const cleanedValues = Object.fromEntries(
         Object.entries(otherValues).filter(([_, value]) => value !== null && value !== undefined && value !== "")

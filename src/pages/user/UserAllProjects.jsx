@@ -33,7 +33,9 @@ function UserAllProjects() {
   // console.log(value,'value')
 
   useEffect(()=>{
-    setProperties(value?.result)
+    if(value?.result){
+      setProperties(value.result.filter((item)=> item.propertyType.includes(nameOfPropertyType.toLowerCase())))
+    }
   },[value?.result])
 
   React.useEffect(() => {
@@ -48,13 +50,11 @@ function UserAllProjects() {
       setLoading(true);
    
         const propertiesData = await getPropertiesByProjectsId(name);
-        console.log(propertiesData,'propertiesData')
         setProperties(propertiesData.result);
      
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      console.log(error.message);
     }
   };
 
