@@ -953,14 +953,13 @@ const [ads,setAds] = useState([]);
                                 return(
 <SwiperSlide
                                   className='cursor-pointer'
-                                  // onClick={() =>
-                                  //   navigate(
-                                  //     `/property/${property.property.projectTitle}/${item.property._id}`
-                                  //   )
-                                  // }
+                                  onClick={() =>
+                                    navigate(
+                                      `/property/${item?.property?.projectTitle}/${item?.property?._id}`
+                                    )
+                                  }
                                   key={index}
                                 >
-                                  {console.log(property,'---')}
                                   <Lazyloading
                                     src={item?.imageFile?.secure_url}
                                     className='w-full h-full object-cover'
