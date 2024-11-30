@@ -7,7 +7,7 @@ const AdminEditPropertyPage = () => {
   const { state } = useLocation();
   const { userId } = useParams();
 
-console.log(state,'state : ')
+// console.log(state,'state : ')
   return (
     <motion.div
       className="h-screen text-black flex flex-col items-start"

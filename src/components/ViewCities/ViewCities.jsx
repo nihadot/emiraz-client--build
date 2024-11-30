@@ -65,16 +65,16 @@ function ViewCities() {
 
     const handleDelete = async ({ _id }) => {
         try {
-            console.log("Delete action triggered for ID:", _id);
+            // console.log("Delete action triggered for ID:", _id);
         
             // Show confirmation dialog
             const status = confirm("Are you sure you want to delete?");
-            console.log("User confirmation:", status);
+            // console.log("User confirmation:", status);
             if (!status) return;
         
             // API call to delete the city
             await deleteCityById(_id);
-            console.log("API call succeeded for ID:", _id);
+            // console.log("API call succeeded for ID:", _id);
     
             // Filter data to remove the deleted item
             const filteredData = data.filter((item) => item._id !== _id);
@@ -83,7 +83,7 @@ function ViewCities() {
             setData(filteredData);
             setSearchData(filteredData); // Ensure search data reflects the deletion
         } catch (error) {
-            console.error("Error during deletion:", error);
+            // console.error("Error during deletion:", error);
             errorToast(error?.response?.data?.message || error?.message || "An error occurred");
         }
     };

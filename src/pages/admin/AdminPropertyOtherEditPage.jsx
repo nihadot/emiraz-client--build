@@ -68,7 +68,7 @@ function AdminPropertyOtherEditPage() {
     adsDetails:{},
   });
   const { state } = useLocation();
-console.log(state,'state')
+// console.log(state,'state')
 
   useEffect(()=>{
     if(state){
@@ -197,7 +197,7 @@ for (const element of obj) {
     // return true
      data.isSold = event.isSold;
 
-    console.log('[Data]: => ', data)
+    // console.log('[Data]: => ', data)
     const response = await axios.put(`${SERVER_URL}/property/update-other-options/${projectId}`, data, {
         headers: { Authorization: `Bearer ${localStorage.getItem(ADMIN_TOKEN)}` },
       });
@@ -235,7 +235,7 @@ for (const element of obj) {
         const response = await axios.delete(`${SERVER_URL}/property/city/delete/${projectId}/${id}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem(ADMIN_TOKEN)}` },
         });
-        console.log('[Response]: => ', response);
+        // console.log('[Response]: => ', response);
         navigate('/admin/edit-properties');
         successToast('Property deleted successfully');
       } catch (error) {
@@ -265,7 +265,7 @@ for (const element of obj) {
         const response = await axios.delete(`${SERVER_URL}/property/property-type/delete/${projectId}/${item}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem(ADMIN_TOKEN)}` },
         });
-        console.log('[Response]: => ', response);
+        // console.log('[Response]: => ', response);
         navigate('/admin/edit-properties');
         successToast('Property deleted successfully');
       } catch (error) {
@@ -287,7 +287,7 @@ for (const element of obj) {
          const response = await axios.delete(`${SERVER_URL}/property/delete/priority/${projectId}/${item}`, {
            headers: { Authorization: `Bearer ${localStorage.getItem(ADMIN_TOKEN)}` },
          });
-         console.log('[Response]: => ', response);
+        //  console.log('[Response]: => ', response);
          navigate('/admin/edit-properties');
          successToast('Deleted successfully');
        } catch (error) {
@@ -309,7 +309,7 @@ for (const element of obj) {
          const response = await axios.delete(`${SERVER_URL}/property/delete/ads/${projectId}`, {
            headers: { Authorization: `Bearer ${localStorage.getItem(ADMIN_TOKEN)}` },
          });
-         console.log('[Response]: => ', response);
+        //  console.log('[Response]: => ', response);
          navigate('/admin/edit-properties');
          successToast('Deleted successfully');
        } catch (error) {
@@ -393,7 +393,7 @@ for (const element of obj) {
 
 <div className="flex justify-center  gap-3 mt-3 w-fit items-center  capitalize sf-bold border-[#E4E4E4] py-3 px-4 rounded-[10px] font-normal text-sm text-[#333333] cursor-pointer outline-none relative bg-white ">Already existing : </div>
 <div className=" flex gap-3">
-  {console.log(userData,'userData')}
+  {/* {console.log(userData,'userData')} */}
             {userData?.cityDetails?.map((item,index)=> {
                 return(
                     <div className="flex justify-center  gap-3 mt-3 w-fit items-center border capitalize sf-medium border-[#E4E4E4] py-3 px-4 rounded-[10px] font-normal text-sm text-[#333333] cursor-pointer outline-none relative bg-white ">

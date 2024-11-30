@@ -36,7 +36,7 @@ function PropertiesCard({handlePublish,publish, view,item,handleDelete,disableDe
     if (navigator.share) {
       navigator
         .share({
-          title: title,
+          title: 'Hello, I found this off-plan project on PropertySeller',
           url: `https://propertyseller.ae/${url}`,
         })
         .then(() => console.log("Thanks for sharing!"))

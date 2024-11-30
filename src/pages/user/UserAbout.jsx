@@ -75,6 +75,8 @@ function UserAbout() {
   return (
     <>
       <Helmet>
+      <meta name="author" content="Property Seller"></meta>
+
       <title>{seo_title?.length > 65 ?  seo_title?.slice(0,65) :  seo_title  }</title>
             <meta name="description" content={seo_description?.length > 170 ?  seo_description?.slice(0,170) :  seo_description  } />
             <link rel="canonical" href={seo_site_url}></link>

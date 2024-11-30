@@ -134,7 +134,7 @@ function RecentEnquiries({ searchTerm, selectedFilter,selectedFilterDeveloper,se
     
 
     if (selectedFilterAgency) {
-      console.log(selectedFilterAgency,'selectedFilterAgency')
+      // console.log(selectedFilterAgency,'selectedFilterAgency')
       if(selectedFilterAgency._id === 'all'){
         filteredProperties = filteredProperties.filter(item => true == true);
       }else{
@@ -303,8 +303,8 @@ function RecentEnquiries({ searchTerm, selectedFilter,selectedFilterDeveloper,se
                 </div>
                 <div className=' w-full text-center capitalize'>{item?.name}</div>
                 <div className=' w-full text-center'>+{item?.number}</div>
-                <div className=' w-full text-center capitalize'>{item?.propertyName}</div>
-                <div className=' w-full text-center capitalize'>{item?.developerName}</div>
+                <div className=' w-full text-center capitalize'>{item?.propertyDetails?.projectTitle}</div>
+                <div className=' w-full text-center capitalize'>{item?.developerDetails?.developerName}</div>
                 <div className=' w-full text-center capitalize'>{statusComponent(item)}</div>
 
               </div>

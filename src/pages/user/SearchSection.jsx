@@ -81,7 +81,7 @@ function SearchSection({handleSearchQuery}) {
   },[query]);
   return (
     <>
-      <div className='hidden   max-w-[1300px] px-5 sm:flex md:w-full lg:px-[3rem] mx-auto bg-white justify-between items-center gap-10 h-[130px] '>
+      <div className='hidden  px-5 max-w-[1300px] lg:px-20 xl:px-28 sm:flex md:w-full bg-white justify-between items-center gap-10 h-[130px] '>
         <h1 className='poppins font-bold text-[25px]'>
           {' '}
           Discover Off Plan Properties in Dubai and Other Emirates.{' '}

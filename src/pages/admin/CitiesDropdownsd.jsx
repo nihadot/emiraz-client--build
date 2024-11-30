@@ -58,7 +58,7 @@ const [cities,setCities] = useState([]);
 
 
 
-  console.log(cities,'cities')
+  // console.log(cities,'cities')
 
 
 

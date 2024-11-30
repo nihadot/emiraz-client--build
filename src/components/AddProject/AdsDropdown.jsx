@@ -40,7 +40,7 @@ const ThemedDropdown = ({
   return (
     <div className="flex mt-6 mb-6 flex-col gap-2">
       <label htmlFor={name} className="sf-medium font-medium text-sm text-[#000000]">
-        Select an Option
+        Select Ads 
       </label>
 
       {/* Dropdown */}

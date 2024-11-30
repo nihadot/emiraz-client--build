@@ -25,8 +25,8 @@ const DevelopersDropdown = ({
     }
   }, [options, existingData]);
 
-  console.log(existingData,'exisitng data')
-  console.log(options,'options data')
+  // console.log(existingData,'exisitng data')
+  // console.log(options,'options data')
   // Sync the `value` with selected developer
   useEffect(() => {
     setSelectedDeveloper(value || null);

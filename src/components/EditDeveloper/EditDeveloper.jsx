@@ -102,7 +102,7 @@ const handleSubmit = async (values, { resetForm }) => {
       // API call to add a new city
       const response = await editDeveloperById(formDataFields,developerId);
       // Display success message and reset the form
-      console.log(values,'values')
+      // console.log(values,'values')
       successToast("Successfully updated");
       navigate('/admin/view-developers')
 

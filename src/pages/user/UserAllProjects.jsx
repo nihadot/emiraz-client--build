@@ -95,6 +95,8 @@ function UserAllProjects() {
         <>
           <div>
             <Helmet>
+            <meta name="author" content="Property Seller"></meta>
+
               <title>{seo_title}</title>
               <meta name="description" content={seo_description} />
               <meta property="og:title" content={seo_title} />

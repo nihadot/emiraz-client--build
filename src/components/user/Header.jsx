@@ -121,6 +121,8 @@ function Header() {
           } relative poppins-medium text-white flex justify-between w-full px-4 h-20 items-center  rounded-[10px]`}
         >
           {/*  */}
+
+          
           {/*  is home true, pathname */}
           <Link to={"/"}>
             
@@ -148,26 +150,26 @@ function Header() {
               pathName ? "text-white" : "text-black"
             } hidden xl:flex`}
           >
-            <li className="px-2 flex items-center capitalize">
+            <li className="px-3 1440px:px-6 flex items-center capitalize">
               <Link to={"/"}>Home</Link>{" "}
               <span
-                className={`ms-4 w-[1px] h-4 ${
+                className={`ms-3 1440px:ms-6 w-[1px] h-4 ${
                   pathName ? "bg-slate-50" : "bg-black"
                 }  block`}
               ></span>
             </li>
-            <li className="px-2 flex items-center">
+            <li className="px-3 1440px:px-6 flex items-center">
               <Link to={"/about"}>About Us</Link>{" "}
               <span
-                className={`ms-4 w-[1px] h-4 ${
+                className={`ms-3 1440px:ms-6 w-[1px] h-4 ${
                   pathName ? "bg-slate-50" : "bg-black"
                 }  block`}
               ></span>
             </li>
-            <li className="px-5 flex items-center">
+            <li className="px-3 1440px:px-6 flex items-center">
               <Link to={"/blog"}>Blog</Link>{" "}
               <span
-                className={`ms-6 w-[1px] h-4 ${
+                className={`ms-3 1440px:ms-6 w-[1px] h-4 ${
                   pathName ? "bg-slate-50" : "bg-black"
                 }  block`}
               ></span>
@@ -175,10 +177,10 @@ function Header() {
 
 
 
-            <li className="px-5 flex items-center">
+            <li className="px-3 1440px:px-6 flex items-center">
               <Link to={"/property-type/villa"}>Villa</Link>{" "}
               <span
-                className={`ms-6 w-[1px] h-4 ${
+                className={`ms-3 1440px:ms-6 w-[1px] h-4 ${
                   pathName ? "bg-slate-50" : "bg-black"
                 }  block`}
               ></span>
@@ -186,10 +188,10 @@ function Header() {
 
 
 
-            <li className="px-5 flex items-center">
+            <li className="px-3 1440px:px-6 flex items-center">
               <Link to={"/property-type/apartment"}>Apartment</Link>{" "}
               <span
-                className={`ms-6 w-[1px] h-4 ${
+                className={`ms-3 1440px:ms-6 w-[1px] h-4 ${
                   pathName ? "bg-slate-50" : "bg-black"
                 }  block`}
               ></span>
@@ -197,10 +199,10 @@ function Header() {
 
 
 
-            <li className="px-5 flex items-center">
+            <li className="px-3 1440px:px-6 flex items-center">
               <Link to={"/property-type/penthouse"}>Penthouse</Link>{" "}
               <span
-                className={`ms-6 w-[1px] h-4 ${
+                className={`ms-3 1440px:ms-6 w-[1px] h-4 ${
                   pathName ? "bg-slate-50" : "bg-black"
                 }  block`}
               ></span>
@@ -208,10 +210,10 @@ function Header() {
 
 
 
-            <li className="px-5 flex items-center">
+            <li className="px-3 1440px:px-6 flex items-center">
               <Link to={"/property-type/townhouse"}>Townhouse</Link>{" "}
               <span
-                className={`ms-6 w-[1px] h-4 ${
+                className={`ms-3 1440px:ms-6 w-[1px] h-4 ${
                   pathName ? "bg-slate-50" : "bg-black"
                 }  block`}
               ></span>

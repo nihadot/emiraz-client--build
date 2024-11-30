@@ -59,11 +59,36 @@ function UserViewProjects() {
   const [indexOf, setIndexOf] = useState(0);
   const [formIsLoading, setFormIsLoading] = React.useState(false);
 
+
+  const [orientation, setOrientation] = useState(
+    window.innerWidth > window.innerHeight ? "Landscape" : "Portrait"
+  );
+
+  const checkOrientation = () => {
+    setOrientation(
+      window.innerWidth > window.innerHeight ? "Landscape" : "Portrait"
+    );
+  };
+
+
+  useEffect(() => {
+    // Add event listener for screen resize
+    window.addEventListener("resize", checkOrientation);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      window.removeEventListener("resize", checkOrientation);
+    };
+  }, []);
+
+
   React.useEffect(() => {
     setLoading(true);
     if (!id) {
-      navigate('/all-projects');
+      return navigate('/');
     }
+
+  
     fetchdata();
     // fetchAds();
 
@@ -86,7 +111,7 @@ const [ads,setAds] = useState([]);
     if (navigator.share) {
       navigator
         .share({
-          title: title,
+          title: 'Hello, I found this off-plan project on PropertySeller',
           url: `https://propertyseller.ae/${url}`,
         })
         .then(() => console.log('Thanks for sharing!'))
@@ -156,7 +181,6 @@ const [ads,setAds] = useState([]);
       // }
       const sideBanner = await fetchSideBanners();
 
-      console.log(sideBanner.result,'sidebarrner')
       // setSideBanner(sideBanner.result);
       setLoading(false);
 
@@ -166,7 +190,6 @@ const [ads,setAds] = useState([]);
           item => item._id+'' !== property.result[0].adsOptions+''
         );
 
-        console.log(sideBarResultFiltered,'sideBarResultFiltered')
 
       // Function to shuffle the array
       function shuffleArray(array) {
@@ -183,7 +206,6 @@ const [ads,setAds] = useState([]);
       setAdsState(shuffledArray);
     } catch (error) {
       setLoading(false);
-      console.log(error.message);
     }
   };
 
@@ -224,6 +246,27 @@ const [ads,setAds] = useState([]);
     setPropertyUniqueID(id);
   };
 
+  // const videoRef = useRef();
+  // const [isHidden, setIsHidden] = useState(false);
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     if (videoRef.current && !isHidden) {
+  //       const videoPosition = videoRef.current.getBoundingClientRect().top;
+  //       const triggerPosition = window.innerHeight * 0.25; // Adjust trigger threshold as needed
+
+  //       if (videoPosition < triggerPosition) {
+  //         setIsHidden(true); // Hide the video once
+  //       }
+  //     }
+  //   };
+
+  //   window.addEventListener("scroll", handleScroll);
+
+  //   return () => {
+  //     window.removeEventListener("scroll", handleScroll);
+  //   };
+  // }, [isHidden]);
+
   const handleSecondRegisterSubmit = async e => {
     try {
       e.preventDefault();
@@ -252,7 +295,6 @@ const [ads,setAds] = useState([]);
         setSuccessCLoseModal(true);
       setFormIsLoading(false);
     } catch (error) {
-      console.log(error);
       setFormIsLoading(false);
     }
   };
@@ -315,9 +357,10 @@ const [ads,setAds] = useState([]);
   // },[property])
 
 
-  const seo_description = property?.description;
-  const seo_title = property?.projectTitle;
+  const seo_description = property?.projectMetaDescription;
+  const seo_title = property?.projectMetaTitle;
   const seo_site_url = `${window.location.href}`;
+  const keyboard = property?.projectMetaKeywords;
 
 
   const formattedDate = property?.handoverDate
@@ -338,6 +381,9 @@ const [ads,setAds] = useState([]);
               : seo_description
           }
         />
+          <meta name="keywords" content={keyboard}/>
+          <meta name="author" content="Property Seller"></meta>
+
         <meta property='og:title' content={seo_title} />
         <link rel='canonical' href={seo_site_url}></link>
         <meta property='og:description' content={seo_description} />
@@ -696,11 +742,11 @@ const [ads,setAds] = useState([]);
                     {/* description */}
 
                     {/* facilities and amentites */}
-                    <div className='max-w-[740px] capitalize'>
+                    <div className='max-w-[740px] poppins-medium capitalize'>
                       <h1 className='sf-medium text-black lg:text-[30px] text-[25px] mt-3 my-2'>
                         Facilities and Amenities
                       </h1>
-                      <div className='grid grid-cols-1 md:grid-cols-3 '>
+                      <div className='grid  grid-cols-1 md:grid-cols-3 '>
                         {property.facilities &&
                           property.facilities.map((item, index) => {
                             return (
@@ -847,8 +893,10 @@ const [ads,setAds] = useState([]);
                     /> */}
 
                     <div
+                    
+                    // ref={videoRef}
                       onClick={handleYoutubeVideo}
-                      className='cursor-pointer'
+                      className={`cursor-pointer `}
                     >
                       <iframe
                         style={{ pointerEvents: 'none' }}
@@ -859,11 +907,11 @@ const [ads,setAds] = useState([]);
 
                     {/* enquiries */}
 
-                    <div className=' border h-[250px] sticky top-5 z-30  bg-white  py-4  px-2 mt-4 rounded-[15px]  lg:flex-none lg:max-w-[420px]   hidden lg:block '>
+                    <div className=' border h-[185px] sticky top-2 z-30  bg-white  py-2  px-2 mt-4 rounded-[15px]  lg:flex-none lg:max-w-[420px]   hidden lg:block '>
                       <form onSubmit={handleThirdRegisterSubmit} className=''>
-                        <h1 className='text-[30px] sf-medium text-center mb-3'>
+                        {/* <h1 className='text-[30px] sf-medium text-center mb-3'>
                           Register Your interest
-                        </h1>
+                        </h1> */}
                         <input
                           type='text'
                           disabled={setFormIsLoading}
@@ -906,7 +954,7 @@ const [ads,setAds] = useState([]);
                     {/* sidebanner */}
 
                     {
-                      <div className='w-[338px] m-auto h-[670px] sticky top-[280px] mt-5 '>
+                      <div className='w-[338px] m-auto h-[500px] sticky top-[190px] mt-3 '>
                         <Swiper
                           style={{
                             width: '100%',
@@ -982,30 +1030,66 @@ const [ads,setAds] = useState([]);
 
               <section className=' mt-[24px] px-6  md:px-20 lg:px-28 w-full'>
                 <div className='pt-1 pb-0'>
-                  <h1 className='text-center sf-medium lg:font-bold lg:text-[40px] text-[25px] mt-0 my-0 text-black'>
-                    Similar Projects
-                  </h1>
 
-                  <div className="md:hidden flex my-10">
-                  {
-                                  <SwiperSlide
+                <div className="md:hidden flex my-10">
+                 
+              {/*  */}
+              <div className='max-w-[600px] w-full m-auto h-[300px] sticky top-[190px] mt-3 '>
+                        <Swiper
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            textAlign: 'center',
+                          }}
+                          spaceBetween={30}
+                          centeredSlides={true}
+                          autoplay={{
+                            delay: 5000,
+                            disableOnInteraction: false,
+                          }}
+                          modules={[Autoplay]}
+                          className='mySwiper'
+                        >
+                        
+
+
+                              { adsState.length > 0 && adsState.filter(item => item.landScape && Object.keys(item.landScape).length > 0).map((item)=>{
+                                return(
+<SwiperSlide
                                   className='cursor-pointer'
-                                  // onClick={() =>
-                                  //   navigate(
-                                  //     `/property/${property.property.projectTitle}/${item.property._id}`
-                                  //   )
-                                  // }
+                                  onClick={() =>{
+                                    if(item.property && item.property.projectTitle  && item.property._id)
+                                    navigate(
+                                      `/property/${item?.property?.projectTitle}/${item?.property?._id}`
+                                    )
+                                  }
+                                   
+                                  }
                                   key={index}
                                 >
-                                  {console.log(property,'---')}
                                   <Lazyloading
-                                    src={property?.adsDetails?.imageFile?.secure_url}
+                                    src={item?.landScape?.secure_url}
                                     className='w-full h-full object-cover'
                                     alt='banner'
                                   />
                                 </SwiperSlide>
+                                )
+                              })
+                                  
                               }
+                        </Swiper>
+                      </div>
+              {/*  */}
+                                
                   </div>
+
+
+
+                  <h1 className='text-center sf-medium lg:font-bold lg:text-[40px] text-[25px] mt-0 my-0 text-black'>
+                    Similar Projects
+                  </h1>
+
+                
                   <div className='flex flex-col justify-center items-center '>
             <div className="mt-5 mb-20
              w-full grid sm:grid-cols-2 grid-cols-1 md:grid-cols-3   gap-7 max-w-[1300px]">
@@ -1094,7 +1178,6 @@ const [ads,setAds] = useState([]);
                       }
                     />
                   </h1>
-                  {console.log(indexOf,'00')}
                   <div className='h-screen flex-col flex pt-[100px] lg:pt-3 items-center  px-5 lg:px-28'>
                     <div className='w-[100%] h-[318px] md:h-[450px] mb-5 xl:h-[591px] justify-center  rounded-[20px] object-cover overflow-hidden flex'>
                       {fullImages?.length > 0 && (

@@ -72,7 +72,7 @@ const handleRemovePreviewImage = ()=>{
     setPreview("");
 }
 
-console.log(data,'data')
+// console.log(data,'data')
   
 const handleSubmit = async (values, { resetForm }) => {
     // Submission logic

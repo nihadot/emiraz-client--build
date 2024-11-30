@@ -40,7 +40,7 @@ function OurSellers() {
   };
 
   const seo_description = "Property for Sale in Dubai, UAE  | Off-plan Properties for sale in Dubai, UAE | Off-plan Apartments for Sale in Dubai, UAE";
-const seo_title = `Our Sellers`;
+const seo_title = `Our Developers`;
 const seo_site_url = `${window.location.href}`;
 
 
@@ -52,6 +52,8 @@ const seo_site_url = `${window.location.href}`;
 
 
   <Helmet>
+  <meta name="author" content="Property Seller"></meta>
+
         <title>{seo_title}</title>
         <meta name="description" content={seo_description} />
         <meta property="og:title" content={seo_title} />
@@ -90,7 +92,7 @@ const seo_site_url = `${window.location.href}`;
                               `/developers/${item._id}/${item.developerName}`
                             )
                           }
-                          className="cursor-pointer overflow-hidden p-5 lg:h-[252px] sm:w-[180px] h-[172px]  lg:w-[264px] rounded-[15px] flex justify-center items-center border"
+                          className="cursor-pointer overflow-hidden p-5 lg:h-[252px] sm:w-[180px] h-[172px]  lg:w-[264px] rounded-[15px] flex justify-center flex-col items-center border"
                           key={item._id}
                         >
                           <Lazyloading
@@ -98,6 +100,8 @@ const seo_site_url = `${window.location.href}`;
                             alt={item?.developerName}
                             className={"my-10  object-contain max-h-[120px]"}
                           />
+
+                                                     <label htmlFor="">{item?.developerName}</label>
                         </div>
                       );
                     })}

@@ -92,7 +92,6 @@ function AddProperties() {
           axios.get(`${SERVER_URL}/sidebar`), // Replace with your second API URL
         ]);
 
-        console.log(responses, 'res')
 
         // Set the data from both API calls
         setCities(responses[0].data.result);
@@ -193,8 +192,6 @@ for (const element of obj) {
     setIsDraft(false);  // Reset the draft state here after form reset
     successToast('Successfully added');
 
-    console.log(data.priority)
-    console.log(Boolean(data.priority),'----------------------------------------------------------------')
 
     if(data.priority){
       // const result = existPriorities.filter((item)=> {
@@ -220,7 +217,7 @@ for (const element of obj) {
 
 
 
-  console.log(existPriorities,'existPriorities')
+  // console.log(existPriorities,'existPriorities')
   // console.log(priorityValue,'prioritiesValue')
   return (
     <Formik
@@ -244,6 +241,9 @@ for (const element of obj) {
         projectNumber: "",
         isChecked:false,
         adsOptions: [],
+        projectMetaDescription:'',
+        projectMetaTitle:'',
+        projectMetaKeywords:''
       }}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
@@ -275,6 +275,86 @@ for (const element of obj) {
                   className="text-red-500 text-sm"
                 />
               </div>
+
+
+
+
+
+    {/* Project META Title */}
+    <div className="flex flex-col my-2 gap-2 ">
+                <label
+                  htmlFor="projectMetaTitle"
+                  className="sf-medium font-medium text-sm text-[#000000]"
+                >
+                  Project Meta Title 
+                </label>
+                <Field
+                  disabled={isLoading}
+                  name="projectMetaTitle"
+                  type="text"
+                  // innerRef={projectTitleRef}
+                  value={values.projectMetaTitle}
+                  placeholder="Meta Title"
+                  className="border border-[#E4E4E4] py-4 px-5 rounded-[10px] font-extralight sf-normal text-sm text-[#666666] outline-none"
+                />
+                <ErrorMessage
+                  name="projectMetaTitle"
+                  component="div"
+                  className="text-red-500 text-sm"
+                />
+              </div>
+
+
+
+                  {/* Project META Keywords */}
+    <div className="flex flex-col my-2 gap-2 ">
+                <label
+                  htmlFor="projectMetaKeywords"
+                  className="sf-medium font-medium text-sm text-[#000000]"
+                >
+                  Project Meta Keywords 
+                </label>
+                <Field
+                  disabled={isLoading}
+                  name="projectMetaKeywords"
+                  type="text"
+                  // innerRef={projectTitleRef}
+                  value={values.projectMetaKeywords}
+                  placeholder="Meta Title"
+                  className="border border-[#E4E4E4] py-4 px-5 rounded-[10px] font-extralight sf-normal text-sm text-[#666666] outline-none"
+                />
+                <ErrorMessage
+                  name="projectMetaKeywords"
+                  component="div"
+                  className="text-red-500 text-sm"
+                />
+              </div>
+
+
+                {/* Project META Description */}
+                <div className="flex flex-col my-2 gap-2 ">
+                <label
+                  htmlFor="projectMetaDescription"
+                  className="sf-medium font-medium text-sm text-[#000000]"
+                >
+                  Project Meta Description 
+                </label>
+                <Field
+                  disabled={isLoading}
+                  name="projectMetaDescription"
+                  type="text"
+                  // innerRef={projectTitleRef}
+                  value={values.projectMetaDescription}
+                  placeholder="Meta Description"
+                  className="border border-[#E4E4E4] py-4 px-5 rounded-[10px] font-extralight sf-normal text-sm text-[#666666] outline-none"
+                />
+                <ErrorMessage
+                  name="projectMetaDescription"
+                  component="div"
+                  className="text-red-500 text-sm"
+                />
+              </div>
+
 
               {/* Price In AED */}
               <div className="flex mt-3 flex-col gap-2 ">

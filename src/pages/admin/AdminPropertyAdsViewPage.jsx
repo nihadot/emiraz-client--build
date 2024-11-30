@@ -26,7 +26,7 @@ function AdminPropertyAdsViewPage() {
       };
 
   return (
-    <div>
+    <div className='flex gap-4'>
                 
           <div className="flex gap-3 flex-wrap justify-center items-center">
             {state &&
@@ -52,6 +52,28 @@ function AdminPropertyAdsViewPage() {
                   >
                     Delete
                   </a>
+                </div>
+}
+            
+          </div>
+
+
+
+
+          <div className="flex gap-3 flex-wrap justify-center items-center">
+            {state &&
+                <div className="" >
+                  <img
+                    className="w-[481px] h-[400px]  my-3 lg:my-0"
+                    src={state?.adsDetails?.landScape?.secure_url}
+                    // key={item._id}
+                    alt="loading"
+                    loading="lazy"
+                  />
+
+                  {/* <p className="my-2 capitalize py-3 text-sm"> {state?.adsDetails?.name} </p> */}
+                 
+            
                 </div>
 }
             

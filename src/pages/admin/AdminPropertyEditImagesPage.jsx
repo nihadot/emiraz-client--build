@@ -35,7 +35,7 @@ const { userId } = useParams();
     imageFile:  "",
     imageFiles : "",
   });
-  console.log(state,'state')
+  // console.log(state,'state')
 
   useEffect(() => {
     if(state){
@@ -65,7 +65,7 @@ const { userId } = useParams();
         public_id: response.data.public_id,
       };
     } catch (error) {
-      console.error('Error uploading image:', error);
+      // console.error('Error uploading image:', error);
       throw new Error('Image upload failed');
     }
   };
@@ -74,7 +74,7 @@ const { userId } = useParams();
   const handleSubmit = async (event, { resetForm }) => {
 
 
-console.log(event,'use data')
+// console.log(event,'use data')
 
     try {
 
@@ -102,7 +102,7 @@ for (const element of obj) {
         }
         data.imageFiles = uploadedImages;
       }
-      console.log(data,'33')
+      // console.log(data,'33')
     //   
  
 

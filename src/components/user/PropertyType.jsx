@@ -32,12 +32,17 @@ function PropertyType() {
     const villa__data = data.find((item)=> item.propertyType === 'villa');
   return (
     <section>
-      <h1 className="mb-8 sf-medium sf-medium-600 justify-center items-center text-[30px] md:text-[50px] flex flex-col leading-[23px] md:leading-tight lg:flex-row gap-4">
+      <h1 className="mb-8 min-[1037px]:flex sf-medium sf-medium-600  text-[30px] md:text-[50px]  leading-[23px] md:leading-tight  justify-center items-center flex-row   gap-4">
         <span className="block text-center ">Availability Based on</span>
         <span className="block text-center text-[#666666]">Property Types</span>
       </h1>
+{/* 
+      <h1 className="mb-8 sf-medium sf-medium-600 justify-center items-center text-[30px] md:text-[50px]  flex flex-col leading-[23px] md:leading-tight lg:flex-row gap-4">
+        <span className="block text-center ">Availability Based on</span>
+        <span className="block text-center text-[#666666]">Property Types</span>
+      </h1> */}
 
-      <div className="mt-4 grid justify-items-center  grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 capitalize">
+      <div className="mt-4 grid justify-items-center  grid-cols-1 md:grid-cols-2  xl:grid-cols-4 gap-3 capitalize">
                    {/* { data && data.map((item)=>{ */}
                     {/* return( */}
                         <div  onClick={()=>navigate(`/property-type/apartment/`)} className="w-full cursor-pointer border border-[#D2D2D2] flex justify-center items-center  md:w-fit   p-4 rounded-[15px]">

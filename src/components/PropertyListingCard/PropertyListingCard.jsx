@@ -20,13 +20,13 @@ import { formatDate } from '../../utils/formatDate';
 function PropertyListingCard({previewLink,modify,prevMain,viewMain,preview,normal,user,item, handleRegister, navigate,enqButtonStatus,handleDelete}) {
 
     // gone developerName = field if user select an developer then find the developer and assining developerName as the developerName
-console.log(item,'imagesLink')
+// console.log(item,'imagesLink')
     //  enquiry now button status - true or false = field is enqButtonStatus
     const handleShare = (title, url) => {
         if (navigator.share) {
           navigator
             .share({
-              title: title,
+              title: 'Hello, I found this off-plan project on PropertySeller',
               url: `https://propertyseller.ae/${url}`,
             })
             .then(() => console.log("Thanks for sharing!"))
@@ -145,7 +145,7 @@ console.log(item,'imagesLink')
             </Swiper>
 
 
-{console.log(item?.projectImagesPreview,'item?.projectImagesPreview')}
+{/* {console.log(item?.projectImagesPreview,'item?.projectImagesPreview')} */}
     
             {/* desktop */}
             {/* <div className="hidden absolute w-full md:flex justify-between  z-30 px-4 top-4 left-0 ">

@@ -25,7 +25,7 @@ function Footer() {
 
   return (
     <>
-      <footer className="bg-black hidden sm:block pb-7">
+      <footer className="bg-black hidden md:block pb-7">
         <div className="lg:mx-20 xl:mx-28 hidden 600px:flex mb-8 justify-center items-center pt-0  h-[100px]">
           <div className="w-[356px] h-[55px]">
           <Lazyloading
@@ -35,9 +35,9 @@ function Footer() {
             />
             </div>
         </div>
-        <div className=" lg:mx-20 xl:mx-28">
-          <div className=" flex justify-between mb-8 flex-col lg:flex-row overflow-hidden">
-            <div className="pb-6 hidden sm:pb-0 lg:flex justify-center items-center">
+        <div className="mx-5 lg:mx-20  xl:mx-28">
+          <div className=" flex justify-between mb-8 flex-col lg:flex-row ">
+            <div className="pb-6 hidden sm:pb-0 xl:flex lg:hidden justify-center items-center">
               <Lazyloading
                 alt={"PropertySeller"}
                 src={logo}
@@ -51,20 +51,22 @@ function Footer() {
                 }
               />
             </div>
+
+            
             <div className="poppins w-full font-medium flex capitalize lg:justify-between sm:justify-center justify-between lg:mt-0 mt-5 items-center">
               <div className=" flex justify-end w-full gap-4 items-center flex-row sm:flex">
                 <Link to={"/"}>
-                  <p className="mb-3 sm:mb-0 text-white text-[10px] sm:text-[14px]  ps-4 pe-3">
+                  <p className="mb-3 sm:mb-0 text-white text-[10px] sm:text-[14px]  px-1 1440px:px-6">
                     Home
                   </p>
                 </Link>
                 <Link to={"/about"}>
-                  <p className="mb-3 sm:mb-0 text-white text-[10px] sm:text-[14px]  ps-4 pe-3">
+                  <p className="mb-3 sm:mb-0 text-white text-[10px] sm:text-[14px]  px-1 1440px:px-6">
                     About Us
                   </p>
                 </Link>
                 <Link to={"/blog"}>
-                  <p className="mb-3 sm:mb-0 text-white text-[10px] sm:text-[14px]  ps-4 pe-3">
+                  <p className="mb-3 sm:mb-0 text-white text-[10px] sm:text-[14px]  px-1 1440px:px-6">
                     Blog
                   </p>
                 </Link>
@@ -72,14 +74,14 @@ function Footer() {
 
 
                 <Link to={"/property-type/villa"}>
-                  <p className="mb-3 sm:mb-0 text-white text-[10px] sm:text-[14px]  ps-4 pe-3">
+                  <p className="mb-3 sm:mb-0 text-white text-[10px] sm:text-[14px]  px-1 1440px:px-6">
                   Villa
                   </p>
                 </Link>
 
 
                 <Link to={"/property-type/apartment"}>
-                  <p className="mb-3 sm:mb-0 text-white text-[10px] sm:text-[14px]  ps-4 pe-3">
+                  <p className="mb-3 sm:mb-0 text-white text-[10px] sm:text-[14px]  px-1 1440px:px-6">
                   Apartment
                   </p>
                 </Link>
@@ -87,21 +89,21 @@ function Footer() {
 
 
                 <Link to={"/property-type/penthouse"}>
-                  <p className="mb-3 sm:mb-0 text-white text-[10px] sm:text-[14px]  ps-4 pe-3">
+                  <p className="mb-3 sm:mb-0 text-white text-[10px] sm:text-[14px]  px-1 1440px:px-6">
                   Penthouse
                   </p>
                 </Link>
 
 
                 <Link to={"/property-type/townhouse"}>
-                  <p className="mb-3 sm:mb-0 text-white text-[10px] sm:text-[14px]  ps-4 pe-3">
+                  <p className="mb-3 sm:mb-0 text-white text-[10px] sm:text-[14px]  px-1 1440px:px-6">
                   Townhouse
                   </p>
                 </Link>
 
 
                 <Link to={"/our-developers"}>
-                  <p className="mb-3 sm:mb-0 text-white text-[10px] sm:text-[14px]  ps-4 pe-3">
+                  <p className="mb-3 sm:mb-0 text-white text-[10px] sm:text-[14px]  px-1 1440px:px-6">
                   Developers
                   </p>
                 </Link>
@@ -168,7 +170,7 @@ function Footer() {
       </footer>
 
       {/* mobile footer */}
-      <footer className="bg-black w-full block sm:hidden">
+      <footer className="bg-black w-full block md:hidden">
         <div className="flex pt-7 justify-center items-center">
           <img
             src={footerMobileLogo}
@@ -179,17 +181,17 @@ function Footer() {
         <div className="mx-6 items-center my-3 flex justify-between">
           <div className="poppins gap-1 flex w-full flex-col">
             <Link to={"/"}>
-              <p className="mb-3 sm:mb-0 text-white text-[14px] sm:text-[14px] border-0 sm:border-r border-solid border-white pe-7">
+              <p className="mb-3 md:mb-0 text-white text-[14px] md:text-[14px] border-0 md:border-r border-solid border-white pe-7">
                 Home
               </p>
             </Link>
             <Link to={"/about"}>
-              <p className="mb-3 sm:mb-0 text-white text-[14px] sm:text-[14px] border-0 sm:border-r border-white pe-7">
+              <p className="mb-3 md:mb-0 text-white text-[14px] md:text-[14px] border-0 md:border-r border-white pe-7">
                 About Us
               </p>
             </Link>
             <Link to={"/blog"}>
-              <p className="mb-3 sm:mb-0 text-white text-[14px] sm:text-[14px] border-0 sm:border-r border-white pe-7">
+              <p className="mb-3 md:mb-0 text-white text-[14px] md:text-[14px] border-0 md:border-r border-white pe-7">
                 Blog
               </p>
             </Link>
@@ -204,8 +206,8 @@ function Footer() {
                       <p
                         className={`${
                           index < 3
-                            ? "mb-3 sm:mb-0 text-white text-[14px] sm:text-[14px] border-0 sm:border-r border-white pe-7"
-                            : "mb-3 sm:mb-0 text-white text-[14px] sm:text-[14px] border-0  border-white pe-3"
+                            ? "mb-3 md:mb-0 text-white text-[14px] md:text-[14px] border-0 md:border-r border-white pe-7"
+                            : "mb-3 md:mb-0 text-white text-[14px] md:text-[14px] border-0  border-white pe-3"
                         } `}
                       >
                         {item.propertyType.name}
@@ -217,34 +219,34 @@ function Footer() {
 
 
 <Link to={"/property-type/villa"}>
-              <p className="mb-3 sm:mb-0 text-white text-[14px] sm:text-[14px] border-0 sm:border-r border-white pe-7">
+              <p className="mb-3 md:mb-0 text-white text-[14px] md:text-[14px] border-0 md:border-r border-white pe-7">
               Villa
               </p>
             </Link>
 
 
             <Link to={"/property-type/apartment"}>
-              <p className="mb-3 sm:mb-0 text-white text-[14px] sm:text-[14px] border-0 sm:border-r border-white pe-7">
+              <p className="mb-3 md:mb-0 text-white text-[14px] md:text-[14px] border-0 md:border-r border-white pe-7">
               Apartment
               </p>
             </Link>
 
             <Link to={"/property-type/penthouse"}>
-              <p className="mb-3 sm:mb-0 text-white text-[14px] sm:text-[14px] border-0 sm:border-r border-white pe-7">
+              <p className="mb-3 md:mb-0 text-white text-[14px] md:text-[14px] border-0 md:border-r border-white pe-7">
               Penthouse
               </p>
             </Link>
 
 
             <Link to={"/property-type/townhouse"}>
-              <p className="mb-3 sm:mb-0 text-white text-[14px] sm:text-[14px] border-0 sm:border-r border-white pe-7">
+              <p className="mb-3 md:mb-0 text-white text-[14px] md:text-[14px] border-0 md:border-r border-white pe-7">
               Townhouse
               </p>
             </Link>
 
 
             <Link to={"/our-developers"}>
-              <p className="mb-3 sm:mb-0 text-white text-[14px] sm:text-[14px] border-0 sm:border-r border-white pe-7">
+              <p className="mb-3 md:mb-0 text-white text-[14px] md:text-[14px] border-0 md:border-r border-white pe-7">
               Developers
               </p>
             </Link>

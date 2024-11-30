@@ -25,7 +25,7 @@ function ViewDevelopersPage() {
       // dispatch(setLoading());
       const response = await getDevelopers()
       // dispatch(fetchDevelopers(response));
-      console.log(response.result,'response.result')
+      // console.log(response.result,'response.result')
       setDevelopers(response.result);
     } catch (error) {
       errorToast(error?.response?.data?.message || error?.message || 'Error occurred');
@@ -111,6 +111,8 @@ function ViewDevelopersPage() {
                             alt={item?.developerName}
                             className={"my-10 object-contain max-h-[120px]"}
                             />
+
+                            <label htmlFor="">{item?.developerName}</label>
                             
                         </div>
                     

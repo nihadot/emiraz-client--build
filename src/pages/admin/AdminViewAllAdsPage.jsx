@@ -3,15 +3,16 @@ import { deleteSideBanners, getCities, SERVER_URL } from '../../api';
 import axios from 'axios';
 import { ADMIN_TOKEN } from '../../api/localstorage-varibles';
 import { errorToast } from '../../toast';
+import { Link } from 'react-router-dom';
 
 function AdminViewAllAdsPage() {
 
     const [data, setData] = useState([]);
-
+  const [refresh,setRefresh] = useState(false);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [refresh]);
 
   const fetchData = async () => {
     try {
@@ -27,30 +28,27 @@ function AdminViewAllAdsPage() {
 
 
   const handleDelete = async (id) => {
-    // console.log(id,'---')
-    // return true;
+  
     if (!id) return errorToast("Id Is Not Provided!");
 
     try {
       await deleteSideBanners(id);
-    //   setRefresh(!refresh);
+      setRefresh(!refresh);
     } catch (error) {
-    //   if (error.response && error.response.data) {
         errorToast(error?.response?.data?.message || error?.message || 'Error deleting');
-    //   } else {
-        // errorToast("An error occurred during login.");
-    //   }
     }
   };
 
-  console.log(data,'data')
   return (
     <div>
                 
-          <div className="flex gap-3 flex-wrap justify-center items-center">
+          <div className="flex gap-3 flex-wrap flex-col justify-center items-start">
             {data.length > 0 && data.map((item,index)=>{
 
              return (  <div key={index} className="" >
+               
+               <div className="flex gap-3">
+
                   <img
                     className="w-[338px] h-[670px] my-3 lg:my-0"
                     src={item?.imageFile?.secure_url}
@@ -58,6 +56,17 @@ function AdminViewAllAdsPage() {
                     alt="loading"
                     loading="lazy"
                   />
+
+
+<img
+                    className="w-[481px] h-[400px] my-3 lg:my-0"
+                    src={item?.landScape?.secure_url}
+                    key={item._id}
+                    alt="loading"
+                    loading="lazy"
+                  />
+               </div>
+
 
                   <p className="my-2 capitalize py-3 text-sm"> {item?.name} </p>
                  

@@ -8,6 +8,7 @@ import * as serviceWorker from './service-worker.js'; // Assuming you have a ser
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
+  
   <React.StrictMode>
     <Provider store={store}>
       <App />

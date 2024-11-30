@@ -29,7 +29,7 @@ function DesktopHeader() {
       const response = await fetchPropertyTypeAPI();
       setData(response.result);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 

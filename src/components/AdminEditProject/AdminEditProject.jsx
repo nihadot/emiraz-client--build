@@ -143,7 +143,7 @@ function AdminEditProject() {
 
   const [filteredPropertyTypes, setFilteredPropertyTypes] = useState([]);
 
-  console.log(data)
+  // console.log(data)
   // user selected property type removes from property types state then update the property state
   useEffect(() => {
     if (data?.projectTypes?.length > 0) {
@@ -179,7 +179,7 @@ function AdminEditProject() {
   };
 
   useEffect(() => {
-    console.log(existingCity, 'existingCity')
+    // console.log(existingCity, 'existingCity')
     if (allCities?.length > 0) {
       const existingCityIds = existingCity.map((item) => item._id + '');
       const filteredCities = allCities.filter((item) => !(existingCityIds.includes(item._id + '')));
@@ -193,7 +193,7 @@ function AdminEditProject() {
     setPreview("");
   }
 
-  console.log(cities, 'cities')
+  // console.log(cities, 'cities')
 
 
   const handleSubmit = async (values, { resetForm }) => {
@@ -266,7 +266,7 @@ function AdminEditProject() {
 
 
   const handleDeleteCity = async (cityId) => {
-    console.log(cityId, '----')
+    // console.log(cityId, '----')
     try {
       const status = confirm("Are you want to delete!");
       if (!status) return true;

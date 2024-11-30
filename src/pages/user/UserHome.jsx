@@ -160,6 +160,7 @@ function UserHome() {
                   : seo_description
               }
             />
+            <meta name="author" content="Property Seller"></meta>
             <link rel="canonical" href={seo_site_url}></link>
             <meta property="og:title" content={seo_title} />
             <meta property="og:description" content={seo_description} />

@@ -98,7 +98,7 @@ function AdminViewCities() {
         }
     }
 
-    console.log([state.prioritiesArray],'---')
+    // console.log([state.prioritiesArray],'---')
 
   return (
     <div className='grid grid-cols-5 gap-3'>

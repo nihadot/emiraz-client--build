@@ -177,7 +177,7 @@ function RecentEnquiries({ searchTerm, selectedFilter,selectedFilterDeveloper,se
 
   const statusComponent = i => {
     return (
-      <div className='relative mx-auto flex items-center justify-center'>
+      <div key={i} className='relative mx-auto flex items-center justify-center'>
         <div
           onClick={() => handleStatus(!status.status, i._id)}
           className={` capitalize 
@@ -288,47 +288,9 @@ function RecentEnquiries({ searchTerm, selectedFilter,selectedFilterDeveloper,se
     );
   };
 
-  const handleChangeAgencyComponent = async (agencyId, leadId) => {
-    try {
-      await assignedToAgencyAPI({ agencyId, leadId });
-      setRefresh(!refresh);
-    } catch (error) {
-      errorToast(
-        error.response.data.message ||
-          error.message ||
-          'An error occurred during login.'
-      );
-    }
-  };
 
-  const agencyComponent = i => {
-    return (
-     
-      <div className='m-auto w-[100px] bg-black/20 pe-2 overflow-auto h-7 flex justify-center items-center rounded-[4px] cursor-pointer'>
-        <select
-          onChange={e =>
-            handleChangeAgencyComponent(e.target.value, i._id)
-          }
-          value={i.assignedId ? i.assignedId : 'choose'} 
-          className='w-full capitalize h-full text-black bg-transparent outline-none px-3'
-          id=''
-        >
-          {agencies &&
-            agencies.map((item, index) => (
-              <option
-                className='w-full capitalize max-w-[150px] text-ellipsis h-full text-white bg-transparent'
-                value={item._id}
-                key={index}
-              >
-                {item.name} 
-              </option>
-            ))}
-          <option value='none' className='capitalize'>Not Assigned</option>
-          <option value='choose' hidden className='capitalize'>Choose</option>
-        </select>
-      </div>
-    );
-  };
+
+ 
 
   useEffect(() => {
     if (status.status && toggleRef.current) {
@@ -339,6 +301,8 @@ function RecentEnquiries({ searchTerm, selectedFilter,selectedFilterDeveloper,se
     }
   }, [status.status]);
 
+
+  // console.log(filteredProperties,'---')
  
   return (
     <div className=' md:h-[85vh] w-full  mt-5 mx-0'>
@@ -370,7 +334,7 @@ function RecentEnquiries({ searchTerm, selectedFilter,selectedFilterDeveloper,se
                   { toggleNoteBox.status && toggleNoteBox.id === item._id && <NoteBox refresh={refresh} setRefresh={setRefresh} note={item.note} id={item._id} setToggleNoteBox={setToggleNoteBox}/>}
                    </div>
                 <div className=' w-full text-center capitalize'>
-                  {agencyComponent(item)}{' '}
+                  <AgencyComponent setRefresh={setRefresh} agencies={agencies} item={item} />
                 </div>
               
                
@@ -427,3 +391,47 @@ setNote(existNote)
   )
 }
 
+
+
+const AgencyComponent = ({ item: i, agencies = [], setRefresh }) => {
+  const handleChangeAgencyComponent = async (agencyId, leadId) => {
+    try {
+      await assignedToAgencyAPI({ agencyId, leadId });
+      setRefresh((prev) => !prev);
+    } catch (error) {
+      errorToast(
+        error.response?.data?.message ||
+          error.message ||
+          "An error occurred during assignment."
+      );
+    }
+  };
+
+  return (
+    <div
+      key={i._id}
+      className="m-auto w-[100px] bg-black/20 pe-2 overflow-auto h-7 flex justify-center items-center rounded-[4px] cursor-pointer"
+    >
+      <select
+        onChange={(e) =>
+          handleChangeAgencyComponent(e.target.value, i._id)
+        }
+        value={i.assignedTo+'' || "none"}
+        className="w-full capitalize h-full text-black bg-transparent outline-none px-3"
+      >
+        <option value="none" className="capitalize">
+          Not Assigned
+        </option>
+        {agencies.map((item) => (
+          <option
+            className="capitalize max-w-[150px] text-ellipsis text-white bg-black"
+            value={item._id}
+            key={item._id}
+          >
+            {item.name}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+};

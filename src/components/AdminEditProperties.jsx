@@ -66,8 +66,6 @@ function EditProperty() {
     setImage("");
   };
 
-  console.log(existingCitiesInfo,'----')
-
   // Function to handle file selection
   const handleFileSelect = (event) => {
     const filesArray = Array.from(event.target.files);
@@ -306,7 +304,6 @@ function EditProperty() {
         return { value: item._id, label: item.name };
       });
 
-      console.log(to_converted_properties,'to_converted_properties')
   
   
       setPropertyType(to_converted_properties);

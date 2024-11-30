@@ -64,7 +64,7 @@ function AddProperties() {
     const [data,setData] = useState();
 
     useEffect(()=>{
-        console.log(state,'state')
+        // console.log(state,'state')
         if(state){
             setData(state);
         }
@@ -112,7 +112,7 @@ function AddProperties() {
           public_id: response.data.public_id,
         };
       } catch (error) {
-        console.error('Error uploading image:', error);
+        // console.error('Error uploading image:', error);
         throw new Error('Image upload failed');
       }
     };
@@ -145,7 +145,7 @@ function AddProperties() {
           axios.get(`${SERVER_URL}/developer`), // Replace with your second API URL
         ]);
 
-        console.log(responses, 'res')
+        // console.log(responses, 'res')
 
         // Set the data from both API calls
         setCities(responses[0].data.result);

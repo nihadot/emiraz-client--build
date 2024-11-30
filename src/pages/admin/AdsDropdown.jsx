@@ -50,7 +50,7 @@ const AdsDropdown = ({
         } transition-all duration-300 ease-in-out`}
         onClick={() => !isLoading && setIsOpen((prev) => !prev)}
       >
-        {console.log(selectedOption.name === 'none')}
+        {/* {console.log(selectedOption.name === 'none')} */}
         
         {selectedOption.name || 'Select an Options' }
         <span className="absolute right-4 top-1/2 transform -translate-y-1/2">

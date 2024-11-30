@@ -39,8 +39,8 @@ const FacilitiesAndAmenities = ({ name, value, onChange, clear ,existingData}) =
   },[existingData])
 
 
-  console.log(existingData,'00')
-  console.log(fields,'sss')
+  // console.log(existingData,'00')
+  // console.log(fields,'sss')
   return (
     <div className="flex flex-col gap-4 mb-6">
       <label className="sf-medium font-medium text-sm text-[#000000]">

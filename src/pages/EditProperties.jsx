@@ -20,7 +20,7 @@ function EditProperties() {
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
 
 
-  console.log(selectedFilterDeveloper,'selectedFilterDeveloper')
+  // console.log(selectedFilterDeveloper,'selectedFilterDeveloper')
   // Debounce search term for optimization
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -91,7 +91,7 @@ function EditProperties() {
 
     const developerMatch = selectedFilterDeveloper._id === 'all' || item.developer === selectedFilterDeveloper._id;
 
-    console.log(developerMatch,'developerMatch')
+    // console.log(developerMatch,'developerMatch')
     return searchMatch && developerMatch;
   });
 

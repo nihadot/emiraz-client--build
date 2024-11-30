@@ -53,6 +53,8 @@ function UserBlogDetails() {
 
 <Helmet>
         <title>{seo_title}</title>
+        <meta name="author" content="Property Seller"></meta>
+
         <meta name="description" content={seo_description?.length > 170 ?  seo_description?.slice(0,170) :  seo_description  } />
         <meta property="og:title" content={seo_title} />
         <meta property="og:description" content={seo_description} />

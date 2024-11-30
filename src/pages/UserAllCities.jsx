@@ -51,6 +51,8 @@ function UserAllCities() {
         <title>
           {seo_title?.length > 65 ? seo_title?.slice(0, 65) : seo_title}
         </title>
+        <meta name="author" content="Property Seller"></meta>
+
         <meta name="description" content={seo_description} />
         <link rel="canonical" href={seo_site_url}></link>
         <meta property="og:title" content={seo_title} />

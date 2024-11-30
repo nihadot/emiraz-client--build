@@ -164,7 +164,7 @@ function AdminViewProjects() {
 
   const handleToggleDraft = (status)   =>{
 
-    console.log(status,'updatedData')
+    // console.log(status,'updatedData')
 
     if(status){
         const updatedData = data.filter((item) => item.isDraft === true  )        

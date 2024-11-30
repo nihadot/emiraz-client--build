@@ -14,10 +14,10 @@ import FooterLogoTransparentWhiteLogo from "./footerlogoTransparentWhiteLogo.svg
 import mobileAppLogo from "./mobile-app-logo.png"
 import desktopAppLogo from "./desktop-app-logo.png"
 
-import apartment from "./Apartment.jpeg";
+import apartment from "./apartment.webp";
 import villa from "./villa.jpeg";
-import townhouse from "./town-house.jpeg";
-import penthouse from "./pent-house.jpeg";;
+import townhouse from "./townhouse.jpeg";
+import penthouse from "./penthouse.jpeg";;
 
 export{
     Banner,

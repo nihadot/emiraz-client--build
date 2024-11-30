@@ -24,7 +24,7 @@ function PropertiesCard({ item, handleRegister, navigate }) {
     if (navigator.share) {
       navigator
         .share({
-          title: title,
+          title: 'Hello, I found this off-plan project on PropertySeller',
           url: `https://propertyseller.ae/${url}`,
         })
         .then(() => console.log("Thanks for sharing!"))
@@ -39,6 +39,14 @@ function PropertiesCard({ item, handleRegister, navigate }) {
       </p>
     );
   }) ;
+
+  const customStyle = {
+    '@media (min-width: 767px) and (max-width: 800px)': {
+      display: 'none',
+    },
+  };
+
+
   useEffect(() => {
     const indicators = document.querySelectorAll(".swiper-pagination");
 
@@ -178,9 +186,9 @@ function PropertiesCard({ item, handleRegister, navigate }) {
           </div>
         </div>
       </div>
-      <div className="px-5 py-3 poppins-medium">
+      <div className="px-5 py-3 poppins-medium ">
         <div className="text-[#545454] font-normal text-xs  flex justify-between items-center">
-          <div className="capitalize flex gap-0.5">{propertyTypesResult}</div>
+          <div className="capitalize flex gap-0.5 ">{propertyTypesResult}</div>
           <div className="flex gap-2 justify-center items-center">
             <FaBed color="#545454" size={18} />
             <span className="font-normal text-[10px]">{item?.beds}</span>
@@ -196,7 +204,7 @@ function PropertiesCard({ item, handleRegister, navigate }) {
         </div>
         <div className="poppins-semibold text-[#000000] text-base mt-3">
           <h1 className="font-medium">
-            Starting from{" "}
+            <span className="md:hidden lg:inline  " >Starting from{" "}</span>
             <span className="font-bold text-xl">{item.priceInAED}</span>
           </h1>
         </div>
