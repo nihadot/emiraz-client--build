@@ -53,7 +53,7 @@ function Footer() {
             </div>
 
             
-            <div className="poppins w-full font-medium flex capitalize lg:justify-between sm:justify-center justify-between lg:mt-0 mt-5 items-center">
+            <div className="poppins  w-full font-medium flex capitalize lg:justify-between sm:justify-center justify-between lg:mt-0 mt-5 items-center">
               <div className=" flex justify-end w-full gap-4 items-center flex-row sm:flex">
                 <Link to={"/"}>
                   <p className="mb-3 sm:mb-0 text-white text-[10px] sm:text-[14px]  px-1 1440px:px-6">
@@ -103,7 +103,7 @@ function Footer() {
 
 
                 <Link to={"/our-developers"}>
-                  <p className="mb-3 sm:mb-0 text-white text-[10px] sm:text-[14px]  px-1 1440px:px-6">
+                  <p className="mb-3 sm:mb-0 text-white text-[10px] sm:text-[14px]  px-1 1440px:ps-6">
                   Developers
                   </p>
                 </Link>

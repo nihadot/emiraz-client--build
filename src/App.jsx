@@ -67,7 +67,7 @@ import {
   ViewSideBar,
   AddSideBar,
   EditSideBar,
-
+  DashboardPageAdmin,
   // agency
   AdminAgencyPage,
   AdminAddAgencyPage,
@@ -114,7 +114,7 @@ function App() {
             <Route path='edit-agency/:id' element={<AdminEditAgencyPage />} />
 
             {/* agency */}
-            <Route path='dashboard' element={<AdminDashBoard />} />
+            {/* <Route path='dashboard' element={<AdminDashBoard />} /> */}
 
             <Route path='notifications' element={<AdminNotificationPage />} />
             <Route
@@ -169,6 +169,7 @@ function App() {
               element={<EditBannerClient />}
             />
             <Route path='edit-client/:id' element={<EditClient />} />
+            <Route path='dashboard' element={<DashboardPageAdmin />} />
             <Route path='view-banner-client' element={<ViewBannerClient />} />
             <Route path='view-client' element={<ViewClient />} />
 

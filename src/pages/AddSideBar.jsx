@@ -102,7 +102,7 @@ function AddSideBar() {
   return (
     <form onSubmit={handleSubmit} className="flex flex-wrap ">
       <div className="px-4 flex-1">
-        <div className="sticky top-0 bg-white flex justify-between py-6">
+        <div className="sticky top-0 z-[1000] bg-white flex justify-between py-6">
           <h1 className="sf-medium font-medium text-5xl">Add Ads</h1>
         </div>
         <div className="flex gap-3 items-start flex-col">
@@ -153,11 +153,11 @@ function AddSideBar() {
         </div> */}
         </div>
 
-        <div className="flex gap-3  ">
+        <div className="flex gap-3 mt-4 ">
 
               {/* portrait */}
-              <label htmlFor=""> (338X500) </label>
                 <div className="flex flex-col gap-4">
+              <label htmlFor=""> (338X670) </label>
                 <div className="w-[338px] h-[670px] relative ">
                       <img
                         src={formData.preview || PlaceHolder}
@@ -209,7 +209,7 @@ function AddSideBar() {
                         </span>
                       )}
                     </div>
-                    <div className="">
+                    <div className="mt-6">
                       <UploadingImage
                         isLoading={isLoading}
                         onError={(error) => {

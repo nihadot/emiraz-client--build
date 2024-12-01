@@ -4,6 +4,7 @@ import AdminDashBoard from "./pages/AdminDashBoard";
 import AdminEnquiries from "./pages/AdminEnquiries";
 import ManageProperties from "./pages/ManageProperties";
 import AddProperties from "./pages/AddProperties";
+import DashboardPageAdmin from "./pages/DashboardPageAdmin"
 import EditProperties from "./pages/EditProperties";
 import EditProperty from "./pages/EditProperty";
 import AddCityPage from "./pages/AddCityPage";
@@ -105,6 +106,7 @@ export {
   AddDeveloperPage,
   ViewDevelopersPage,
   AddBannerClient,
+  DashboardPageAdmin,
   AddClient,
   EditBannerClient,
   EditClient,

@@ -907,11 +907,11 @@ const [ads,setAds] = useState([]);
 
                     {/* enquiries */}
 
-                    <div className=' border h-[185px] sticky top-2 z-30  bg-white  py-2  px-2 mt-4 rounded-[15px]  lg:flex-none lg:max-w-[420px]   hidden lg:block '>
+                    <div className=' border h-[250px] sticky top-5 z-30  bg-white  py-4  px-2 mt-4 rounded-[15px]  lg:flex-none lg:max-w-[420px]   hidden lg:block '>
                       <form onSubmit={handleThirdRegisterSubmit} className=''>
-                        {/* <h1 className='text-[30px] sf-medium text-center mb-3'>
+                        <h1 className='text-[30px] sf-medium text-center mb-3'>
                           Register Your interest
-                        </h1> */}
+                        </h1>
                         <input
                           type='text'
                           disabled={setFormIsLoading}
@@ -954,7 +954,7 @@ const [ads,setAds] = useState([]);
                     {/* sidebanner */}
 
                     {
-                      <div className='w-[338px] m-auto h-[500px] sticky top-[190px] mt-3 '>
+                      <div className='w-[338px] m-auto h-[670px] sticky top-[190px] mt-3 '>
                         <Swiper
                           style={{
                             width: '100%',
@@ -1031,10 +1031,10 @@ const [ads,setAds] = useState([]);
               <section className=' mt-[24px] px-6  md:px-20 lg:px-28 w-full'>
                 <div className='pt-1 pb-0'>
 
-                <div className="md:hidden flex my-10">
+                <div className="md:hidden flex mb-4">
                  
               {/*  */}
-              <div className='max-w-[600px] w-full m-auto h-[300px] sticky top-[190px] mt-3 '>
+              <div className='max-w-[600px] w-full m-auto h-[250px]  mt-0 '>
                         <Swiper
                           style={{
                             width: '100%',
