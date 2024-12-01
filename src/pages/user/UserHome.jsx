@@ -415,7 +415,7 @@ function UserHome() {
             {/* cities */}
 
             {/* blogs */}
-            <section className="max-w-[1300px] w-full mt-0 sm:mt-14 sm:mb-20">
+            <section className="max-w-[1440px] w-full mt-0 sm:mt-14 sm:mb-0">
               <div className=" sf-medium-600 flex items-center justify-between ">
                 <h1 className="hidden sm:flex flex-col leading-tight ">
                   <span className=" text-[20px] lg:text-[50px] text-[#666666]">
@@ -436,7 +436,7 @@ function UserHome() {
 
               {/* mapping */}
 
-              <div className="grid xl:grid-cols-3 my-5  990px:grid-cols-3 sm:grid-cols-2 grid-cols-1 mt-4  gap-5">
+              <div className="grid xl:grid-cols-3 mt-5  990px:grid-cols-3 sm:grid-cols-2 grid-cols-1 mt-4  gap-5">
                 {blogs &&
                   blogs.map((item, index) => {
                     if (index < 3) {

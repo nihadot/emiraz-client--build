@@ -9,13 +9,13 @@ function AdminLayout() {
 
   useEffect(() => {
     if (!(localStorage.getItem(AGENCY_TOKEN) && localStorage.getItem(AGENCY_ID))) {
-      navigate('/agency-login');
+      navigate('/agent-login');
     }
   }, [navigate]);
 
   return (
     <div className=''>
-        { localStorage.getItem(AGENCY_TOKEN) && localStorage.getItem(AGENCY_ID) ? <Layout/> : navigate('/agency-login')}
+        { localStorage.getItem(AGENCY_TOKEN) && localStorage.getItem(AGENCY_ID) ? <Layout/> : navigate('/agent-login')}
     </div>
   )
 }

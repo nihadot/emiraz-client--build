@@ -20,7 +20,7 @@ function LeftAgencyPanel() {
     const handleLogout = ()=> {
         localStorage.removeItem(AGENCY_ID)
         localStorage.removeItem(AGENCY_TOKEN)
-        navigate('/agency-login');
+        navigate('/agent-login');
     }
     
 
@@ -41,7 +41,7 @@ function LeftAgencyPanel() {
         <div className="flex justify-center text-[#ffffff] sf-medium font-medium pt-10 pb-12 px-4 ">
             <ul className='w-full'>
            
-                <Link to={'/agency-dashboard/enquiries'}>
+                <Link to={'/agent-dashboard/enquiries'}>
                     <li className='flex transition-all duration-150 ease-in-out hover:scale-105  items-center gap-3  hover:bg-white hover:text-black py-3 ps-4  w-full rounded-lg' > <FaUsers/> Leads</li>
                 </Link>
                

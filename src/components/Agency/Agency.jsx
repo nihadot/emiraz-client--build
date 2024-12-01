@@ -24,7 +24,7 @@ function Login() {
           localStorage.setItem(AGENCY_ID,user?.result?._id)
          
           successToast('Logged in successfully')
-          navigate('/agency-dashboard')
+          navigate('/agent-dashboard')
         } catch (error) {
         
             errorToast(error.response.data.message || error.message || 'An error occurred during login.');
@@ -41,7 +41,7 @@ function Login() {
   return (
     <form onSubmit={handleSubmit} className="max-w-lg mx-2 md:mx-0">
       <div className="sf-medium font-medium text-center mb-10">
-        <h1 className="text-[#000000] text-5xl ">Welcome Agency Login</h1>
+        <h1 className="text-[#000000] text-5xl ">Welcome Agent Login</h1>
         <p className=" text-sm text-[#666666] mt-1">Enter your credentials to access Admin Panel</p>
       </div>
       <div className="flex flex-col gap-2 mx-3">

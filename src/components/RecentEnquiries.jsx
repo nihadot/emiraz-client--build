@@ -138,7 +138,7 @@ function RecentEnquiries({ searchTerm, selectedFilter,selectedFilterDeveloper,se
         filteredProperties = filteredProperties.filter(item => true == true);
       }else{
         filteredProperties = filteredProperties.filter(
-          item => item?.assignedId === selectedFilterAgency._id
+          item => item?.assignedTo === selectedFilterAgency._id
         );
       }
     }

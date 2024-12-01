@@ -12,5 +12,5 @@ export function capitalizeWords(str) {
 }
 
 export function filterNotificationOnlyManual(notifications) {
-  return notifications.filter((item) => !item.mainImgaeLink);
+  return notifications.filter((item) => !item.imageFile);
 }
