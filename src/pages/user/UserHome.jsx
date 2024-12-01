@@ -483,7 +483,7 @@ function UserHome() {
                       );
                     }
                   })}
-                <div className="mt-2 mb-2 sm:mt-4 sm:mb-10 flex justify-center">
+                <div className="mt-2 mb-10 sm:mb-0 sm:mt-4 sm:mb-10 flex justify-center">
                   <button
                     onClick={() => navigate("/blog")}
                     className="text-[14px] block sm:hidden  w-[150px] h-[48px]  bg-black text-white rounded-[10px] poppins-semibold"

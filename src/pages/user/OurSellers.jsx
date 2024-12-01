@@ -92,7 +92,7 @@ const seo_site_url = `${window.location.href}`;
                               `/developers/${item._id}/${item.developerName}`
                             )
                           }
-                          className="cursor-pointer overflow-hidden p-5 lg:h-[252px] sm:w-[180px] h-[172px]  lg:w-[264px] rounded-[15px] flex justify-center flex-col items-center border"
+                          className="cursor-pointer overflow-hidden p-5 lg:h-[252px] sm:w-[180px] h-[250px]  lg:w-[264px] rounded-[15px] flex justify-center flex-col items-center border"
                           key={item._id}
                         >
                           <Lazyloading
