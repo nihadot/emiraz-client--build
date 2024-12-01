@@ -72,7 +72,7 @@ function DashboardPageAdmin() {
 
 
         <div className="bg-black rounded-xl flex justify-center gap-4 items-center h-[100px]">
-            <label className='text-white text-xl' htmlFor="">Enquiries</label>
+            <label className='text-white text-xl' htmlFor="">Leads</label>
             <label className='text-white text-[30px]' htmlFor="">{count?.enquiries}</label>
         </div>
         </div>
