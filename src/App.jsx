@@ -223,6 +223,7 @@ function App() {
           {/* agency route */}
           {/* agency route */}
           <Route path='/agent-login' element={<AgencyLoginPage />} />
+          <Route path='/agent' element={<AgencyLoginPage />} />
           <Route path='/agent-dashboard' element={<AgencyLayoutPage />}>
             <Route path='enquiries' element={<AgencyEnquiriesPage />} />
           </Route>
