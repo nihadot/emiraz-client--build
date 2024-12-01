@@ -101,7 +101,7 @@ const seo_site_url = `${window.location.href}`;
                             className={"my-10  object-contain max-h-[120px]"}
                           />
 
-                                                     <label htmlFor="">{item?.developerName}</label>
+                                                     <label htmlFor="" className="-mt-6">{item?.developerName}</label>
                         </div>
                       );
                     })}
