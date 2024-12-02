@@ -92,7 +92,9 @@ function ViewNotification() {
                 />
               )}
             </div>
-            <div className='text-sm flex justify-start mt-2 mb-1.5 me-5 text-red-600'>
+
+{  item?.propertyDetails &&  <label className='font-bold block my-4' htmlFor="">Project : {item?.propertyDetails?.projectTitle}</label>
+}            <div className='text-sm flex justify-start mt-2 mb-1.5 me-5 text-red-600'>
               {!item.mainImgaeLink && (
                 <>
                   <Link

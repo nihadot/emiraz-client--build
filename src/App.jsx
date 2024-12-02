@@ -52,6 +52,7 @@ import {
   ViewBannerClient,
   ViewClient,
   DeveloperLoginPage,
+  EditLanguagePage,
   UserAllCities,
   AddPropertyTypePage,
   ViewPropertyTypePage,
@@ -68,12 +69,17 @@ import {
   AddSideBar,
   EditSideBar,
   DashboardPageAdmin,
+  AddLanguagePage,
   // agency
   AdminAgencyPage,
   AdminAddAgencyPage,
   AdminEditAgencyPage,
   AdminViewAgencyPage,
   AdminEditPage,
+  ViewLanguagePage,
+  AddCountryPage,
+ViewCountryPage,
+EditCountryPage,
 
 } from './Routes';
 import { Toaster } from 'react-hot-toast';
@@ -109,9 +115,19 @@ function App() {
           <Route path='/admin' element={<AdminLayout />}>
             {/* agency */}
             <Route path='manage-agent' element={<AdminAgencyPage />} />
-            <Route path='add-agencies' element={<AdminAddAgencyPage />} />
-            <Route path='view-agencies' element={<AdminViewAgencyPage />} />
+            <Route path='add-agent' element={<AdminAddAgencyPage />} />
+            <Route path='view-agents' element={<AdminViewAgencyPage />} />
             <Route path='edit-agency/:id' element={<AdminEditAgencyPage />} />
+
+            <Route path='add-language' element={<AddLanguagePage />} />
+            <Route path='view-language' element={<ViewLanguagePage />} />
+            <Route path='edit-language/:id' element={<EditLanguagePage />} />
+
+
+
+            <Route path='add-country' element={<AddCountryPage />} />
+            <Route path='view-country' element={<ViewCountryPage />} />
+            <Route path='edit-country/:id' element={<EditCountryPage />} />
 
             {/* agency */}
             {/* <Route path='dashboard' element={<AdminDashBoard />} /> */}
@@ -219,6 +235,10 @@ function App() {
           <Route path='/developers/:id/:name' element={<UserDevelopers />} />
 
           <Route path='/projects' element={<UserProjects />} />
+
+
+          {/* language */}
+
 
           {/* agency route */}
           {/* agency route */}

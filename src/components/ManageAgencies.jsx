@@ -8,7 +8,7 @@ function ManageAgencies() {
     <div className="flex flex-col gap-3">
       <div className="flex gap-2 sf-medium font-medium text-2xl">
         <div
-          onClick={() => navigate("/admin/add-agencies")}
+          onClick={() => navigate("/admin/add-agent")}
           className="flex h-20 lg:h-16  items-center  flex-1 justify-between px-6 rounded-[10px] bg-[#000000] text-[#FFFFFF] cursor-pointer"
         >
           <span className="">Add Agent</span>
@@ -17,7 +17,7 @@ function ManageAgencies() {
           </span>
         </div>
         <div className="cursor-pointer flex h-20 lg:h-16  items-center  flex-1 justify-between px-6 rounded-[10px] bg-[#000000] text-[#FFFFFF]">
-          <span onClick={() => navigate("/admin/view-agencies")} className="">
+          <span onClick={() => navigate("/admin/view-agents")} className="">
             View Agents
           </span>
           <span>

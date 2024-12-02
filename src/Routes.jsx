@@ -9,7 +9,9 @@ import EditProperties from "./pages/EditProperties";
 import EditProperty from "./pages/EditProperty";
 import AddCityPage from "./pages/AddCityPage";
 import EditCityPage from "./pages/EditCityPage";
+import EditLanguagePage from "./pages/EditLanguagePage"
 import EditCitiesPage from "./pages/EditCitiesPage";
+import ViewLanguagePage from "./pages/ViewLanguagePage"
 import ManageBlogPage from "./pages/ManageBlogPage";
 import AddBlogPage from "./pages/AddBlogPage";
 import EditBlogsPage from "./pages/EditBlogsPage";
@@ -43,7 +45,11 @@ import AdminPropertyEditDetailsPage from "./pages/admin/AdminPropertyEditDetails
 import AdminPropertyEditImagesPage from "./pages/admin/AdminPropertyEditImagesPage"
 import AdminPropertyOtherEditPage from "./pages/admin/AdminPropertyOtherEditPage"
 import AdminViewAllAdsPage from "./pages/admin/AdminViewAllAdsPage"
+import AddCountryPage from "./pages/AddCountryPage" 
+import ViewCountryPage from "./pages/ViewCountryPage"
+import EditCountryPage from "./pages/EditCountryPage"
 // sidebar
+import AddLanguagePage from "./pages/AddLanguagePage"
 import ViewSideBar from "./pages/ViewSideBar";
 import AddSideBar from "./pages/AddSideBar";
 import EditSideBar from "./pages/EditSideBar";
@@ -90,6 +96,8 @@ export {
   ManageProperties,
   AddProperties,
   EditProperties,
+  AddLanguagePage,
+  ViewLanguagePage,
   EditProperty,
   AddCityPage,
   EditCityPage,
@@ -97,6 +105,10 @@ export {
   ManageBlogPage,
   AddBlogPage,
   EditBlogsPage,
+  AddCountryPage,
+ViewCountryPage,
+EditCountryPage,
+  EditLanguagePage,
   EditBlogPage,
   AddBannerPage,
   EditBannerPage,

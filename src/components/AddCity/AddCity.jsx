@@ -11,7 +11,7 @@ import { FaAngleDown, FaAngleUp } from 'react-icons/fa';
 import PriorityDropDown from '../InputFields/PriorityDropDown';
 import CityListingCard from '../CityListingCard/CityListingCard';
 import { addingCity, fetchCityUsedPriorityCount } from '../../services/city';
-import { CLOUD_NAME, CLOUDINARY_PERSISTENT } from '../../api/localstorage-varibles';
+import { CLOUD_NAME, CLOUDINARY_NAME, CLOUDINARY_PERSISTENT } from '../../api/localstorage-varibles';
 import axios from 'axios';
 
 function AddCity() {
@@ -52,7 +52,7 @@ function AddCity() {
         formData.append('folder', 'cities_upload'); 
 
         const response = await axios.post(
-          `https://api.cloudinary.com/v1_1/${ CLOUD_NAME}/image/upload`, // Replace your_cloud_name
+          `https://api.cloudinary.com/v1_1/${ CLOUDINARY_NAME}/image/upload`, // Replace your_cloud_name
           formData
         );
         // console.log(response.data);

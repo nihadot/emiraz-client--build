@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { errorToast, successToast } from '../toast';
-import { addingNotification, fetchNotification, fetchNotificationByIdAPI, updateNotificationByIdAPI } from '../api';
-import { useParams } from 'react-router-dom';
+import { addingNotification, fetchNotification, fetchNotificationByIdAPI, SERVER_URL, updateNotificationByIdAPI } from '../api';
+import { useNavigate, useParams } from 'react-router-dom';
+import PropertyDropDown from './PropertyDropDown';
+import axios from 'axios';
 
 function EditNotification() {
   const [isLoading, setIsLoading] = useState(false);
@@ -11,27 +13,49 @@ function EditNotification() {
   const [formData, setFormData] = useState({
     title: '',
   });
+  const [projects,setProjects] = useState([]);
+  const navigator = useNavigate();
   // -----------------------------------------------------
 
   const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  console.log(formData,'formData')
-
   // -------------------------------------------------
 
+  const [clearForms, setClearForms] = useState(false);
+
+const [existingProject,setExistingProject] = useState();
+  const handleClear = () => {
+    setClearForms(!clearForms); // Trigger clearing
+  };
   const handleSubmit = async e => {
     try {
+
+        if(!formData.title){
+          errorToast('Title is required');
+          return;
+        }
+
+        const data = {
+          title: formData.title,
+        }
+
+        if(formData.project){
+          data.project = formData.project;
+
+        }
+
       e.preventDefault();
       setIsLoading(true);
 
    
       await updateNotificationByIdAPI(formData,formData._id);
       successToast('Successfully added');
-      setFormData({ title: '' });
+      // setFormData({ title: '' });
 
       setIsLoading(false);
+      navigator('/admin/view-notification')
     } catch (error) {
       if (error.response && error.response.data) {
         errorToast(error.response.data.message || error.message);
@@ -47,6 +71,12 @@ function EditNotification() {
     try {
       const result = await fetchNotificationByIdAPI(notificationId);
       setFormData({...result.result});
+
+      const response = await axios.get(`${SERVER_URL}/property`);
+      const filteredData = await response.data.result?.filter(item => item._id !== result.result.project )
+      setProjects(filteredData);
+      const filtered = response.data.result?.find(item => item._id === result.result.project);
+      setExistingProject(filtered);
     } catch (error) {
       errorToast(error.response.data.message || error.message || 'error occur');
     } finally {
@@ -79,7 +109,29 @@ function EditNotification() {
           ></textarea>
         </div>
 
-        <div className='p-3 poppins-semibold text-lg'>
+
+
+
+        <PropertyDropDown 
+        name="property"
+        clearForms={clearForms}
+
+        // value={[values.developer]}
+        onChange={(e)=>{
+         setFormData({
+          ...formData,
+          project: e.id
+         })
+        }}
+        isLoading={isLoading}
+        options={projects}
+      />
+
+{ existingProject && existingProject?.projectTitle && <label className='text-sm rounded-[10px] px-5 ms-3 my-3 border py-4' htmlFor="">{existingProject?.projectTitle}</label>
+}
+
+
+        <div className='p-3 mt-5 poppins-semibold text-lg'>
           <button
             disabled={isLoading}
             type='submit'

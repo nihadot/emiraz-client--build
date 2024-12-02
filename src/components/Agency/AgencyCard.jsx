@@ -7,6 +7,7 @@ function AgencyCard({ item,handleDelete }) {
 
   return (
     <div className='rounded-2xl border px-4 py-4 text-sm'>
+      <img src={item?.imageFile?.secure_url} alt="" className='object-contain mb-3 w-full h-[200px]' />
       <div className='poppins-medium  mt-1 overflow-hidden'>
         <h1>
           Name : {item?.name}

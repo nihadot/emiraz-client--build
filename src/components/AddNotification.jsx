@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { errorToast, successToast } from '../toast';
-import { addingNotification } from '../api';
+import { addingNotification, SERVER_URL } from '../api';
+import PropertyDropDown from './PropertyDropDown';
+import axios from 'axios';
 
 function AddNotification() {
   const [isLoading, setIsLoading] = useState(false);
@@ -17,17 +19,39 @@ function AddNotification() {
 
   // -------------------------------------------------
 
+  const [clearForms, setClearForms] = useState(false);
+
+
+  const handleClear = () => {
+    setClearForms(!clearForms); // Trigger clearing
+  };
+
+
   const handleSubmit = async e => {
     try {
       e.preventDefault();
-      setIsLoading(true);
-      const formDataFields = new FormData();
-      formDataFields.append('title', formData.title);
 
-      await addingNotification(formDataFields);
+      if(!formData.title){
+        errorToast('Title is required');
+        return;
+      }
+
+      const data = {
+        title: formData.title,
+        // project: formData.project,
+      }
+
+      if(formData.project){
+        data.project = formData.project;
+      }
+      setIsLoading(true);
+      // const formDataFields = new FormData();
+      // formDataFields.append('title', formData.title);
+
+      await addingNotification(data);
       successToast('Successfully added');
       setFormData({ title: '' });
-
+handleClear();
       setIsLoading(false);
     } catch (error) {
       if (error.response && error.response.data) {
@@ -37,6 +61,22 @@ function AddNotification() {
     }
   };
 
+  const [projects,setProjects] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+
+  const fetchData = async () => {
+    try {
+        const response = await axios.get(`${SERVER_URL}/property`);
+      setProjects(response.data.result);
+  
+    } catch (error) {
+      errorToast(error?.response?.data?.message || error?.message || 'Error occurred');
+    }
+  };
   return (
     <form onSubmit={handleSubmit} className='flex flex-wrap'>
       <div className='flex-1'>
@@ -61,6 +101,27 @@ function AddNotification() {
             className='border border-[#E4E4E4] py-4 px-5 rounded-[10px] font-extralight sf-normal text-sm text-[#666666]  outline-none'
           ></textarea>
         </div>
+
+
+        <PropertyDropDown 
+        name="property"
+        clearForms={clearForms}
+
+        // value={[values.developer]}
+        onChange={(e)=>{
+         setFormData({
+          ...formData,
+          project: e.id
+         })
+        }}
+        isLoading={isLoading}
+        options={projects}
+      />
+
+
+
+
+
 
         <div className='p-3 poppins-semibold text-lg'>
           <button
