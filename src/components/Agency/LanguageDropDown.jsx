@@ -44,7 +44,7 @@ const LanguageDropDown = ({
         }`}
         onClick={() => !isLoading && setIsOpen((prev) => !prev)}
       >
-        {selectedItem ? selectedItem.languageName : "Select Country"}
+        {selectedItem ? selectedItem.languageName : "Select Language"}
         <span className="absolute right-4 capitalize top-1/2 transform -translate-y-1/2">
           {isOpen ? "▲" : "▼"}
         </span>

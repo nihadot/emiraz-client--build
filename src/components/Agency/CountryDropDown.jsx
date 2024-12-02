@@ -35,8 +35,8 @@ console.log(value,'value')
   },[clearForms])
 
   return (
-    <div className={`flex mx-3 mt-6 flex-col ${mt6 ? 'mt-4' : 'mb-6'}`}>
-      <label htmlFor={name} className="sf-medium font-medium text-sm text-[#000000]">
+    <div className={`flex mx-3 mt-6  flex-col ${mt6 ? 'mt-4' : 'mb-6'}`}>
+      <label htmlFor={name} className="sf-medium mb-3 font-medium text-sm text-[#000000]">
         Select Country <span className="text-lg text-red-600">*</span>
       </label>
 

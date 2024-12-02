@@ -11,6 +11,8 @@ import axios from "axios";
 import DevelopersDropdown from "../AddProject/DevelopersDropdown";
 import CountryDropDown from "./CountryDropDown";
 import LanguageDropDown from "./LanguageDropDown";
+import PropertyTypeDropdown from "./PropertyTypeDropdown";
+import MultiSelectDropdown from "./MultiSelectDropdown";
 function AddAgency() {
   const [isLoading,setIsLoading] = useState(false);
   // --------------------------------------------
@@ -25,7 +27,7 @@ function AddAgency() {
   
   const [image,setImage] = useState(null);
   const [imagePreview,setImagePreview] = useState(null);
-
+const [refresh,setRefresh] = useState(false);
     const [countries,setCountries] = useState();
     const [language,setLanguage] = useState();
   const[visible,setVisible] = React.useState('password')
@@ -43,6 +45,15 @@ function AddAgency() {
   };
 
   // -------------------------------------------------
+  const [selectedLanguages, setSelectedLanguages] = useState([]);
+
+  const handleSelectionChange = (selections) => {
+    setSelectedLanguages(selections);
+  };
+
+  const handleRefresh = ()=>{
+    setSelectedLanguages([]);
+  }
 
   const handleSubmit = async (e) => {
       
@@ -79,7 +90,7 @@ function AddAgency() {
       return;
     }
 
-    if(!formData.language){
+    if(!selectedLanguages.length > 0){
       errorToast("Please select a language");
       return;
     }
@@ -89,7 +100,7 @@ function AddAgency() {
       username:formData.username,
       password: formData.password,
       country: formData.country,
-      language: formData.language,
+      language: selectedLanguages.map((item)=> item._id ),
     }
 
 
@@ -128,6 +139,8 @@ function AddAgency() {
       setFormData({ name: "", username: "", password: "" });
       setImage(null);
       setImagePreview(null);
+      setRefresh(prev => !prev );
+      setSelectedLanguages([]);
     } catch (error) {
         errorToast(error.response.data.message || error.message || "An error occurred during login.");
     }finally{
@@ -156,6 +169,8 @@ setLanguage(response_lang.data.result);
     errorToast(error?.response?.data?.message || error?.message || 'Error occurred');
   }
 };
+
+
 
 
   return (
@@ -226,7 +241,7 @@ setLanguage(response_lang.data.result);
 
 
           {/* languages */}
-          <LanguageDropDown 
+          {/* <LanguageDropDown 
         name="language"
         clearForms={clearForms}
 
@@ -239,10 +254,14 @@ setLanguage(response_lang.data.result);
         }}
         isLoading={isLoading}
         options={language}
-      />
+      /> */}
 
 
 
+
+
+{/* <h1 className="text-xl font-bold mb-4">Multi-Select Dropdown Example</h1> */}
+      <MultiSelectDropdown refresh={refresh} data={language} onSelectionChange={handleSelectionChange} />
 
 
         <div className="relative flex flex-col gap-2 mt-3 mx-3">

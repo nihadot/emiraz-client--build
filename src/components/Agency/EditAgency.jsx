@@ -9,12 +9,14 @@ import LanguageDropDown from './LanguageDropDown';
 import CountryDropDown from './CountryDropDown';
 import UploadingImage from '../uploading/UploadingImage';
 import { CiCircleRemove } from 'react-icons/ci';
+import MultiSelectDropdown from './MultiSelectDropdown';
 
 function EditAgency() {
   const navigate = useNavigate();
   const { id: agencyId } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   // --------------------------------------------
+  const [refresh,setRefresh] = useState(false);
 
   // -----------------------------------------------------
   const [formData, setFormData] = useState({
@@ -29,12 +31,13 @@ function EditAgency() {
   const [image,setImage] = useState(null);
   const [imagePreview,setImagePreview] = useState(null);
   const [existingImage,setExistingImages] = useState(null);
-  const [existingLanguage,setExistingLanguage] = useState(null);
+  const [existingLanguage,setExistingLanguage] = useState([]);
   const [existingCountry,setExistingCountry] = useState(null);
 
   const [countries,setCountries] = useState();
   const [language,setLanguage] = useState();
   const [clearForms, setClearForms] = useState(false);
+  const [selectedLanguages, setSelectedLanguages] = useState([]);
 
 
   const handleClear = () => {
@@ -84,10 +87,10 @@ function EditAgency() {
       return;
     }
 
-    if(!formData.language){
-      errorToast("Please select a language");
-      return;
-    }
+    // if(!existingLanguage.length > 0){
+    //   errorToast("Please select a language");
+    //   return;
+    // }
     setIsLoading(true);
 
     const data = {
@@ -95,7 +98,8 @@ function EditAgency() {
       username:formData.username,
       password: formData.password,
       country: formData.country,
-      language: formData.language,
+      language: selectedLanguages.map((item)=> item._id ),
+
     }
 
 
@@ -157,18 +161,46 @@ setExistingCountry(findTheCountry);
   const response_lang = await axios.get(`${SERVER_URL}/banner/get-all-languages`,{
     headers: { Authorization: `Bearer ${localStorage.getItem(ADMIN_TOKEN)}` },
   });
-  const filteredLang = response_lang.data.result.filter(lang => lang._id !== result.result.language)
+  const filteredLang = response_lang.data.result.filter(lang =>   !result.result.language.includes(lang._id))
 
-setLanguage(filteredLang);
-const findTheLang = response_lang.data.result.find(i => result.result.language === i._id )
+  setLanguage(filteredLang);
+const findTheLang = response_lang.data.result.filter(i => result.result.language.includes(i._id) )
 setExistingLanguage(findTheLang);
     } catch (error) {
-      errorToast(error.response.data.message || error.message || 'error occur');
+      errorToast(error?.response?.data?.message || error?.message || 'error occur');
     } finally {
       setIsLoading(false);
     }
   };
 
+  const handleSelectionChange = (selections) => {
+    setSelectedLanguages(selections);
+  };
+
+  const handleRemove = async({_id:langId})=>{
+    const status = window.confirm('Are you sure you want to remove');
+    if(!status){
+      return;
+    }
+
+    if(existingLanguage.length === 1){
+      return errorToast('At least one language should be there.')
+    }
+ 
+    try {
+      const response = await axios.delete(`${SERVER_URL}/agency/delete/lang/${langId}/${agencyId}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem(ADMIN_TOKEN)}` },
+      });
+      // console.log('[Response]: => ', response);
+      navigate('/admin/view-agents');
+      successToast('Deleted successfully');
+    } catch (error) {
+      errorToast(error?.response?.data?.message || error?.message || 'Error occurred while deleting property');
+    } finally {
+      setIsLoading(false);
+    }
+
+  }
 
   return (
     <form onSubmit={handleSubmit}  className='flex flex-wrap'>
@@ -220,6 +252,7 @@ setExistingLanguage(findTheLang);
 
 
 
+<div className="py-3">
 
         <CountryDropDown 
         name="country"
@@ -239,12 +272,13 @@ setExistingLanguage(findTheLang);
       />
 
       <label className='text-sm rounded-[10px] px-5 ms-3 mt-3 border py-4' htmlFor="">{existingCountry?.countryName}</label>
+      </div>
 
 
 
 
           {/* languages */}
-          <LanguageDropDown 
+          {/* <LanguageDropDown 
         name="language"
         clearForms={clearForms}
 
@@ -257,8 +291,35 @@ setExistingLanguage(findTheLang);
         }}
         isLoading={isLoading}
         options={language}
-      />
-      <label className='text-sm rounded-[10px] px-5 ms-3 mt-3 border py-4 capitalize' htmlFor="">{existingLanguage?.languageName}</label>
+      /> */}
+
+
+<div className="py-2">
+
+<MultiSelectDropdown refresh={refresh} data={language} onSelectionChange={handleSelectionChange} />
+
+
+      <div className="flex gap-0">
+        {
+          existingLanguage.length > 0  && existingLanguage.map((item)=>{
+            return (
+              <div key={item._id} className='text-sm w-fit rounded-[10px] px-5 ms-3 mt-0 border py-4 capitalize'>
+                {item.languageName}
+               
+                <button
+                  type="button"
+                  onClick={() => handleRemove(item)}
+                  className="ml-2 text-red-500 text-xs hover:text-red-700"
+                >
+                  ✕
+                </button>
+              </div>
+            )
+          })
+        }
+      </div>
+      {/* <label className='text-sm rounded-[10px] px-5 ms-3 mt-3 border py-4 capitalize' htmlFor="">{existingLanguage?.languageName}</label> */}
+      </div>
 
 
 

@@ -46,7 +46,7 @@ const PropertyDropDown = ({
         }`}
         onClick={() => !isLoading && setIsOpen((prev) => !prev)}
       >
-        {selectedCountry ? selectedCountry.projectTitle : "Select Country"}
+        {selectedCountry ? selectedCountry.projectTitle : "Select Project"}
         <span className="absolute right-4 capitalize top-1/2 transform -translate-y-1/2">
           {isOpen ? "▲" : "▼"}
         </span>
