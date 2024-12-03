@@ -220,49 +220,6 @@ setLanguage(response_lang.data.result);
         </div>
 
 
-        {/* country */}
-        
-      <CountryDropDown 
-        name="country"
-        clearForms={clearForms}
-
-        // value={[values.developer]}
-        onChange={(e)=>{
-         setFormData({
-          ...formData,
-           country: e.id
-         })
-        }}
-        isLoading={isLoading}
-        options={countries}
-      />
-
-
-
-
-          {/* languages */}
-          {/* <LanguageDropDown 
-        name="language"
-        clearForms={clearForms}
-
-        // value={[values.developer]}
-        onChange={(e)=>{
-         setFormData({
-          ...formData,
-           language: e.id
-         })
-        }}
-        isLoading={isLoading}
-        options={language}
-      /> */}
-
-
-
-
-
-{/* <h1 className="text-xl font-bold mb-4">Multi-Select Dropdown Example</h1> */}
-      <MultiSelectDropdown refresh={refresh} data={language} onSelectionChange={handleSelectionChange} />
-
 
         <div className="relative flex flex-col gap-2 mt-3 mx-3">
         <label htmlFor="password" className="sf-medium font-medium text-sm text-[#000000]">Password</label>
@@ -343,6 +300,52 @@ setLanguage(response_lang.data.result);
           </button>
         </div>
       </div>
+
+        {/* country */}
+        
+      <CountryDropDown 
+        name="country"
+        clearForms={clearForms}
+
+        // value={[values.developer]}
+        onChange={(e)=>{
+         setFormData({
+          ...formData,
+           country: e.id
+         })
+        }}
+        isLoading={isLoading}
+        options={countries}
+      />
+
+
+
+
+          {/* languages */}
+          {/* <LanguageDropDown 
+        name="language"
+        clearForms={clearForms}
+
+        // value={[values.developer]}
+        onChange={(e)=>{
+         setFormData({
+          ...formData,
+           language: e.id
+         })
+        }}
+        isLoading={isLoading}
+        options={language}
+      /> */}
+
+
+
+
+
+{/* <h1 className="text-xl font-bold mb-4">Multi-Select Dropdown Example</h1> */}
+      <MultiSelectDropdown refresh={refresh} data={language} onSelectionChange={handleSelectionChange} />
+
+
+     
 
 
         

@@ -27,7 +27,7 @@ function AgencyCard({ item,handleDelete }) {
       <div className='flex gap-2 mt-3 h-8 text-sm'>
         <button
           onClick={() =>
-            navigate(`/admin/edit-agency/${item?._id}`)
+            navigate(`/admin/edit-agent/${item?._id}`)
           }
           className='flex-1 py-1 flex justify-center items-center rounded-[5px] border border-[#000000] text-[#000000] bg-[#FFFFFF]'
         >

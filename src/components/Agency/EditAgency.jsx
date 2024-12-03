@@ -248,6 +248,34 @@ setExistingLanguage(findTheLang);
           />
         </div>
 
+        <div className='mt-6 relative flex flex-col gap-2 mx-3'>
+       <label
+            htmlFor='password'
+            
+            className='sf-medium font-medium text-sm text-[#000000]'
+            >
+            Password
+          </label>
+          <input
+            disabled={isLoading}
+            name='password'
+            onChange={handleChange}
+            value={formData.password}
+            autoComplete='current-password'
+            type={visible}
+            id='password'
+            placeholder='Password'
+            className='border border-[#E4E4E4] py-4 ps-5 pe-16 rounded-[10px] sf-normal text-sm text-[#666666]  outline-none'
+            />
+          <div className='absolute right-7   top-11'>
+            {visible === 'password' ? (
+              <FaEye size={20} onClick={() => setVisible('text')} />
+            ) : (
+              <FaEyeSlash size={20} onClick={() => setVisible('password')} />
+            )}
+          </div>
+            </div>
+
 
 
 
@@ -329,34 +357,7 @@ setExistingLanguage(findTheLang);
 
 
         <div className='mt-6 relative flex flex-col gap-2 mx-3'>
-          <label
-            htmlFor='password'
-     
-            className='sf-medium font-medium text-sm text-[#000000]'
-          >
-            Password
-          </label>
-          <input
-            disabled={isLoading}
-            name='password'
-            onChange={handleChange}
-            value={formData.password}
-            autoComplete='current-password'
-            type={visible}
-            id='password'
-            placeholder='Password'
-            className='border border-[#E4E4E4] py-4 ps-5 pe-16 rounded-[10px] sf-normal text-sm text-[#666666]  outline-none'
-          />
-          <div className='absolute right-7   top-11'>
-            {visible === 'password' ? (
-              <FaEye size={20} onClick={() => setVisible('text')} />
-            ) : (
-              <FaEyeSlash size={20} onClick={() => setVisible('password')} />
-            )}
-          </div>
-
-
-
+   
 
 
 

@@ -118,6 +118,7 @@ function App() {
             <Route path='add-agent' element={<AdminAddAgencyPage />} />
             <Route path='view-agents' element={<AdminViewAgencyPage />} />
             <Route path='edit-agency/:id' element={<AdminEditAgencyPage />} />
+            <Route path='edit-agent/:id' element={<AdminEditAgencyPage />} />
 
             <Route path='add-language' element={<AddLanguagePage />} />
             <Route path='view-language' element={<ViewLanguagePage />} />
