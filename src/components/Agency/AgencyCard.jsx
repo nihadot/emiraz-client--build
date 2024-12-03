@@ -7,7 +7,7 @@ function AgencyCard({ item,handleDelete }) {
 
   return (
     <div className='rounded-2xl border px-4 py-4 text-sm'>
-      <img src={item?.imageFile?.secure_url} alt="" className='object-contain mb-3 w-full h-[200px]' />
+      <img src={item?.imageFile?.secure_url} alt="" className='object-contain rounded mb-3 w-full h-[200px]' />
       <div className='poppins-medium  mt-1 overflow-hidden'>
         <h1>
           Name : {item?.name}
@@ -15,13 +15,16 @@ function AgencyCard({ item,handleDelete }) {
       </div>
       <div className='overflow-hidden break-words poppins-medium text-sm text-[#666666] text-left'>
         <p>
-         Username : {item?.username}
+         Country : {item?.countryDetails?.countryName}
         </p>
         <p className=''>
-         Password : {item?.password}
+        <p className="capitalize">
+  Languages: {item?.languageDetails?.map((lang) => lang.languageName).join(', ')}
+</p>
+
         </p>
       </div>
-      <div className='flex gap-2 mt-3 h-6 text-sm'>
+      <div className='flex gap-2 mt-3 h-8 text-sm'>
         <button
           onClick={() =>
             navigate(`/admin/edit-agency/${item?._id}`)
