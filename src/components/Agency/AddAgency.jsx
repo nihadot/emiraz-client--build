@@ -235,8 +235,58 @@ setLanguage(response_lang.data.result);
 
 
 
-        {/* images */}
-        <div className="px-4 flex-1">
+      
+      </div>
+
+        {/* country */}
+        
+      <CountryDropDown 
+        name="country"
+        clearForms={clearForms}
+
+        // value={[values.developer]}
+        onChange={(e)=>{
+         setFormData({
+          ...formData,
+           country: e.id
+         })
+        }}
+        isLoading={isLoading}
+        options={countries}
+      />
+
+
+
+
+          {/* languages */}
+          {/* <LanguageDropDown 
+        name="language"
+        clearForms={clearForms}
+
+        // value={[values.developer]}
+        onChange={(e)=>{
+         setFormData({
+          ...formData,
+           language: e.id
+         })
+        }}
+        isLoading={isLoading}
+        options={language}
+      /> */}
+
+
+
+
+
+{/* <h1 className="text-xl font-bold mb-4">Multi-Select Dropdown Example</h1> */}
+      <MultiSelectDropdown refresh={refresh} data={language} onSelectionChange={handleSelectionChange} />
+
+
+     
+
+
+  {/* images */}
+  <div className="px-4 flex-1">
             {/* Main image */}
             <h1 className="mb-3 text-4xl font-medium sf-medium">Media</h1>
             <h2 className="sf-medium font-medium text-sm mb-3">Main Image  <span className="text-lg text-red-600">*</span></h2> 
@@ -299,55 +349,7 @@ setLanguage(response_lang.data.result);
             
           </button>
         </div>
-      </div>
-
-        {/* country */}
         
-      <CountryDropDown 
-        name="country"
-        clearForms={clearForms}
-
-        // value={[values.developer]}
-        onChange={(e)=>{
-         setFormData({
-          ...formData,
-           country: e.id
-         })
-        }}
-        isLoading={isLoading}
-        options={countries}
-      />
-
-
-
-
-          {/* languages */}
-          {/* <LanguageDropDown 
-        name="language"
-        clearForms={clearForms}
-
-        // value={[values.developer]}
-        onChange={(e)=>{
-         setFormData({
-          ...formData,
-           language: e.id
-         })
-        }}
-        isLoading={isLoading}
-        options={language}
-      /> */}
-
-
-
-
-
-{/* <h1 className="text-xl font-bold mb-4">Multi-Select Dropdown Example</h1> */}
-      <MultiSelectDropdown refresh={refresh} data={language} onSelectionChange={handleSelectionChange} />
-
-
-     
-
-
         
       </div>
 

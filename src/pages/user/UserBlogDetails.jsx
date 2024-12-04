@@ -1,7 +1,7 @@
 import React from "react";
 import Footer from "../../components/Footer";
 import Header from "../../components/user/Header";
-import { MAIN_IMAG_URL, getBlogById, getBlogs } from "../../api";
+import { MAIN_IMAG_URL, getBlogById, getBlogByName, getBlogs } from "../../api";
 import { useNavigate, useParams } from "react-router-dom";
 import Placeholder from "../../assets/placeholder/placeholder-image.png";
 import Loader from "../../components/Loader/Loader";
@@ -12,12 +12,12 @@ function UserBlogDetails() {
   const [blogs, setBlogs] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [blog, setBlog] = React.useState({});
-  const { id } = useParams();
+  const { id,name } = useParams();
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    if (!id) {
-      navigate("/blog");
+    if (!name) {
+      navigate("/");
     }
     fetchdata();
     window.scrollTo(0, 0);
@@ -27,9 +27,9 @@ function UserBlogDetails() {
     try {
       setLoading(true);
       const blogs = await getBlogs();
-      const filteredData = blogs?.result?.filter((item)=> item._id !== id )
+      const filteredData = blogs?.result?.filter((item)=> item.slug !== name )
       setBlogs(filteredData);
-      const blog = await getBlogById(id);
+      const blog = await getBlogByName(name);
       setBlog(blog.result);
 
       setLoading(false);
@@ -71,12 +71,12 @@ function UserBlogDetails() {
               <div className="">
                 <div className="block lg:flex w-full h-full   lg:gap-3  ">
                   <div className="flex-none lg:flex-[70%] lg:w-[749px] ">
-                    <BlogBody item={blog} />
+                    { blog && <BlogBody item={blog} />}
                   </div>
                   <div className="flex-[30%] lg:w-[847px]">
                     <div className="mb-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 mt-0  gap-5">
                       {blogs &&
-                        blogs.map((item, index) => {
+                        blogs?.map((item, index) => {
                           if (index < 3) {
                             return (
                               <div
@@ -106,7 +106,8 @@ function UserBlogDetails() {
                                   <button
                                     onClick={() =>
                                       navigate(
-                                        `/blog/${item._id}/${item.blogTitle.trim().toLowerCase().replace(/\s+/g, '-')}/`
+                                        `/blog/${item.slug}/`
+                                        // `/blog/${item._id}/${item.blogTitle.trim().toLowerCase().replace(/\s+/g, '-')}/`
                                       )
                                     }
                                     type="button"

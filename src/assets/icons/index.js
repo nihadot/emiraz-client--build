@@ -18,6 +18,8 @@ import villa from "./villa.png"
 import townhouse from "./townhouse.png"
 import pentHouse from "./pentHouse.png"
 import footerMobileLogo from "./footer-mobile-logo-white.png"
+import phoneCall from "./call.svg"
+import whatsappCall from "./whatsapp.svg";
 export {
   CameraSVGIcons,
   LocationSVGIcons,
@@ -39,4 +41,6 @@ export {
   villa,
   apartment,
   footerMobileLogo,
+  phoneCall,
+  whatsappCall
 };

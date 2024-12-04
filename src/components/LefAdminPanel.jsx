@@ -4,9 +4,9 @@ import ImageSVG from "../assets/logo/ps_logo.png"
 
 
 // --------------------REACT-ICONS---------------------------------//
-import { FaRegCircleUser } from "react-icons/fa6";
+import { FaDoorClosed, FaRegCircleUser } from "react-icons/fa6";
 import { MdLogout, MdSupportAgent } from "react-icons/md";
-import { FaBlogger, FaHome, FaRegBuilding, FaUsers } from "react-icons/fa";
+import { FaBlogger, FaClosedCaptioning, FaHome, FaRegBuilding, FaUsers } from "react-icons/fa";
 import { IoCloseOutline } from "react-icons/io5";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { useDispatch, useSelector } from 'react-redux';
@@ -86,6 +86,9 @@ function LefAdminPanel() {
                 </Link>
                 <Link to={'/admin/manage-blog'}>
                     <li className='flex transition-all duration-150 ease-in-out hover:scale-105  items-center gap-3  hover:bg-white hover:text-black py-3 px-6 rounded-lg' > <FaBlogger/> Manage Blog</li>
+                </Link>
+                <Link to={'/admin/closed-enq'}>
+                    <li className='flex transition-all duration-150 ease-in-out hover:scale-105  items-center gap-3  hover:bg-white hover:text-black py-3 px-6 rounded-lg' > <FaDoorClosed/> Closed Enq</li>
                 </Link>
             </ul>
         </div>

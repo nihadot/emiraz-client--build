@@ -309,8 +309,13 @@ function UserHome() {
                   if (index < 10) {
                     return (
                       <div
+                        // onClick={() =>
+                        //   navigate(`/cproperty/${item._id}/${item.cityName}`)
+                        // }
+                // `/property/${item?.projectTitle?.trim().toLowerCase().replace(/\s+/g, "-")}`,
+                // 
                         onClick={() =>
-                          navigate(`/cproperty/${item._id}/${item.cityName}`)
+                          navigate(`/city/property/${item?.slug}`)
                         }
                         className="cursor-pointer border rounded-[10px]"
                         key={item._id}
@@ -415,7 +420,7 @@ function UserHome() {
             {/* cities */}
 
             {/* blogs */}
-            <section className="max-w-[1440px] w-full mt-0 sm:mt-14 sm:mb-0">
+            <section className="max-w-[1440px] w-full mt-0 sm:mt-14 md:mb-14">
               <div className=" sf-medium-600 flex items-center justify-between ">
                 <h1 className="hidden sm:flex flex-col leading-tight ">
                   <span className=" text-[20px] lg:text-[50px] text-[#666666]">
@@ -427,7 +432,7 @@ function UserHome() {
                 </h1>
                 <h5 className="text-[45px] sf-bold mx-auto block sm:hidden text-center">Blogs</h5>
                 <button
-                  onClick={() => navigate(`/blog`)}
+                  onClick={() => navigate(`/blogs`)}
                   className="hidden sm:block  text-[14px] w-[150px] h-[48px]  bg-black text-white rounded-[10px] poppins-semibold"
                 >
                   View All Blogs
@@ -467,14 +472,11 @@ function UserHome() {
                             <button
                               type="button"
                               className="bg-white border border-[#000000] w-full py-2 rounded-[5px] text-[10px] poppins-semibold"
-                              onClick={() =>
-                                navigate(
-                                  `/blog/${item._id}/${item.blogTitle
-                                    .trim()
-                                    .toLowerCase()
-                                    .replace(/\s+/g, "-")}/`
-                                )
+                              onClick={() =>{
+                                navigate(`/blog/${item.slug}/`)
+                             
                               }
+                            }
                             >
                               Keep Reading
                             </button>
@@ -485,7 +487,7 @@ function UserHome() {
                   })}
                 <div className="mt-2 mb-10 sm:mb-0 sm:mt-4 sm:mb-10 flex justify-center">
                   <button
-                    onClick={() => navigate("/blog")}
+                    onClick={() => navigate("/blogs")}
                     className="text-[14px] block sm:hidden  w-[150px] h-[48px]  bg-black text-white rounded-[10px] poppins-semibold"
                   >
                     View All Blogs

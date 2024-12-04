@@ -379,7 +379,7 @@ function DesktopHeader() {
 
 
           {/* input search component */}
-      <div className='flex xl:hidden'>
+      {/* <div className='flex xl:hidden'>
         <div
           className={`${
             pathName ? 'flex' : ' hidden'
@@ -394,7 +394,7 @@ function DesktopHeader() {
           />
           <img src={Search} alt='' className='h-[20px]' />
         </div>
-      </div>
+      </div> */}
           {/* input search component */}
 
     </>

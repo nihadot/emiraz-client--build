@@ -171,14 +171,19 @@ function PropertiesCard({ item, handleRegister, navigate }) {
             )}
           </div>
           <div
+            // onClick={() =>
+            //   handleShare(
+            //     item?.projectTitle,
+            //     `property/${item?.projectTitle
+            //       .trim()
+            //       .toLowerCase()
+            //       .replace(/\s+/g, "-")}/${item?._id}`
+            //   )
+            // }
             onClick={() =>
               handleShare(
                 item?.projectTitle,
-                `property/${item?.projectTitle
-                  .trim()
-                  .toLowerCase()
-                  .replace(/\s+/g, "-")}/${item?._id}`
-              )
+                `property/${item?.projectTitle}`)
             }
             className="bg-[#ffffff] cursor-pointer rounded-md w-8 h-8 flex  justify-center items-center"
           >
@@ -230,7 +235,7 @@ function PropertiesCard({ item, handleRegister, navigate }) {
           <button
             onClick={() => {
               navigate(
-                `/property/${item?.projectTitle?.trim().toLowerCase().replace(/\s+/g, "-")}/${item._id}`,
+                `/property/${item?.slug}`,
                 {
                   state: item,
                 }

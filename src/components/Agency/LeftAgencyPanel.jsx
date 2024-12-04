@@ -37,6 +37,10 @@ function LeftAgencyPanel() {
 
   
     const handleLogout = ()=> {
+        const status = window.confirm('Are you sure you want to logout?')
+        if(!status){
+            return;
+        }
         localStorage.removeItem(AGENCY_ID)
         localStorage.removeItem(AGENCY_TOKEN)
         navigate('/agent-login');
@@ -46,7 +50,7 @@ function LeftAgencyPanel() {
 
   return (
     <>
-    <div className={`block z-50 fixed md:overflow-clip overflow-scroll top-0 left-0 ease-out duration-1000 max-w-60 h-screen bg-[#000000] text-white`}>
+    <div className={`hidden z-50 fixed md:overflow-clip overflow-scroll top-0 left-0 ease-out duration-1000 max-w-60 h-screen bg-[#000000] text-white lg:block`}>
         <div className="pt-14 px-6">
             <img src={ImageSVG} alt="logo" className='w-44 h-12 object-contain'  />
         </div>

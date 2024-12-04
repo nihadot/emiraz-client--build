@@ -139,10 +139,32 @@ export const getPropertiesByDevelopers = async (id) => {
   }
 };
 
+
+export const getPropertiesByDevelopersName = async (name) => {
+  try {
+    const response = await axios.get(`${SERVER_URL}/developer/name/${name}`,{
+      headers: { Authorization: `Bearer ${localStorage.getItem(ADMIN_TOKEN)}` },
+    });
+    return response.data;
+  } catch (error) {
+    throw error || "An error occurred during login.";
+  }
+};
 // ========GET=PROPERTIES=BY CITY ID=======//
 export const getPropertiesByCity = async (id) => {
   try {
     const response = await axios.get(`${SERVER_URL}/${PROPERTY}/city/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error || "An error occurred during login.";
+  }
+};
+
+
+// ========GET=PROPERTIES=BY CITY Name=======//
+export const getPropertiesByCityName = async (name) => {
+  try {
+    const response = await axios.get(`${SERVER_URL}/${PROPERTY}/city/name/${name}`);
     return response.data;
   } catch (error) {
     throw error || "An error occurred during login.";
@@ -173,6 +195,15 @@ export const getPropertiesCounts = async () => {
 export const getPropertyById = async (id) => {
   try {
     const response = await axios.get(`${SERVER_URL}/${PROPERTY}/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error || "An error occurred during login.";
+  }
+};
+// ========GET=PROPERTY=BY=Name========//
+export const getPropertyByName = async (name) => {
+  try {
+    const response = await axios.get(`${SERVER_URL}/${PROPERTY}/name/${name}`);
     return response.data;
   } catch (error) {
     throw error || "An error occurred during login.";
@@ -468,6 +499,14 @@ export const getBlogs = async () => {
 export const getBlogById = async (id) => {
   try {
     const response = await axios.get(`${SERVER_URL}/${BLOG}/${GET_ONE}/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error || "An error occurred during login.";
+  }
+};
+export const getBlogByName = async (name) => {
+  try {
+    const response = await axios.get(`${SERVER_URL}/blog/name/${name}`);
     return response.data;
   } catch (error) {
     throw error || "An error occurred during login.";
@@ -887,6 +926,19 @@ export const updateNoteForAdminEnquiry = async (id,data) => {
   try {
     const response = await axios.put(`${SERVER_URL}/${PROPERTY}/enq-change-note/${id}`, data, {
       headers: { Authorization: `Bearer ${localStorage.getItem(ADMIN_TOKEN)}` },
+    });
+    return response.data;
+  } catch (error) {
+    throw error || "An error occurred during login.";
+  }
+};
+
+
+
+export const updateNoteForAgencyEnquiry = async (id,data) => {
+  try {
+    const response = await axios.put(`${SERVER_URL}/${PROPERTY}/enq-change-note/${id}`, data, {
+      headers: { Authorization: `Bearer ${localStorage.getItem(AGENCY_TOKEN)}` },
     });
     return response.data;
   } catch (error) {

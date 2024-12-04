@@ -19,8 +19,10 @@ function AgencyCard({ item,handleDelete }) {
         </p>
         <p className=''>
         <p className="capitalize">
-  Languages: {item?.languageDetails?.map((lang) => lang.languageName).join(', ')}
+  Languages: {item?.languageDetails?.sort((a,b)=> b.createdAt - a.createdAt ).map((lang) => lang.languageName).join(', ')}
 </p>
+
+{/* {console.log(item?.languageDetails,'item?.languageDetails')} */}
 
         </p>
       </div>

@@ -86,8 +86,8 @@ function EditProperties() {
   // Filtering data based on search term and selected developer
   const filteredData = data.filter(item => {
     const searchMatch =
-      item.projectTitle.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
-      item.description.toLowerCase().includes(debouncedSearchTerm.toLowerCase());
+      item?.projectTitle?.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+      item?.description?.toLowerCase().includes(debouncedSearchTerm.toLowerCase());
 
     const developerMatch = selectedFilterDeveloper._id === 'all' || item.developer === selectedFilterDeveloper._id;
 

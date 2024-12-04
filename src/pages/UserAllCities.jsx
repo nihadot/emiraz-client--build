@@ -74,7 +74,9 @@ function UserAllCities() {
                 return (
                   <div
                     onClick={() =>
-                          navigate(`/cproperty/${item._id}/${item.cityName}`)
+                      navigate(`/city/property/${item?.slug}`)
+
+                          // navigate(`/cproperty/${item._id}/${item.cityName}`)
                         }
                     className=" cursor-pointer mb-3 md:mb-0 border rounded-[10px]"
                     key={item._id}
@@ -110,7 +112,9 @@ function UserAllCities() {
                 return (
                   <div
                     onClick={() => {
-                      navigate(`/cproperty/${item._id}/${item.cityName}`)
+                      navigate(`/city/property/${item?.slug}`)
+                      
+                      // navigate(`/cproperty/${item._id}/${item.cityName}`)
                       
                     }}
                     className="mb-3 cursor-pointer md:mb-0 border rounded-[10px]"

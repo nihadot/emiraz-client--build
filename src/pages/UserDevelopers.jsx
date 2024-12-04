@@ -11,7 +11,7 @@ import { errorToast } from "../toast";
 import Lazyloading from "../components/Lazyloading/Lazyloading";
 import { SuccessLabel } from "../assets/images";
 import { Helmet } from "react-helmet";
-import { addingEnquiry,  getPropertiesByDevelopers } from "../api";
+import { addingEnquiry,  getPropertiesByDevelopers, getPropertiesByDevelopersName } from "../api";
 import PhoneInput from "react-phone-input-2";
 import Modal from "../components/Register/Modal";
 
@@ -32,15 +32,15 @@ function UserDevelopers() {
   const [name, setName] = React.useState("");
   React.useEffect(() => {
     setLoading(true);
-      fetchData(idOfPropertyType);
+      fetchData(nameOfPropertyType);
     
   }, []); // Fetch data only once when component mounts
 
-  const fetchData = async (id) => {
+  const fetchData = async (nameOfPropertyType) => {
     try {
       setLoading(true);
    
-        const propertiesData = await getPropertiesByDevelopers(id);
+        const propertiesData = await getPropertiesByDevelopersName(nameOfPropertyType);
         setProperties(propertiesData.result);
      
       setLoading(false);

@@ -98,7 +98,9 @@ function ViewDevelopersPage() {
                     filteredProperties.length > 0 &&
                     filteredProperties.map((item, index) => {
                       return (
-                        <div className='flex flex-col'>
+                        <div className='flex flex-col relative'>
+            {<span className="flex absolute top-2 right-2 rounded-full w-9 h-9 bg-black z-40 text-white justify-center items-center">{item?.projectCount}</span>}
+
                         <div
                       
                               className="cursor-pointer relative flex-col p-5 lg:h-[252px] sm:w-[180px] h-[172px]  lg:w-[264px] rounded-[15px] flex justify-center items-center border"

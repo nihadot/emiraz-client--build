@@ -24,7 +24,7 @@ function Login() {
           localStorage.setItem(AGENCY_ID,user?.result?._id)
          
           successToast('Logged in successfully')
-          navigate('/agent-dashboard')
+          navigate('/agent-dashboard/enquiries')
         } catch (error) {
         
             errorToast(error.response.data.message || error.message || 'An error occurred during login.');

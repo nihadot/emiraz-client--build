@@ -12,7 +12,7 @@ import Lazyloading from "../components/Lazyloading/Lazyloading";
 import { SuccessLabel } from "../assets/images";
 import Loader from "../components/Loader/Loader";
 import { Helmet } from "react-helmet";
-import {  getPropertiesByCity } from "../api";
+import {  getPropertiesByCity, getPropertiesByCityName } from "../api";
 import Modal from "../components/Register/Modal";
 
 
@@ -30,16 +30,16 @@ function UserAllProjects() {
 
   React.useEffect(() => {
     setLoading(true);
-      fetchData(idOfPropertyType);
+      fetchData(nameOfPropertyType);
     
   }, []); // Fetch data only once when component mounts
 
 
-  const fetchData = async (id) => {
+  const fetchData = async (name) => {
     try {
       setLoading(true);
    
-        const propertiesData = await getPropertiesByCity(id);
+        const propertiesData = await getPropertiesByCityName(name);
         setProperties(propertiesData.result);
      
       setLoading(false);
@@ -102,7 +102,9 @@ function UserAllProjects() {
               <Header />
             </div>
             <h1 className="px-6 md:px-20 lg:px-28 text-center mt-4 sf-medium-600 text-[35px] uppercase sm:text-[70px]">
-              {nameOfPropertyType}
+              {nameOfPropertyType.split("-")
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ")}
             </h1>
             <section className="mb-20">
             <div className="  mx-6 flex flex-col justify-center items-center lg:mx-20 xl:mx-28 ">

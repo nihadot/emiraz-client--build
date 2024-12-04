@@ -53,8 +53,8 @@ function SearchAndFilter({
   };
 
   return (
-    <div className='flex justify-between flex-row relative mb-3'>
-      <div className='flex max-w-[271px] w-[271px] h-[53px] max-h-[53px] font-extralight text-sm sf-normal text-[#666666] justify-center items-center border rounded-[50px] border-[#E4E4E4] bg-[#F7F7F7]'>
+    <div className='flex justify-between md:flex-row flex-col relative mb-3'>
+      <div className='flex md:max-w-[271px] max-w-full w-full md:w-[271px] h-[53px] max-h-[53px] font-extralight text-sm sf-normal text-[#666666] px-4 md:px-0 md:justify-center justify-between items-center border rounded-[50px] border-[#E4E4E4] bg-[#F7F7F7]'>
         <input
           type='search'
           onChange={handleSearchChange}
@@ -65,14 +65,14 @@ function SearchAndFilter({
         />
         <FaSearch color='#666666' />
       </div>
-      <div className='flex gap-5'>
+      <div className='flex gap-5 md:mt-0 mt-3'>
 
 
         <div
           onClick={() =>
             setDevelopersFilterOptionVisible(!developersFilterOptionVisible)
           }
-          className=' relative cursor-pointer flex w-[188px] h-[53px] max-h-[53px] justify-between px-10 items-center border rounded-[50px] border-[#E4E4E4] bg-[#F7F7F7]'
+          className=' relative cursor-pointer flex w-full md:w-[188px] h-[53px] max-h-[53px] justify-between px-10 items-center border rounded-[50px] border-[#E4E4E4] bg-[#F7F7F7]'
         >
           <span className='w-[#666666] text-black font-extralight text-sm sf-normal capitalize'>
             {developersFilterOptionItem?.developerName
@@ -82,7 +82,7 @@ function SearchAndFilter({
           {developersFilterOptionVisible ? <FaAngleUp /> : <FaAngleDown />}
 
           {developersFilterOptionVisible && (
-            <div className='bg-white text-start poppins-medium text-[14px] px-2 absolute z-50 right-0 top-16 border py-3 rounded-[10px] border-[#E4E4E4] max-w-48 max-h-80 h-fit overflow-y-auto w-48 ps-4'>
+            <div className='bg-white text-start poppins-medium text-[14px] px-2 absolute z-50 right-0 top-16 border py-3 rounded-[10px] border-[#E4E4E4] max-w-full md:max-w-48 max-h-80 h-fit overflow-y-auto md:w-48 w-full ps-4'>
               <div
                 className='py-2 capitalize cursor-pointer'
                 onClick={() =>
@@ -113,7 +113,7 @@ function SearchAndFilter({
 
         <div
           onClick={() => setFilterOptions(!filterOptions)}
-          className='cursor-pointer flex w-[188px] h-[53px] max-h-[53px] justify-between px-10 items-center border rounded-[50px] border-[#E4E4E4] bg-[#F7F7F7]'
+          className='cursor-pointer flex w-full md:w-[188px] h-[53px] max-h-[53px] justify-between px-10 items-center border rounded-[50px] border-[#E4E4E4] bg-[#F7F7F7]'
         >
           <span className='w-[#666666] font-extralight text-sm sf-normal capitalize'>
             {fileActiveName === 'newlead'
@@ -130,7 +130,7 @@ function SearchAndFilter({
         </div>
       </div>
       {filterOptions && (
-        <div className='bg-white text-start poppins-medium text-[14px] px-2 absolute z-50 right-0 top-16 border py-3 rounded-[10px] border-[#E4E4E4] max-w-48 w-48 ps-4'>
+        <div className='bg-white text-start poppins-medium text-[14px] px-2 absolute z-50 right-0 top-32 md:top-16 border py-3 rounded-[10px] border-[#E4E4E4] max-w-[300px] md:max-w-48 w-full md:w-48 ps-4'>
           <p
             className='py-2 capitalize cursor-pointer'
             onClick={() => handleFilterSelection('all')}

@@ -12,6 +12,7 @@ import {
   fetchSideBanners,
   getProperties,
   getPropertyById,
+  getPropertyByName,
 } from '../../api';
 import Placeholder from '../../assets/placeholder/placeholder-image.png';
 import {
@@ -54,11 +55,10 @@ function UserViewProjects() {
   const [toggleImagePoppup, setImageTogglePoppup] = useState(false);
   const [property, setProperty] = React.useState({});
   const [sidebanner, setSideBanner] = React.useState([]);
-  const { id } = useParams();
-  const navigate = useNavigate();
+  const { id,name } = useParams();
+  const navigate = useNavigate(); 
   const [indexOf, setIndexOf] = useState(0);
   const [formIsLoading, setFormIsLoading] = React.useState(false);
-
 
   const [orientation, setOrientation] = useState(
     window.innerWidth > window.innerHeight ? "Landscape" : "Portrait"
@@ -84,7 +84,7 @@ function UserViewProjects() {
 
   React.useEffect(() => {
     setLoading(true);
-    if (!id) {
+    if (!name) {
       return navigate('/');
     }
 
@@ -148,7 +148,7 @@ const [ads,setAds] = useState([]);
 
   const fetchdata = async () => {
     try {
-      const property = await getPropertyById(id);
+      const property = await getPropertyByName(name);
     
       // if (
         // property.result &&
@@ -907,9 +907,9 @@ const [ads,setAds] = useState([]);
 
                     {/* enquiries */}
 
-                    <div className=' border h-[250px] sticky top-5 z-30  bg-white  py-4  px-2 mt-4 rounded-[15px]  lg:flex-none lg:max-w-[420px]   hidden lg:block '>
+                    <div className=' border h-[240px] sticky top-1 z-30  bg-white  py-3  px-2 mt-4 rounded-[15px]  lg:flex-none lg:max-w-[420px]   hidden lg:block '>
                       <form onSubmit={handleThirdRegisterSubmit} className=''>
-                        <h1 className='text-[30px] sf-medium text-center mb-3'>
+                        <h1 className='text-[26px] sf-medium text-center mb-3'>
                           Register Your interest
                         </h1>
                         <input
@@ -954,7 +954,7 @@ const [ads,setAds] = useState([]);
                     {/* sidebanner */}
 
                     {
-                      <div className='w-[338px] m-auto h-[670px] sticky top-[190px] mt-3 '>
+                      <div className='w-[338px] m-auto h-[670px] sticky top-[250px] mt-0 '>
                         <Swiper
                           style={{
                             width: '100%',
@@ -1001,11 +1001,14 @@ const [ads,setAds] = useState([]);
                                 return(
 <SwiperSlide
                                   className='cursor-pointer'
-                                  onClick={() =>
+                                  onClick={() =>{
                                     navigate(
-                                      `/property/${item?.property?.projectTitle}/${item?.property?._id}`
+                                      `/property/${item?.property?.slug}`,
+                                      // `/property/${item?.property?.projectTitle?.trim().toLowerCase().replace(/\s+/g, "-")}`
+                                      // `/property/${item?.property?.projectTitle}/${item?.property?._id}`
                                     )
-                                  }
+                                    // console.log(`/property/${item?property?.slug}`)
+                                  }}
                                   key={index}
                                 >
                                   <Lazyloading
@@ -1060,7 +1063,9 @@ const [ads,setAds] = useState([]);
                                   onClick={() =>{
                                     if(item.property && item.property.projectTitle  && item.property._id)
                                     navigate(
-                                      `/property/${item?.property?.projectTitle}/${item?.property?._id}`
+                                      `/property/${item?.property?.slug}`,
+                                      // `/property/${item?.property?.projectTitle?.trim().toLowerCase().replace(/\s+/g, "-")}`
+                                      // `/property/${item?.property?.projectTitle}/${item?.property?._id}`
                                     )
                                   }
                                    
@@ -1096,7 +1101,7 @@ const [ads,setAds] = useState([]);
                    
                       {properties &&
                         properties
-                          .filter(i => i._id !== id)
+                          .filter(i => i.projectTitle.toLowerCase() !== name.toLowerCase())
                           .map((item, index) => {
                             if (index < 3) {
                               return (

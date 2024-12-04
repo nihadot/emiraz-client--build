@@ -12,6 +12,7 @@ import './index.css';
 import { FaPen } from 'react-icons/fa';
 import lockIcon from "../assets/icons/lock-svgrepo-com.svg"
 import unlockIcon from "../assets/icons/lock-unlocked-svgrepo-com.svg"
+import { useLocation } from 'react-router-dom';
 function RecentEnquiries({ searchTerm, selectedFilter,selectedFilterDeveloper,selectedFilterAgency }) {
   const [properties, setProprties] = useState([]);
   const [agencies, setAgencies] = useState([]);
@@ -288,7 +289,33 @@ function RecentEnquiries({ searchTerm, selectedFilter,selectedFilterDeveloper,se
     );
   };
 
+  const {state:customState} = useLocation();
+// const itemRef = useRef();
+//   useEffect(()=>{
+//     if(customState && customState.id && itemRef.current){
+//       const childrenArray = Array.from(itemRef.current.children); // Convert children to an array
+//       console.log('All Children Nodes:', childrenArray);
 
+
+
+//       // const childrenIds = childrenArray
+//       //   .find((child) => child.id === customState.id)
+       
+
+//       // console.log('Children IDs:', childrenIds);
+//       // console.log('Children IDs:', childrenIds);
+
+
+//       const rowElement = document.getElementById(customState.id);
+//       // console.log(rowElement,'rowElement')
+//       if(rowElement){
+//         rowElement.scrollIntoView({
+//           behavior:'smooth',
+//           block: 'nearest',
+//         });
+//       }
+//     }
+//   },[customState.id])
 
  
 
@@ -317,11 +344,11 @@ function RecentEnquiries({ searchTerm, selectedFilter,selectedFilterDeveloper,se
         <h3 className=' w-full text-center'>Status</h3>
       </div>
 
-      <div className='mt-1 w-full'>
+      <div className='mt-1 w-full' >
         {filteredProperties && filteredProperties.length > 0 &&
           filteredProperties.map((item, index) => {
             return (
-              <div className=' grid bg-gray-200 rounded-lg mt-1 w-full py-3 items-center poppins-medium text-[12px] grid-cols-8 justify-items-center gap-0 '>
+              <div id={item._id} key={index} className=' grid bg-gray-200 rounded-lg mt-1 w-full py-3 items-center poppins-medium text-[12px] grid-cols-8 justify-items-center gap-0 '>
                 <div className=' w-full text-center'>
                   {formatDate(item.createdAt)}
                 </div>

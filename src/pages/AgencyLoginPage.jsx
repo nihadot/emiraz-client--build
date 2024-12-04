@@ -9,7 +9,7 @@ function AgencyLoginPage() {
 
   useEffect(() => {
     if (localStorage.getItem(AGENCY_ID) && localStorage.getItem(AGENCY_TOKEN)) {
-      navigate('/agent-dashboard');
+      navigate('/agent-dashboard/enquiries');
     }
   }, [navigate]);
 

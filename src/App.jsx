@@ -34,7 +34,7 @@ import {
   AdminPropertyOtherEditPage,
   AdminPropertyAdsViewPage,
   AdminViewAllAdsPage,
-
+  AdminClosedEnqPage,
   // users
   UserHome,
   UserAbout,
@@ -87,8 +87,7 @@ import { useEffect, useState } from 'react';
 import Offline from './components/Offline/Offline';
 import 'react-phone-input-2/lib/style.css';
 
-import Dummy from "./Dummy"
-
+import NotFoundPage from "./pages/NotFoundPage"
 function App() {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
@@ -110,7 +109,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path='/admin-login' element={<LoginPage />} />
-          <Route path='dummy' element={<Dummy />} />
+          {/* <Route path='dummy' element={<Dummy />} /> */}
 
           <Route path='/admin' element={<AdminLayout />}>
             {/* agency */}
@@ -208,6 +207,10 @@ function App() {
               path='edit-property-type/:id'
               element={<EditPropertyTypePage />}
             />
+
+
+<Route path='closed-enq' element={<AdminClosedEnqPage />} />
+
             
           </Route>
 
@@ -217,15 +220,21 @@ function App() {
           {/* user */}
           <Route index element={<UserHome />} />
           <Route path='/about' element={<UserAbout />} />
-          <Route path='/blog' element={<UserBlog />} />
-          <Route path='/blog/:id/:name' element={<UserBlogDetails />} />
+          <Route path='/blog/:name' element={<UserBlogDetails />} />
+          {/* <Route path='/blog' element={<UserBlog />} /> */}
+          {/* <Route path='/blog/:name' element={<UserBlogDetails />} /> */}
+          <Route path='/blogs' element={<UserBlog />} />
           <Route
             path='/property-type/:name'
             element={<UserAllProjects />}
           />
-          <Route path='/property/:name/:id' element={<UserViewProjects />} />
+          <Route path='/property/:name' element={<UserViewProjects />} />
           <Route
             path='/cproperty/:id/:name'
+            element={<UserViewCityBasedProjects />}
+          />
+            <Route
+            path='/city/property/:name'
             element={<UserViewCityBasedProjects />}
           />
           <Route path='/terms-conditions' element={<TermsAndConditions />} />
@@ -233,7 +242,7 @@ function App() {
           <Route path='/our-developers' element={<OurSellers />} />
           <Route path='/all-cities' element={<UserAllCities />} />
 
-          <Route path='/developers/:id/:name' element={<UserDevelopers />} />
+          <Route path='/developers/:name' element={<UserDevelopers />} />
 
           <Route path='/projects' element={<UserProjects />} />
 
@@ -248,6 +257,8 @@ function App() {
           <Route path='/agent-dashboard' element={<AgencyLayoutPage />}>
             <Route path='enquiries' element={<AgencyEnquiriesPage />} />
           </Route>
+
+          <Route path='*' element={<NotFoundPage />} />
 
           {/* agency route */}
         </Routes>

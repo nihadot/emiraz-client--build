@@ -47,6 +47,7 @@ import AdminPropertyOtherEditPage from "./pages/admin/AdminPropertyOtherEditPage
 import AdminViewAllAdsPage from "./pages/admin/AdminViewAllAdsPage"
 import AddCountryPage from "./pages/AddCountryPage" 
 import ViewCountryPage from "./pages/ViewCountryPage"
+import AdminClosedEnqPage from "./pages/AdminClosedEnqPage"
 import EditCountryPage from "./pages/EditCountryPage"
 // sidebar
 import AddLanguagePage from "./pages/AddLanguagePage"
@@ -129,6 +130,7 @@ EditCountryPage,
   AdminAddNotificationPage,
   AdminEditNotificationPage,
   AdminViewNotificationPage,
+  AdminClosedEnqPage,
   ViewSoldProjectsPage,
   ManageDevelopersPage,
   AgencyLoginPage,
