@@ -167,7 +167,7 @@ function Header() {
               ></span>
             </li>
             <li className="px-3 1440px:px-4 flex items-center">
-              <Link to={"/blog"}>Blog</Link>{" "}
+              <Link to={"/blogs"}>Blog</Link>{" "}
               <span
                 className={`ms-3 1440px:ms-6 w-[1px] h-4 ${
                   pathName ? "bg-slate-50" : "bg-black"
@@ -294,7 +294,7 @@ function Header() {
                 ></span>
               </li>
               <li className="px-2 mx-4 py-2.5 cursor-pointer flex items-start flex-col ">
-                <Link to={"/blog"} aria-label="Blog page route">
+                <Link to={"/blogs"} aria-label="Blog page route">
                   Blog
                 </Link>
                 <span

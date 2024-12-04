@@ -65,7 +65,7 @@ function Footer() {
                     About Us
                   </p>
                 </Link>
-                <Link to={"/blog"}>
+                <Link to={"/blogs"}>
                   <p className="mb-3 sm:mb-0 text-white text-[10px] sm:text-[14px]  px-1 1440px:px-6">
                     Blog
                   </p>
@@ -190,7 +190,7 @@ function Footer() {
                 About Us
               </p>
             </Link>
-            <Link to={"/blog"}>
+            <Link to={"/blogs"}>
               <p className="mb-3 md:mb-0 text-white text-[14px] md:text-[14px] border-0 md:border-r border-white pe-7">
                 Blog
               </p>

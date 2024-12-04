@@ -105,7 +105,7 @@ function DesktopHeader() {
               ></span>
             </li>
             <li className=' flex items-center'>
-              <Link to={'/blog'}>Blog</Link>{' '}
+              <Link to={'/blogs'}>Blog</Link>{' '}
               <span
                 className={`mx-8 w-[1px] h-4 ${
                   pathName ? 'bg-slate-50' : 'bg-black'
@@ -215,7 +215,7 @@ function DesktopHeader() {
                 ></span>
               </li>
               <li className='px-2 mx-4 py-2.5 cursor-pointer flex items-start flex-col '>
-                <Link to={'/blog'} aria-label='Blog page route'>
+                <Link to={'/blogs'} aria-label='Blog page route'>
                   Blog
                 </Link>
                 <span
