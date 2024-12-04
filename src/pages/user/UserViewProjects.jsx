@@ -742,17 +742,17 @@ const [ads,setAds] = useState([]);
                     {/* description */}
 
                     {/* facilities and amentites */}
-                    <div className='max-w-[740px] poppins-medium capitalize'>
-                      <h1 className='sf-medium text-black lg:text-[30px] text-[25px] mt-3 my-2'>
+                    <div className='max-w-[740px]  capitalize'>
+                      <h1 className=' text-black sf-medium lg:text-[25px] text-[25px] mt-3 my-2'>
                         Facilities and Amenities
                       </h1>
-                      <div className='grid  grid-cols-1 md:grid-cols-3 '>
+                      <div className='grid  grid-cols-1 sf-medium md:grid-cols-3 '>
                         {property.facilities &&
                           property.facilities.map((item, index) => {
                             return (
                               <div
                                 key={index}
-                                className='flex capitalize my-1 text-[14px] lg:text-[16px] gap-2 md:gap-3  items-baseline'
+                                className='flex capitalize my-1 text-[14px] lg:text-[14px] gap-2 md:gap-3  items-baseline'
                               >
                                 <span className='capitalize w-[8px] h-[8px]  rounded-full bg-[#545454] flex'></span>{' '}
                                 {capitalizeWords(item)}
@@ -766,17 +766,17 @@ const [ads,setAds] = useState([]);
                     <hr className='mt-6 mb-4 max-w-[740px]' />
 
                     {/* areas nearby */}
-                    <div className='poppins-medium max-w-[740px] '>
-                      <h1 className='lg:text-[30px] sf-medium text-[25px] text-black mt-3 my-2'>
+                    <div className=' max-w-[740px] '>
+                      <h1 className='lg:text-[25px] sf-medium text-[25px] text-black mt-3 my-2'>
                         Areas and Things Nearby
                       </h1>
-                      <div className='grid grid-cols-2 md:grid-cols-3 '>
+                      <div className='grid grid-cols-2 sf-medium gap-x-3 md:grid-cols-3 '>
                         {property.nearbyAreas &&
                           property.nearbyAreas.map((item, index) => {
                             return (
                               <div
                                 key={index}
-                                className='flex items-baseline capitalize my-1 text-[14px] lg:text-[16px] gap-2'
+                                className='flex items-baseline capitalize my-1 text-[14px] lg:text-[14px] gap-2'
                               >
                                 <span className='capitalize w-[8px] h-[8px]  rounded-full bg-[#545454] flex'></span>{' '}
                                 {capitalizeWords(item)}
@@ -1101,7 +1101,7 @@ const [ads,setAds] = useState([]);
                    
                       {properties &&
                         properties
-                          .filter(i => i.projectTitle.toLowerCase() !== name.toLowerCase())
+                          .filter(i => i.slug.toLowerCase() !== name.toLowerCase())
                           .map((item, index) => {
                             if (index < 3) {
                               return (
