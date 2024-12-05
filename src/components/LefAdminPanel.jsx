@@ -88,7 +88,7 @@ function LefAdminPanel() {
                     <li className='flex transition-all duration-150 ease-in-out hover:scale-105  items-center gap-3  hover:bg-white hover:text-black py-3 px-6 rounded-lg' > <FaBlogger/> Manage Blog</li>
                 </Link>
                 <Link to={'/admin/closed-enq'}>
-                    <li className='flex transition-all duration-150 ease-in-out hover:scale-105  items-center gap-3  hover:bg-white hover:text-black py-3 px-6 rounded-lg' > <FaDoorClosed/> Closed Enq</li>
+                    <li className='flex transition-all duration-150 ease-in-out hover:scale-105  items-center gap-3  hover:bg-white hover:text-black py-3 px-6 rounded-lg' > <FaDoorClosed/> Closed List</li>
                 </Link>
             </ul>
         </div>
