@@ -191,6 +191,7 @@ const [ads,setAds] = useState([]);
         );
 
 
+
       // Function to shuffle the array
       function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
@@ -200,6 +201,7 @@ const [ads,setAds] = useState([]);
         return array;
       }
 
+      console.log(sideBarResultFiltered,'sideBarResultFiltered')
       // Shuffle the array
       const shuffledArray = shuffleArray(sideBarResultFiltered);
 
@@ -642,7 +644,7 @@ const [ads,setAds] = useState([]);
                         <h2 className='text-[20px] mt-1 lg:mt-3 lg:text-[30px] poppins-medium'>
                           Starting From {''}
                           <span className=' font-bold text-[24px] poppins-semibold 390px:text-[30px] lg:text-[30px] 390px:font-bold '>
-                            {property.price}
+                            {property.priceInAED}
                           </span>
                         </h2>
                         {/* starting price */}

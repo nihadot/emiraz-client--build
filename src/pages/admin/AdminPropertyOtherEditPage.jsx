@@ -111,7 +111,8 @@ function AdminPropertyOtherEditPage() {
         setCities(responses[0].data.result);
         setDevelopers(responses[1].data.result);
         setExistPriorities(responses[2].data.result);
-        setAdsOptions(responses[3].data.result);
+        const result = responses[3].data.result.filter((item)=> item._id !== state.adsOptions );
+        setAdsOptions(result);
 
         setIsLoading(false);
 
