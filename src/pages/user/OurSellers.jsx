@@ -95,7 +95,7 @@ const seo_site_url = `${window.location.href}`;
                           className="cursor-pointer relative overflow-hidden p-5 lg:h-[252px] sm:w-[180px] h-[250px]  lg:w-[264px] rounded-[15px] flex justify-center flex-col items-center border"
                           key={item._id}
                         >
-            {<span className="flex absolute top-2 right-2 rounded-full w-9 h-9 bg-black z-40 text-white justify-center items-center">{item?.projectCount}</span>}
+            {/* {<span className="flex absolute top-2 right-2 rounded-full w-9 h-9 bg-black z-40 text-white justify-center items-center">{item?.projectCount}</span>} */}
 
                           <Lazyloading
                             src={item?.imageFile?.secure_url}
@@ -103,7 +103,7 @@ const seo_site_url = `${window.location.href}`;
                             className={"my-10  object-contain max-h-[120px]"}
                           />
 
-                                                     <label htmlFor="" className="-mt-6">{item?.developerName} </label>
+                                                     <label htmlFor="" className="-mt-6">{item?.developerName} <span className="text-xs">({(item?.projectCount)})</span></label>
                         </div>
                       );
                     })}

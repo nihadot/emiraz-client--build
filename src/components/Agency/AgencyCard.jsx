@@ -15,7 +15,7 @@ function AgencyCard({ item,handleDelete }) {
       </div>
       <div className='overflow-hidden break-words poppins-medium text-sm text-[#666666] text-left'>
         <p>
-         Country : {item?.countryDetails?.countryName}
+         Nationality : {item?.countryDetails?.countryName}
         </p>
         <p className=''>
         <p className="capitalize">
