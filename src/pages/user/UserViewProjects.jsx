@@ -410,14 +410,11 @@ const [ads,setAds] = useState([]);
                     <div className=' h-[318px] sm:h-[514px] full relative w-ful'>
                       <div className='w-full h-full' onClick={handleToggleImagePoppup}>
                         <Lazyloading
-                          src={
-                            // fullImages.length > 0 ? (fullImages.length - 1) === index && fullImages[index-1]?.secure_url : fullImages[index]?.secure_url
-                            // Placeholder
-                            // index > fullImages.length ? fullImages[fullImages.length - 1]?.secure_url :  fullImages[index]?.secure_url
-                            fullImages.length > 0 && fullImages[index]?.secure_url || Placeholder
-                          }
-                          alt='loading'
-                          className='object-cover w-full h-full rounded-[20px]'
+                          src={fullImages.length > 0 && fullImages[index]?.secure_url || Placeholder}
+                          alt="loading"
+                          className="object-cover w-full h-full rounded-[20px] lazy-loading-component'"
+                          onLeftSwipe={handlePrevious} // Bind left swipe to handlePrevious
+                          onRightSwipe={handleNext}   // Bind right swipe to handleNext
                         />
                         {/* {console.log(index > fullImages.length,fullImages[fullImages.length - 1],'index')} */}
                       </div>
@@ -583,36 +580,13 @@ const [ads,setAds] = useState([]);
                     {/* ---mobile view ( images and videos ) -- */}
                     <div className='md:hidden flex gap-3 my-4 justify-center items-center '>
                       <Lazyloading
-                        // src={
-                        //   property?.smallImage
-                        //     ? property?.smallImage.length === index + 1
-                        //       ? `${MAIN_IMAG_URL}/${property?.smallImage[0]}`
-                        //       : `${SMALL_IMAG_URL}/${
-                        //           property?.smallImage[index + 1]
-                        //         }`
-                        //     : Placeholder
-                        // }
-
-
                         src={ fullImages.length - 1 === index ?  fullImages[fullImages.length - 1]?.secure_url || Placeholder :  fullImages[index+1]?.secure_url || Placeholder}
                         alt='loading'
                         className=' h-[82px]  object-cover  w-[82px] rounded-[10px]'
                       />
 
                       <Lazyloading
-                        // src={
-                        //   property?.smallImage?.length > 2
-                        //     ? index + 2 >= property?.smallImage?.length
-                        //       ? Placeholder
-                        //       : `${SMALL_IMAG_URL}/${
-                        //           property?.smallImage[index + 2]
-                        //         }`
-                        //     : Placeholder
-                        // }
-                        // 
-                        src={ fullImages.length - 1 === index ?  fullImages[fullImages.length - 1]?.secure_url || Placeholder :  fullImages[index+2]?.secure_url || Placeholder}
-                     
-
+                        src={ fullImages.length - 1 === index ?  fullImages[fullImages.length - 1]?.secure_url || Placeholder :  fullImages[index+2]?.secure_url || Placeholder}                
                         alt='loading'
                         className=' h-[82px] object-cover  w-[82px] rounded-[10px]'
                       />

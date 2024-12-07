@@ -145,7 +145,8 @@ function App() {
               path='view-notification'
               element={<AdminViewNotificationPage />}
             />
-            <Route path='enquiries' element={<AdminEnquiries />} />
+            <Route path='enquiries' index element={<AdminEnquiries />} />
+            <Route path='*' index element={<AdminEnquiries />} />
             <Route path='manage-projects' element={<ManageProperties />} />
             <Route path='add-properties' element={<AddProperties />} />
             <Route path='edit-properties' element={<EditProperties />} />

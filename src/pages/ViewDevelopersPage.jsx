@@ -99,7 +99,7 @@ function ViewDevelopersPage() {
                     filteredProperties.map((item, index) => {
                       return (
                         <div className='flex flex-col relative'>
-            {<span className="flex absolute top-2 right-2 rounded-full w-9 h-9 bg-black z-40 text-white justify-center items-center">{item?.projectCount}</span>}
+            {/* {<span className="flex absolute top-2 right-2 rounded-full w-9 h-9 bg-black z-40 text-white justify-center items-center">{item?.projectCount}</span>} */}
 
                         <div
                       
@@ -114,7 +114,7 @@ function ViewDevelopersPage() {
                             className={"my-10 object-contain max-h-[120px]"}
                             />
 
-                            <label htmlFor="">{item?.developerName}</label>
+                            <label htmlFor="">{item?.developerName} <span className="text-xs">({(item?.projectCount)})</span> </label>
                             
                         </div>
                     

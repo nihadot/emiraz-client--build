@@ -313,23 +313,30 @@ const navigate = useNavigate();
                 </div>
                 <div className="justify-center flex flex-col gap-2  items-center ">
                 <div className=' w-full text-start lg:text-center capitalize flex lg:hidden'>{statusComponent(item)}</div>
-                {/* <div className=' w-full text-start lg:text-center capitalize flex lg:hidden'>
-                  <div onClick={()=> window.open(`tel:${item?.number}`, '_blank')} className="bg-black flex rounded w-[120px] justify-center gap-3 px-3 py-1 poppins-medium text-[12px] ">
-                  <img src={phoneCall} alt="" />
-                  <label htmlFor="" className='text-white'>Call</label>
-                  </div>
-                </div> */}
-                
+                <div className=' w-full text-start lg:text-center capitalize flex lg:hidden'>
+                  <div className="flex h-6 gap-1 w-full">
+
+              
                 {/* <div onClick={()=> window.open(`https://wa.me/${item?.number}?text=Hello`, '_blank')} className="bg-green-600 flex lg:hidden rounded w-[120px] justify-center gap-3 px-3 py-1 poppins-medium text-[12px] ">
                   <img  src={whatsappCall} alt="" />
                   <label  htmlFor="" className='text-white'>Whatsapp</label>
                   </div>   */}
                   
-                <div className='relative  mt-4 text-center capitalize flex items-center cursor-pointer justify-center w-full lg:hidden'> 
-                  <FaPen onClick={()=>setToggleNoteBox({id:item._id,status:true})} />
+                <div className='relative bg-black  h-full  rounded text-center capitalize flex items-center cursor-pointer justify-center flex-1 lg:hidden'> 
+                  <FaPen color='#fff' size={12} onClick={()=>setToggleNoteBox({id:item._id,status:true})} />
                   { toggleNoteBox.status && toggleNoteBox.id === item._id && <NoteBox refresh={refresh} setRefresh={setRefresh} note={item.note} id={item._id} setToggleNoteBox={setToggleNoteBox}/>}
                    </div>
 
+
+
+                   <div onClick={()=> window.open(`tel:${item?.number}`, '_blank')} className="bg-black flex cursor-pointer items-center rounded flex-1 justify-center gap-2 px-0 py-1 poppins-medium text-[12px] ">
+                  <img src={phoneCall} className='w-3 h-3' alt="" />
+                  {/* <label htmlFor="" className='text-white'>Call</label> */}
+                  </div>
+                
+                  </div>
+
+                  </div>
 
                   {/* <div className=' w-full text-start lg:text-center capitalize flex lg:hidden'>
                   <div  className="bg-black flex rounded w-[120px] justify-center gap-3 px-3 py-1 poppins-medium text-[12px] ">

@@ -76,15 +76,27 @@ const ThemedDropdown = ({
               </div>
             
             {/* Render options dynamically */}
-            {options?.map((option) => (
-              <div
-                key={option._id}
-                onClick={() => handleOptionClick(option)}
-                className={`py-3 px-5 text-sm text-[#333333] hover:bg-black hover:text-white transition-all duration-300 cursor-pointer `}
-              >
-                {option.name}
-              </div>
-            ))}
+            {options?.map((option) => {
+  return (
+    <div
+      key={option._id}
+      onClick={() => {
+        if (!option.property) {
+          handleOptionClick(option);
+        }
+      }}
+      className={`capitalize py-3 px-5 text-sm text-[#333333] 
+        ${option.taken ? 'bg-gray-300 cursor-not-allowed' : 'hover:bg-black hover:text-white cursor-pointer'} 
+        transition-all duration-300`}
+    >
+      {option.name}
+      {option.property && <span className="ml-2 text-red-500">(Already Taken)</span>}
+    </div>
+  );
+})}
+
+             
+          
 
             {/* "None" option */}
           

@@ -42,11 +42,21 @@ function RecentEnquiries({ searchTerm, selectedFilter,selectedFilterDeveloper,se
 
   const handleStatus = (status, id) => setStatus({ status, id });
 
-  const statusOfEnq = async (status, id) => {
+  const statusOfEnq = async (status, id,existingStatus) => {
     try {
-      await updateEnquiryStatus({ status, id });
-      setStatus({ status: false, id: '' });
-      setRefresh(!refresh);
+console.log(existingStatus,'existingStatus')
+
+if(existingStatus === 'closed'){
+  const confirm = window.confirm('Closed lead will be automatically delete after confirmation. ')
+  if(!confirm) {
+    return;
+  }
+}
+ 
+        await updateEnquiryStatus({ status, id });
+        setStatus({ status: false, id: '' });
+        setRefresh(!refresh);
+      
     } catch (error) {
       errorToast(
         error.response.data.message ||
@@ -240,45 +250,45 @@ function RecentEnquiries({ searchTerm, selectedFilter,selectedFilterDeveloper,se
             className='absolute border top-6 right-7 z-30 border-black/30  capitalize mt-3 poppins-medium flex flex-col gap-1 bg-white shadow-md rounded-md px-2 py-2 text-xs'
           >
             <div
-              onClick={() => statusOfEnq('qualified', i._id)}
+              onClick={() => statusOfEnq('qualified', i._id,i?.status)}
               className={`bg-blue-600 text-[#fff] hover:bg-blue-700 w-36 h-7  flex justify-center items-center rounded-[4px] cursor-pointer`}
             >
               <span>qualified</span>
             </div>
 
             <div
-              onClick={() => statusOfEnq('not-interested', i._id)}
+              onClick={() => statusOfEnq('not-interested', i._id,i?.status)}
               className='w-36 h-7  bg-red-600 text-[#fff] hover:bg-red-700 flex justify-center items-center rounded-[4px] cursor-pointer'
             >
               <span>Not Interested</span>
             </div>
 
             <div
-              onClick={() => statusOfEnq('interested', i._id)}
+              onClick={() => statusOfEnq('interested', i._id,i?.status)}
               className='w-36 h-7 bg-orange-600 text-[#fff] hover:bg-orange-600 flex justify-center items-center rounded-[4px] cursor-pointer'
             >
               <span>interested</span>
             </div>
             <div
-              onClick={() => statusOfEnq('in-progressive', i._id)}
+              onClick={() => statusOfEnq('in-progressive', i._id,i?.status)}
               className='w-36 h-7 bg-[#940788] text-[#fff] hover:bg-[#a7139a] flex justify-center items-center rounded-[4px] cursor-pointer'
             >
               <span>In Progress</span>
             </div>
             <div
-              onClick={() => statusOfEnq('closed', i._id)}
+              onClick={() => statusOfEnq('closed', i._id,i?.status)}
               className='w-36 h-7 bg-green-600 text-[#ffffff] hover:bg-green-500 flex justify-center items-center rounded-[4px] cursor-pointer'
             >
               <span>closed</span>
             </div>
             <div
-              onClick={() => statusOfEnq('newlead', i._id)}
+              onClick={() => statusOfEnq('newlead', i._id,i?.status)}
               className='w-36 h-7 bg-black text-[#ffffff] hover:bg-black flex justify-center items-center rounded-[4px] cursor-pointer'
             >
               <span>New Lead</span>
             </div>
             <div
-              onClick={() => statusOfEnq('wrong-number', i._id)}
+              onClick={() => statusOfEnq('wrong-number', i._id,status.status)}
               className='w-36 h-7 bg-[#dec228] text-[#fff] hover:bg-[#c3aa21] flex justify-center items-center rounded-[4px] cursor-pointer'
             >
               <span>Wrong Number</span>

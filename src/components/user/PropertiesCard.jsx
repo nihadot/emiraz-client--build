@@ -199,7 +199,7 @@ function PropertiesCard({ item, handleRegister, navigate }) {
             <span className="font-normal text-[10px]">{item?.beds}</span>
           </div>
         </div>
-        <div className=" poppins-semibold text-[#000000] text-xl mt-3">
+        <div className=" poppins-semibold text-[#000000] text-lg capitalize md:text-xl mt-3">
           <h1
             className="overflow-hidden w-full whitespace-nowrap"
             style={{ textOverflow: "ellipsis" }}
@@ -207,10 +207,10 @@ function PropertiesCard({ item, handleRegister, navigate }) {
             {item?.projectTitle}
           </h1>
         </div>
-        <div className="poppins-semibold text-[#000000] text-base mt-3">
-          <h1 className="font-medium">
+        <div className="poppins-semibold text-[#000000] text-lg mt-3">
+          <h1 className="font-medium line-clamp-1">
             <span className="md:hidden lg:inline  " >Starting from{" "}</span>
-            <span className="font-bold text-xl">{item.priceInAED}</span>
+            <span className="font-bold text-lg  md:text-xl">{item.priceInAED}</span>
           </h1>
         </div>
 

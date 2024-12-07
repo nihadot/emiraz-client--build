@@ -6,6 +6,7 @@ const CitiesDropdown = ({ isLoading, name, value, onChange, options, clearForms 
   const [isOpen, setIsOpen] = useState(false);
   const [selectedCities, setSelectedCities] = useState(value || []);
 
+  
   const availableCities = options?.filter(
     (city) => !selectedCities.some((selectedCity) => selectedCity._id === city._id)
   );
@@ -44,6 +45,21 @@ const CitiesDropdown = ({ isLoading, name, value, onChange, options, clearForms 
     onChange(name, selectedCities);
   }, [selectedCities, onChange, name]);
 
+
+  const [searchQuery, setSearchQuery] = useState('');
+const [searchCities, setSearchCities] = useState([]);
+
+const handleSearchChange = (e) => {
+  const query = e.target.value.toLowerCase();
+  setSearchQuery(query);
+  
+  // Filter cities
+  const filteredCities = availableCities.filter((city) =>
+    city.cityName.toLowerCase().includes(query)
+  );
+  setSearchCities(filteredCities);
+};
+
   return (
     <div className="flex mt-3 flex-col gap-2">
       <label htmlFor={name} className="sf-medium font-medium text-sm text-[#000000]">
@@ -73,15 +89,21 @@ const CitiesDropdown = ({ isLoading, name, value, onChange, options, clearForms 
             transition={{ duration: 0.3 }}
             className="border border-[#E4E4E4] rounded-[10px] bg-white mt-2 max-h-40 overflow-y-auto shadow-md"
           >
-            {availableCities.map((city) => (
-              <div
-                key={city._id}
-                onClick={() => handleCityClick(city)}
-                className="py-3 capitalize px-5 text-sm text-[#333333] hover:bg-black hover:text-white transition-all duration-300 cursor-pointer"
-              >
-                {city.cityName}
-              </div>
-            ))}
+        <input
+        type="search"
+        placeholder="Search..."
+        className="py-3 capitalize w-full px-5 text-sm text-[#333333] border sticky top-0 transition-all duration-300 cursor-pointer"
+        onChange={handleSearchChange}
+      />
+            {(searchQuery ? searchCities : availableCities).map((city) => (
+        <div
+          key={city._id}
+          onClick={() => handleCityClick(city)}
+          className="py-3 capitalize px-5 text-sm text-[#333333] hover:bg-black hover:text-white transition-all duration-300 cursor-pointer"
+        >
+          {city.cityName}
+        </div>
+      ))}
           </motion.div>
         )}
       </AnimatePresence>

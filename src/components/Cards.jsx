@@ -228,7 +228,7 @@ function PropertiesCard({handlePublish,publish, view,item,handleDelete,disableDe
           </h1> : <h1 className="h-7"></h1>}
         </div>
         <div className="poppins-semibold text-[#000000] text-base mt-3">
-          <h1 className="font-medium">
+          <h1 className="font-medium line-clamp-1">
             Starting from{" "}
             <span className="font-bold text-xl">{item.priceInAED}</span>
           </h1>
