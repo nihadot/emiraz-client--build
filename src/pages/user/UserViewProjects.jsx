@@ -201,7 +201,6 @@ const [ads,setAds] = useState([]);
         return array;
       }
 
-      console.log(sideBarResultFiltered,'sideBarResultFiltered')
       // Shuffle the array
       const shuffledArray = shuffleArray(sideBarResultFiltered);
 
@@ -369,6 +368,15 @@ const [ads,setAds] = useState([]);
   ? new Date(property.handoverDate).toISOString().split('T')[0] // Extract YYYY-MM-DD
   : 'N/A';
 
+  const callUpdateCountAds =async (id)=>{
+    try {
+      const response = await axios.post(`${SERVER_URL}/priority/generate-fingerprint-id`, {fingerprintId:localStorage.getItem('fingerprint-id'),adsId:id});
+      return response.data;
+    } catch (error) {
+      errorToast( error?.response?.data?.message || error?.message || "An error occurred during login.");
+    }
+
+  }
   return (
     <>
       <Helmet>
@@ -978,6 +986,10 @@ const [ads,setAds] = useState([]);
 <SwiperSlide
                                   className='cursor-pointer'
                                   onClick={() =>{
+                                    if(!item?.property?.slug){
+                                      return true;
+                                    }
+                                    callUpdateCountAds(item._id)
                                     navigate(
                                       `/property/${item?.property?.slug}`,
                                       // `/property/${item?.property?.projectTitle?.trim().toLowerCase().replace(/\s+/g, "-")}`

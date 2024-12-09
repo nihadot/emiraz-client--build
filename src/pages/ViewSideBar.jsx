@@ -71,6 +71,7 @@ function ViewSideBar() {
 
                   <p className="my-2 capitalize py-2 text-sm">Ads Name :  {item?.name} </p>
                   <p className="my-2  capitalize py-2 text-sm">Property Name :  {item?.property?.projectTitle} </p>
+                  <p className="my-2  capitalize py-2 text-sm">Click Count:  {item?.clickCount || 0} </p>
                  
                   <a
                     onClick={() => {

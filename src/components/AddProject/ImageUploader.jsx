@@ -6,6 +6,7 @@ import { ErrorMessage } from "formik";
 
 const MainImageUploader = ({
   name = "imageFile",
+  required=  true,
   onChange,
   preferredFormat = "jpeg",
   value,
@@ -87,7 +88,7 @@ const MainImageUploader = ({
       onDrop={handleDrop}
     >
       <label className="sf-medium font-medium text-sm text-[#000000]">
-        Main Image <span className="text-lg text-red-600">*</span>
+        Main Image { required && <span className="text-lg text-red-600">*</span>}
       </label>
 
       {/* Drag-and-Drop Area */}

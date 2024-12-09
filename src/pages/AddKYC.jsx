@@ -7,9 +7,11 @@ import { errorToast, successToast } from '../toast';
 import Countries from './Countries';
 import axios from 'axios';
 import { SERVER_URL } from '../api';
-import { ADMIN_TOKEN } from '../api/localstorage-varibles';
+import { ADMIN_TOKEN, CLOUDINARY_NAME, CLOUDINARY_PERSISTENT } from '../api/localstorage-varibles';
 import Reason from './Reason';
-
+import MainImageUploader from '../components/AddProject/ImageUploader';
+import PDFUploader from './PDFUploader';
+import PDFVIew from "./PDFVIew"
 export default function AddKYC({enqId,setRefresh,item}) {
   let [isOpen, setIsOpen] = useState(false)
 
@@ -46,6 +48,8 @@ export default function AddKYC({enqId,setRefresh,item}) {
     setIsOpen(true)
   }
 
+  const [clearForms, setClearForms] = useState(false);
+
 
   const handleSubmit = async (values, { resetForm }) => {
     try {
@@ -61,6 +65,34 @@ export default function AddKYC({enqId,setRefresh,item}) {
 
       if(values.nationality){
         data.nationality = values.nationality._id
+      }
+
+     
+
+      if(values.pdfFile){
+        const formData = new FormData();
+        formData.append("file", values.pdfFile);
+        formData.append("upload_preset", CLOUDINARY_PERSISTENT);
+        formData.append("folder", 'projects_upload');
+        
+      
+        try {
+          const response = await axios.post(`https://api.cloudinary.com/v1_1/${CLOUDINARY_NAME}/image/upload`, formData);
+        
+          if (response?.data) {
+            data.pdfFile = {
+              asset_id: response.data.asset_id,
+              secure_url: response.data.secure_url,
+              url: response.data.url,
+              public_id: response.data.public_id,
+            };
+          }
+
+        } catch (error) {
+          console.error('Error uploading image:', error);
+          throw new Error('Image upload failed');
+        }
+
       }
 
       setIsLoading(true);
@@ -97,7 +129,7 @@ export default function AddKYC({enqId,setRefresh,item}) {
           onClick={openModal}
           className="rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
         >
-         Update KYC
+         { item?.nationality && item?.passportNumber && item?.email && 'Update KYC' || 'Add KYC'}
         </button>
       </div>
 
@@ -144,6 +176,7 @@ export default function AddKYC({enqId,setRefresh,item}) {
         email: item?.email || "",
         reason: item?.reason || "",
         totalAmount: item?.totalAmount || "",
+        pdfFile : item?.pdfFile || "",
         
       }}
       validationSchema={validationSchema}
@@ -209,6 +242,16 @@ export default function AddKYC({enqId,setRefresh,item}) {
                 />
                 <ErrorMessage name="totalAmount" component="div" className="text-red-500 text-sm" />
               </div>
+
+
+        <PDFUploader
+      required={false}
+         name="pdfFile"
+         onChange={(_, file) => setFieldValue(_, file)} // Updates Formik with the file object
+         preferredFormat="webp"
+         clearForms={clearForms}
+         value={values.pdfFile} // Binds Formik value to the uploader
+        />
 
 
               

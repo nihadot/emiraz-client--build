@@ -296,12 +296,16 @@ const navigate = useNavigate();
         {filteredProperties && filteredProperties.length > 0 &&
           filteredProperties.map((item, index) => {
             return (
-              <div className='h-full px-4 lg:px-0 flex bg-gray-200 rounded-lg gap-2 lg:gap-0 mt-1'>
+              <div draggable={false}
+              
+              className='h-full select-none px-4 lg:px-0 flex bg-gray-200 rounded-lg gap-2 lg:gap-0 mt-1'>
                 <div className="   grid   lg:mt-1 mt-3 w-full py-3 items-center poppins-medium text-[12px] lg:grid-cols-7 justify-items-center  ">
                   <div className=' w-full text-start lg:text-center'>
                     <span className='text-xs font-bold lg:hidden inline'>Date : </span> {formatDate(item.createdAt)}
                   </div>
-                  <div className=' w-full text-start lg:text-center capitalize'> <span className='text-xs font-bold lg:hidden inline'>Name : </span> {item?.name}</div>
+                  <div 
+                   draggable={false}
+                  className=' w-full select-none text-start lg:text-center capitalize'> <span className='text-xs font-bold lg:hidden inline'>Name : </span> {item?.name}</div>
                   <div className=' w-full text-start lg:text-center'> <span className='text-xs font-bold lg:hidden inline'>Number : </span> +{item?.number}</div>
                   <div className=' w-full text-start lg:text-center capitalize'> <span className='text-xs font-bold lg:hidden inline'>Project : </span> {item?.propertyDetails?.projectTitle}</div>
                   <div className=' w-full text-start lg:text-center capitalize'> <span className='text-xs font-bold lg:hidden inline'>Developer : </span> {item?.developerDetails?.developerName}</div>

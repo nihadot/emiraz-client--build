@@ -84,9 +84,9 @@ function ViewNotification() {
                   </>
                 )}
               </p>
-              {item.mainImgaeLink && (
+              {item.imageFile && (
                 <img
-                  src={MAIN_IMAG_URL + '/' + item.mainImgaeLink}
+                  src={item?.imageFile?.secure_url}
                   className='w-[80px] h-[80px] rounded-[5px] overflow-hidden object-cover'
                   alt={item.title}
                 />
@@ -95,7 +95,7 @@ function ViewNotification() {
 
 {  item?.propertyDetails &&  <label className='font-bold block my-4' htmlFor="">Project : {item?.propertyDetails?.projectTitle}</label>
 }            <div className='text-sm flex justify-start mt-2 mb-1.5 me-5 text-red-600'>
-              {!item.mainImgaeLink && (
+              {!item.imageFile && (
                 <>
                   <Link
                   to={`/admin/edit-notification/${item._id}`}

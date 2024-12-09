@@ -358,7 +358,7 @@ if(existingStatus === 'closed'){
         {filteredProperties && filteredProperties.length > 0 &&
           filteredProperties.map((item, index) => {
             return (
-              <div id={item._id} key={index} className=' grid bg-gray-200 rounded-lg mt-1 w-full py-3 items-center poppins-medium text-[12px] grid-cols-8 justify-items-center gap-0 '>
+              <div id={item._id}  key={index} className=' grid bg-gray-200 rounded-lg mt-1 w-full py-3 items-center poppins-medium text-[12px] grid-cols-8 justify-items-center gap-0 '>
                 <div className=' w-full text-center'>
                   {formatDate(item.createdAt)}
                 </div>

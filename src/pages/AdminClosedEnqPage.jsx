@@ -4,6 +4,7 @@ import { SERVER_URL } from '../api';
 import { ADMIN_TOKEN } from '../api/localstorage-varibles';
 import { useNavigate } from 'react-router-dom';
 import AddKYC from './AddKYC';
+import  Placeholder  from '../assets/placeholder/placeholder-image.png';
 
 function AdminClosedEnqPage() {
 
@@ -64,10 +65,10 @@ function Cards({item,setRefresh}) {
     };
 
   return (
-    <section className='relative overflow-hidden'>
+    <section className='relative overflow-hidden  '>
 { item?.enquiryDetails?.status && <div className='bg-green-700 w-[84px] text-[8px] text-white text-center uppercase -rotate-[36px] h-[13px] absolute rotate-[360deg  top-[8px] -left-[23px]' style={{transform:"rotate(-35deg"}}>closed</div>}
-<div className='h-full px-4 lg:px-0 flex bg-gray-200 rounded-lg gap-2 pt-2 lg:gap-0 mt-0'>
-                <div className="   grid   lg:mt-1 mt-3 w-full py-3 px-3 items-start poppins-medium text-[12px] lg:grid-cols-1 justify-items-start h-full ">
+<div className='h-full px-4 lg:px-0 flex bg-white border rounded-lg gap-2 pt-2 lg:gap-0 mt-0'>
+                <div className="   grid gap-2  lg:mt-1 mt-3 w-full py-3 px-3 items-start poppins-medium text-[12px] lg:grid-cols-1 justify-items-start h-full ">
                   <div className=' w-full text-start lg:text-start'>
                     <span className='text-xs font-bold  inline'>Date : </span> {formatDate(item.createdAt)}
                   </div>
@@ -87,6 +88,18 @@ function Cards({item,setRefresh}) {
                   {/* <FaPen onClick={()=>setToggleNoteBox({id:item._id,status:true})} />
                   { toggleNoteBox.status && toggleNoteBox.id === item._id && <NoteBox refresh={refresh} setRefresh={setRefresh} note={item.note} id={item._id} setToggleNoteBox={setToggleNoteBox}/>}
                    </div> */}
+                   {/* pdfFile */}
+                   <div className="w-[200px]  h-[200px]">
+
+                 {  item?.pdfFile?.secure_url ?  <iframe
+          src={item?.pdfFile?.secure_url}
+          className=' object-contain h-full rounded'
+          title="PDF Preview"
+          width='100%'
+          // height={'300px'}
+          /> : <div className="w-full h-full rounded bg-slate-200"></div> }
+          </div>
+                   {/* <img src={item?.imageFile?.secure_url || Placeholder} className='w-60 h-60 object-cover rounded' alt="" /> */}
                    <AddKYC item={item} setRefresh={setRefresh} enqId={item._id}/>
                 </div>
              

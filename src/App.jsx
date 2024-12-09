@@ -1,4 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+// import the fingerprintjs opensource library
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
+import React from "react";
 import {
   LoginPage,
   AdminLayout,
@@ -104,6 +107,22 @@ function App() {
       window.addEventListener('online', updateOnlineStatus);
     };
   }, [isOnline]);
+
+  const [fpHash, setFpHash] = React.useState('');
+
+
+  React.useEffect(() => {
+    const setFp = async () => {
+      const fp = await FingerprintJS.load();
+
+      const { visitorId } = await fp.get();
+      localStorage.setItem('fingerprint-id', visitorId);
+      setFpHash(visitorId);
+    };
+
+    setFp();
+  }, []);
+
   return (
     <>
       <BrowserRouter>
