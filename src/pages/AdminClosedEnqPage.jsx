@@ -5,10 +5,15 @@ import { ADMIN_TOKEN } from '../api/localstorage-varibles';
 import { useNavigate } from 'react-router-dom';
 import AddKYC from './AddKYC';
 import  Placeholder  from '../assets/placeholder/placeholder-image.png';
+import { useDispatch } from 'react-redux';
+import { toLoadClosedEnquiriesCount } from '../features/closedSlice';
 
 function AdminClosedEnqPage() {
 
+  const dispatch = useDispatch();
+
     const [data,setData] = useState([]);
+    const [update,setUpdate] = useState(false);
   const [refresh,setRefresh] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
@@ -17,6 +22,13 @@ function AdminClosedEnqPage() {
               headers: { Authorization: `Bearer ${localStorage.getItem(ADMIN_TOKEN)}` },
             });
             setData(response.data.result)
+            await axios.get(`${SERVER_URL}/admin/closed-enq/viewed`, {
+              headers: { Authorization: `Bearer ${localStorage.getItem(ADMIN_TOKEN)}` },
+            });
+
+    // const totalUnreadCount = response?.data?.result?.length > 0 && response?.data?.result?.reduce((accumulator,currentValue)=> accumulator+(!currentValue.view ? 1 : 0)  ,0 )
+dispatch(toLoadClosedEnquiriesCount(0));
+setUpdate(prev => !prev);
           } catch (error) {
             throw error || "An error occurred during login.";
           }
@@ -24,6 +36,8 @@ function AdminClosedEnqPage() {
 
     fetchData();
   }, [refresh]);
+
+
 
 
   return (

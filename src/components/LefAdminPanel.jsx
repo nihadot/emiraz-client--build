@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import ImageSVG from "../assets/logo/ps_logo.png"
 
@@ -12,6 +12,8 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../features/authSlice';
 import { ADMIN_ID, ADMIN_TOKEN } from '../api/localstorage-varibles';
+import axios from 'axios';
+import { SERVER_URL } from '../api';
 // --------------------REACT-ICONS---------------------------------//
 
 function LefAdminPanel() {
@@ -20,7 +22,6 @@ function LefAdminPanel() {
     const dispatch = useDispatch();
     const navigate = useNavigate()
 
-    
 
     //-------------------------------STATES-----------------------//
     const [style,setStyle] = React.useState('')
@@ -43,9 +44,9 @@ function LefAdminPanel() {
         localStorage.removeItem(ADMIN_ID)
         navigate('/admin-login');
     }
-    
 
     
+    const value = useSelector((state)=>state.closedSlice)
 
   return (
     <>
@@ -88,7 +89,7 @@ function LefAdminPanel() {
                     <li className='flex transition-all duration-150 ease-in-out hover:scale-105  items-center gap-3  hover:bg-white hover:text-black py-3 px-6 rounded-lg' > <FaBlogger/> Manage Blog</li>
                 </Link>
                 <Link to={'/admin/closed-enq'}>
-                    <li className='flex transition-all duration-150 ease-in-out hover:scale-105  items-center gap-3  hover:bg-white hover:text-black py-3 px-6 rounded-lg' > <FaDoorClosed/> Closed List</li>
+                    <li className='flex transition-all duration-150 ease-in-out hover:scale-105  items-center gap-3  hover:bg-white hover:text-black py-3 px-6 rounded-lg' > <FaDoorClosed/> Closed List <span className='bg-green-600 rounded-full w-6 h-6 text-xs flex items-center justify-center'>{value.count || 0}</span></li>
                 </Link>
             </ul>
         </div>

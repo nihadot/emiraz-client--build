@@ -2,7 +2,9 @@ import React from 'react'
 
 function PDFVIew() {
   return (
-    <div>PDFVIew</div>
+    <div>
+        
+    </div>
   )
 }
 
