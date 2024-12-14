@@ -338,7 +338,15 @@ if(existingStatus === 'closed'){
     }
   }, [status.status]);
 
+  useEffect(()=>{
+   
+  },[])
 
+  // document.addEventListener("keydown",(event=>{
+  //   if(event.ctrlKey && (event.key === 'p' || event.key === 'u')){
+  //     event.preventDefault();
+  //   }
+  // }))
   // console.log(filteredProperties,'---')
  
   return (
@@ -354,7 +362,7 @@ if(existingStatus === 'closed'){
         <h3 className=' w-full text-center'>Status</h3>
       </div>
 
-      <div className='mt-1 w-full' >
+      <div className='mt-1 w-full select-none' >
         {filteredProperties && filteredProperties.length > 0 &&
           filteredProperties.map((item, index) => {
             return (

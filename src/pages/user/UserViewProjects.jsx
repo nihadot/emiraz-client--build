@@ -186,9 +186,9 @@ const [ads,setAds] = useState([]);
 
       const sideBarResultFiltered =
         sideBanner.result &&
-        sideBanner.result.filter(
-          item => item._id+'' !== property.result[0].adsOptions+''
-        );
+        sideBanner.result.filter(true)
+          // item => item._id+'' !== property.result[0].adsOptions+''
+        // );
 
 
 
@@ -882,11 +882,15 @@ const [ads,setAds] = useState([]);
                       onClick={handleYoutubeVideo}
                       className={`cursor-pointer `}
                     >
-                      <iframe
+                    { property.projectVideo &&  <iframe
                         style={{ pointerEvents: 'none' }}
                         className=' hidden h-[82px] md:block object-cover lg:w-[415px]  w-[82px] sm:w-[280px] sm:h-[246px] rounded-[10px]'
                         src={property.projectVideo}
-                      ></iframe>
+                      ></iframe>}
+
+                      {
+                        !property.projectVideo && <div className="lg:w-[415px]  w-[82px] sm:w-[280px] sm:h-[246px] rounded-[10px] bg-black text-white flex justify-center items-center">No video available</div>
+                      }
                     </div>
 
                     {/* enquiries */}
@@ -1255,6 +1259,7 @@ const [ads,setAds] = useState([]);
                   ></iframe>
                 </div>
               )}
+
               {/* youtube video */}
 
               {/* map */}
