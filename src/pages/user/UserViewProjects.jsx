@@ -184,27 +184,27 @@ const [ads,setAds] = useState([]);
       // setSideBanner(sideBanner.result);
       setLoading(false);
 
-      const sideBarResultFiltered =
-        sideBanner.result &&
-        sideBanner.result.filter(true)
+      // const sideBarResultFiltered =
+      //   sideBanner.result &&
+      //   sideBanner.result.filter(true)
           // item => item._id+'' !== property.result[0].adsOptions+''
         // );
 
 
 
       // Function to shuffle the array
-      function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
-      }
+      // function shuffleArray(array) {
+      //   for (let i = array.length - 1; i > 0; i--) {
+      //     const j = Math.floor(Math.random() * (i + 1));
+      //     [array[i], array[j]] = [array[j], array[i]];
+      //   }
+      //   return array;
+      // }
 
       // Shuffle the array
-      const shuffledArray = shuffleArray(sideBarResultFiltered);
+      // const shuffledArray = shuffleArray(sideBarResultFiltered);
 
-      setAdsState(shuffledArray);
+      setAdsState(sideBanner.result);
     } catch (error) {
       setLoading(false);
     }
