@@ -1,6 +1,6 @@
 import SearchAndFilter from "../components/SearchAndFilter"
 import RecentEnquiries from '../components/RecentEnquiries'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DashboardPageAdmin from "./DashboardPageAdmin";
 import DuplicateEnquiries from "../components/DuplicateEnquiries";
 
@@ -12,6 +12,28 @@ function AdminEnquiries() {
   const [selectedFilterAgency, setSelectedFilterAgency] = useState('');
   const [toggleButtonState,setToggleButtonState] = useState(false);
   const toggleButton = ()=> setToggleButtonState(pre => !pre );
+
+  useEffect(() => {
+    const handleKeyPress = (e) => {
+      // Disable common screenshot shortcuts
+      if (
+        (e.key === 'PrintScreen') || 
+        (e.key === 'F12') || 
+        (e.metaKey && e.shiftKey && e.key === '3')  // Cmd + Shift + 3 on Mac
+      ) {
+        e.preventDefault();
+        alert("Screenshot shortcut blocked!");
+      }
+
+    };
+
+    document.addEventListener('keydown', handleKeyPress);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress);
+    };
+  }, []);
+
   return (
     <div className='my-7'>
 

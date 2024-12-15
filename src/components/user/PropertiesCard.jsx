@@ -183,7 +183,7 @@ function PropertiesCard({ item, handleRegister, navigate }) {
             onClick={() =>
               handleShare(
                 item?.projectTitle,
-                `property/${item?.projectTitle}`)
+                `property/${item?.slug}`)
             }
             className="bg-[#ffffff] cursor-pointer rounded-md w-8 h-8 flex  justify-center items-center"
           >

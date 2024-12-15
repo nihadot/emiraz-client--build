@@ -38,6 +38,7 @@ function PropertiesCard({handlePublish,publish, view,item,handleDelete,disableDe
         .share({
           title: 'Hello, I found this off-plan project on PropertySeller',
           url: `https://propertyseller.ae/${url}`,
+
         })
         .then(() => console.log("Thanks for sharing!"))
         .catch(console.error);
@@ -197,13 +198,15 @@ function PropertiesCard({handlePublish,publish, view,item,handleDelete,disableDe
           </div>
           <div
             onClick={() =>
-              handleShare(
-                item.projectTitle,
-                `property/${item.projectTitle
-                  .trim()
-                  .toLowerCase()
-                  .replace(/\s+/g, "-")}/${item._id}`
-              )
+              // handleShare(
+              //   item.projectTitle,
+              //   `property/${item.projectTitle
+              //     .trim()
+              //     .toLowerCase()
+              //     .replace(/\s+/g, "-")}/${item._id}`
+              // )
+              handleShare(item.projectTitle,`property/${item?.slug}`)
+
             }
             className="bg-[#ffffff] cursor-pointer rounded-md w-8 h-8 flex  justify-center items-center"
           >

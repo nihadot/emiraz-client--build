@@ -202,13 +202,14 @@ function PropertyListingCard({previewLink,modify,prevMain,viewMain,preview,norma
               </div>
               <div
                 onClick={() =>
-                  handleShare(
-                    item?.name,
-                    `property/${item?.name
-                      .trim()
-                      .toLowerCase()
-                      .replace(/\s+/g, "-")}/${item?._id}`
-                  )
+                  // handleShare(
+                  //   item?.name,
+                  //   `property/${item?.name
+                  //     .trim()
+                  //     .toLowerCase()
+                  //     .replace(/\s+/g, "-")}/${item?._id}`
+                  // )
+                  handleShare(item.projectTitle,`property/${item?.slug}`)
                 }
                 className="bg-[#ffffff] cursor-pointer rounded-md w-8 h-8 flex  justify-center items-center"
               >

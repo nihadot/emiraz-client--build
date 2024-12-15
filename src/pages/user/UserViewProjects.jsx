@@ -113,6 +113,7 @@ const [ads,setAds] = useState([]);
         .share({
           title: 'Hello, I found this off-plan project on PropertySeller',
           url: `https://propertyseller.ae/${url}`,
+          
         })
         .then(() => console.log('Thanks for sharing!'))
         .catch(console.error);
@@ -458,13 +459,7 @@ const [ads,setAds] = useState([]);
                             </div>
                             <div
                               onClick={() =>
-                                handleShare(
-                                  property.projectTitle,
-                                  `property/${property.projectTitle
-                                    .trim()
-                                    .toLowerCase()
-                                    .replace(/\s+/g, '-')}/${property._id}`
-                                )
+                                handleShare(property.projectTitle,`property/${item?.slug}`)
                               }
                               className='bg-[#ffffff] cursor-pointer rounded-md w-8 h-8 flex  justify-center items-center'
                             >
@@ -490,13 +485,7 @@ const [ads,setAds] = useState([]);
                             </div>
                             <div
                               onClick={() =>
-                                handleShare(
-                                  property.projectTitle,
-                                  `property/${property.projectTitle
-                                    .trim()
-                                    .toLowerCase()
-                                    .replace(/\s+/g, '-')}/${property._id}`
-                                )
+                                handleShare(property.projectTitle,`property/${item?.slug}`)
                               }
                               className='bg-[#ffffff] cursor-pointer rounded-md w-8 h-8 flex  justify-center items-center'
                             >
@@ -900,7 +889,7 @@ const [ads,setAds] = useState([]);
                       ></iframe>}
 
                       {
-                        !property.projectVideo && <div className="lg:w-[415px]  w-[82px] sm:w-[280px] sm:h-[246px] rounded-[10px] bg-black text-white flex justify-center items-center">No video available</div>
+                        !property.projectVideo && <div className="lg:w-[415px]  w-[82px] sm:w-[280px] sm:h-[246px] rounded-[10px] bg-black text-white flex justify-center items-center"> Video not available</div>
                       }
                     </div>
 
