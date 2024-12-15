@@ -207,6 +207,7 @@ const [ads,setAds] = useState([]);
       setAdsState(sideBanner.result);
     } catch (error) {
       setLoading(false);
+      
     }
   };
 
@@ -358,11 +359,21 @@ const [ads,setAds] = useState([]);
   // },[property])
 
 
-  const seo_description = property?.projectMetaDescription;
+  // const seo_description = property?.projectMetaDescription;
   const seo_title = property?.projectMetaTitle;
   const seo_site_url = `${window.location.href}`;
   const keyboard = property?.projectMetaKeywords;
+  const [SEODescription,setSEODescription] = useState('');
+  const [SEOTitle,setSEOTitle] = useState('');
+  const [SEOImage,setSEOImage] = useState('');
+  useEffect(()=>{
+    setSEODescription(property?.projectMetaDescription);
+    setSEOTitle(property?.projectMetaTitle);
+    setSEOImage(property?.imageFile?.secure_url);
+  },[property])
 
+
+// const SEOImage =  property?.imageFile?.secure_url;
 
   const formattedDate = property?.handoverDate
   ? new Date(property.handoverDate).toISOString().split('T')[0] // Extract YYYY-MM-DD
@@ -381,23 +392,23 @@ const [ads,setAds] = useState([]);
     <>
       <Helmet>
         <title>
-          {seo_title?.length > 65 ? seo_title?.slice(0, 65) : seo_title}
+          {SEOTitle?.length > 65 ? SEOTitle?.slice(0, 65) : SEOTitle}
         </title>
         <meta
           name='description'
           content={
-            seo_description?.length > 170
-              ? seo_description?.slice(0, 170)
-              : seo_description
+            SEODescription?.length > 170
+              ? SEODescription?.slice(0, 170)
+              : SEODescription
           }
         />
           <meta name="keywords" content={keyboard}/>
           <meta name="author" content="Property Seller"></meta>
 
-        <meta property='og:title' content={seo_title} />
+        <meta property='og:title' content={SEOTitle} />
         <link rel='canonical' href={seo_site_url}></link>
-        <meta property='og:description' content={seo_description} />
-        <meta property='og:image' content={seo_description} />
+        <meta property='og:description' content={SEODescription} />
+        <meta property='og:image' content={SEOImage} />
         <meta property='og:url' content={seo_site_url} />
         <meta property='og:type' content='website' />
       </Helmet>

@@ -42,7 +42,7 @@ function Modal({setDeveloperId,setModal,propertyUniqueID,setSuccessCLoseModal,se
           setPropertyUniqueID("")
     
         } catch (error) {
-          // console.log(error.message);
+          errorToast(error?.response?.data?.message || error?.message || 'Error')
           setFormIsLoading(false)
     
         }

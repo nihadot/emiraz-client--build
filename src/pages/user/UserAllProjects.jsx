@@ -88,6 +88,7 @@ function UserAllProjects() {
     "Property for Sale in Dubai, UAE  | Off-plan Properties for sale in Dubai, UAE | Off-plan Apartments for Sale in Dubai, UAE";
 
   const seo_site_url = `${window.location.href}`;
+  
 
   return (
     <>

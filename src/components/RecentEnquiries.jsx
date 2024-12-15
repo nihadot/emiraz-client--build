@@ -13,6 +13,7 @@ import { FaPen } from 'react-icons/fa';
 import lockIcon from "../assets/icons/lock-svgrepo-com.svg"
 import unlockIcon from "../assets/icons/lock-unlocked-svgrepo-com.svg"
 import { useLocation } from 'react-router-dom';
+import DuplicateEnquiries from "./DuplicateEnquiries"
 function RecentEnquiries({ searchTerm, selectedFilter,selectedFilterDeveloper,selectedFilterAgency }) {
   const [properties, setProprties] = useState([]);
   const [agencies, setAgencies] = useState([]);
@@ -26,7 +27,9 @@ function RecentEnquiries({ searchTerm, selectedFilter,selectedFilterDeveloper,se
   const fetchdata = async () => {
     try {
       const response = await getEnquiries();
-      setProprties(response.result);
+      const filetedOnlyDuplicated = response.result.filter((item)=> !item.duplicateEnquiry )
+
+      setProprties(filetedOnlyDuplicated);
       const agencies = await getAgency();
       setAgencies(agencies.result);
     } catch (error) {
@@ -351,6 +354,8 @@ if(existingStatus === 'closed'){
  
   return (
     <div className=' md:h-[85vh] w-full  mt-5 mx-0'>
+
+
       <div className='grid bg-gray-200 rounded-lg py-3 w-full text-base sf-medium-600 grid-cols-8 justify-items-center gap-4'>
         <h3 className=' w-full text-center'>Date</h3>
         <h3 className=' w-full text-center'>Name</h3>
