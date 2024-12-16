@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { errorToast, successToast } from '../toast';
 import { deleteBlogSuccess, setError, setLoading } from '../features/blogSlice';
 import { MAIN_IMAG_URL, deleteBlog } from '../api';
+import Markdown from 'react-markdown';
 
 
 function BlogCard( {item, refresh, setRefresh} ) {
@@ -40,7 +41,16 @@ function BlogCard( {item, refresh, setRefresh} ) {
         </div>
         <div className="break-words poppins-medium text-sm text-[#666666] text-left mt-3">
             { item.date && <p className='text-[13px] mb-2'>{new Date(item.date).toDateString()}</p>}
-            <p>{item.blogBody.length > 134 ? item.blogBody.slice(0,150)+"..." : item.blogBody }</p>
+            {/* <p>{item.blogBody.length > 134 ? item.blogBody.slice(0,150)+"..." : item.blogBody }</p> */}
+          <p>
+             <Markdown
+                            >
+                              
+                    
+                              {item.blogBody.length > 134 ? item.blogBody.slice(0,150)+"..." : item.blogBody}
+                            </Markdown>
+          </p>
+            {/* <p>{item.blogBody.length > 134 ? item.blogBody.slice(0,150)+"..." : item.blogBody }</p> */}
         </div>
         <div className="flex gap-2 mt-3">
             <button onClick={()=>navigate(`/admin/edit-blog/${item._id}`,{state:item})} className='flex-1 py-3 rounded-[5px] border border-[#000000] text-[#000000] bg-[#FFFFFF]'>Edit</button>

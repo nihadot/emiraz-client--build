@@ -7,6 +7,7 @@ import Placeholder from "../../assets/placeholder/placeholder-image.png";
 import Loader from "../../components/Loader/Loader";
 import { Helmet } from "react-helmet";
 import Lazyloading from "../../components/Lazyloading/Lazyloading";
+import Markdown from "react-markdown";
 
 function UserBlogDetails() {
   const [blogs, setBlogs] = React.useState([]);
@@ -165,8 +166,14 @@ const BlogBody = ({ item }) => {
         </p>
       )}
 
-      <p className="whitespace-pre-line sf-medium break-words my-5 text-[14px] lg:text-[15px]  text-[#666666]">
-        {item.blogBody}
+      <p className="whitespace-pre-line prose lg:prose-xl sf-medium break-words my-5 text-[14px] lg:text-[15px]  text-[#666666]">
+        {/* {item.blogBody} */}
+          <Markdown
+                >
+                  
+        
+                  {item.blogBody}
+                </Markdown>
       </p>
     </div>
   );
