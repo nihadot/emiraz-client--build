@@ -1,8 +1,11 @@
 import { SitemapStream, streamToPromise } from 'sitemap';
 import { writeFileSync } from 'fs';
 import axios from 'axios';
+import cron from "node-cron";
+import express from "express";
 
-
+// Initialize Express
+const app = express();
 
 const getProperties = async (query) => {
     try {
@@ -43,7 +46,7 @@ const getBlogs = async () => {
 
 async function generateSitemap() {
   const smStream = new SitemapStream({ hostname: 'https://www.propertyseller.ae' });
-// console.log(smStream)
+
   // Fetch all dynamic pages like products
   const projects = await getProperties(); 
   const blogs = await getBlogs(); 
@@ -89,10 +92,25 @@ async function generateSitemap() {
   const sitemap = await streamToPromise(smStream).then((data) => data.toString());
 
   // Write sitemap to file
-  writeFileSync('./public/sitemap.xml', sitemap);
+  writeFileSync('./dist/sitemap.xml', sitemap);
 }
 
-generateSitemap();
+// Schedule the function to run every day at 12:00 AM
+cron.schedule('0 0 * * *', () => {
+  generateSitemap();
+
+  console.log("Cron job executed successfully!");
+});
+
+app.get('/', (req, res) => {
+  res.send('Server is running with a scheduled cron job!');
+});
+
+const PORT = 4004;
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
+
 
 
 

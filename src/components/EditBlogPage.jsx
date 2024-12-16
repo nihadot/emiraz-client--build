@@ -26,6 +26,9 @@ function EditBlogPage() {
     blogBody: "",
     preview: "",
     date: "",
+    metaTitle:"",
+    metaDescription : "",
+    metaKeywords:"",
   });
   // -----------------------------------------------------
   const removeImage = () => {
@@ -73,6 +76,9 @@ function EditBlogPage() {
         blogBody: formData.blogBody,
         date: formData.date,
         imageFile: image,
+        ...(formData.metaDescription &&{metaDescription:formData.metaDescription}),
+        ...(formData.metaKeywords && {metaKeywords:formData.metaKeywords}),
+        ...(formData.metaTitle && {metaTitle:formData.metaTitle})
       }
 
 
@@ -150,6 +156,91 @@ function EditBlogPage() {
             className="border border-[#E4E4E4] py-4 px-5 rounded-[10px] sf-normal font-extralight text-sm text-[#666666]  outline-none"
           />
         </div>
+
+
+
+           {/* Blog Meta Title */}
+           <div className="flex flex-col gap-2 my-3 mx-3">
+          <label
+            htmlFor="metaTitle"
+            className="sf-medium font-medium text-sm text-[#000000]"
+          >
+            Blog Meta Title
+          </label>
+          <input
+            disabled={isLoading}
+            autoComplete=""
+            value={formData.metaTitle}
+            name="metaTitle"
+            onChange={handleChange}
+            type="text"
+            id="metaTitle"
+            placeholder="Blog meta title"
+            title="Meta Title"
+            className="border border-[#E4E4E4] py-4 px-5 rounded-[10px] sf-normal font-extralight text-sm text-[#666666]  outline-none"
+          />
+        </div>
+
+
+
+          {/* Blog Meta Description */}
+          <div className="flex flex-col gap-2 my-3 mx-3">
+          <label
+            htmlFor="metaDescription"
+            className="sf-medium font-medium text-sm text-[#000000]"
+          >
+            Blog Meta Description
+          </label>
+          {/* <input
+            disabled={isLoading}
+            autoComplete=""
+            value={formData.metaDescription}
+            name="metaDescription"
+            onChange={handleChange}
+            type="text"
+            id="metaDescription"
+            placeholder="Blog meta description"
+            title="Meta Title"
+            className="border border-[#E4E4E4] py-4 h-[100px] px-5 rounded-[10px] sf-normal font-extralight text-sm text-[#666666]  outline-none"
+          /> */}
+           <textarea
+            disabled={isLoading}
+            name="metaDescription"
+            onChange={handleChange}
+            value={formData.metaDescription}
+            id="metaDescription"
+            cols="30"
+            rows="10"
+            className="border border-[#E4E4E4] py-4 px-5 rounded-[10px] sf-normal font-extralight text-sm text-[#666666]  outline-none"
+            placeholder="Blog meta description"
+          ></textarea>
+        </div>
+
+
+
+
+           {/* Blog Meta Keywords */}
+   <div className="flex flex-col gap-2 my-3 mx-3">
+          <label
+            htmlFor="metaKeywords"
+            className="sf-medium font-medium text-sm text-[#000000]"
+          >
+            Blog Meta Keywords
+          </label>
+          <input
+            disabled={isLoading}
+            autoComplete=""
+            value={formData.metaKeywords}
+            name="metaKeywords"
+            onChange={handleChange}
+            type="text"
+            id="metaKeywords"
+            placeholder="Blog meta keywords"
+            title="Meta Keywords"
+            className="border border-[#E4E4E4] py-4 px-5 rounded-[10px] sf-normal font-extralight text-sm text-[#666666]  outline-none"
+          />
+        </div>
+
 
         {/* Date */}
         <div className="flex flex-col gap-2 mx-3">

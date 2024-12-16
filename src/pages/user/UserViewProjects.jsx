@@ -367,10 +367,13 @@ const [ads,setAds] = useState([]);
   const [SEODescription,setSEODescription] = useState('');
   const [SEOTitle,setSEOTitle] = useState('');
   const [SEOImage,setSEOImage] = useState('');
+    const [SEOKeywords,setSEOKeywords] = useState('');
+
   useEffect(()=>{
     setSEODescription(property?.projectMetaDescription);
     setSEOTitle(property?.projectMetaTitle);
-    setSEOImage(property?.imageFile?.secure_url);
+    setSEOKeywords(property?.projectMetaKeywords);
+
   },[property])
 
 
@@ -403,8 +406,8 @@ const [ads,setAds] = useState([]);
               : SEODescription
           }
         />
-          <meta name="keywords" content={keyboard}/>
-          <meta name="author" content="Property Seller"></meta>
+          <meta name="keywords" content={SEOKeywords}/>
+          <meta name="author" content="PropertySeller"></meta>
 
         <meta property='og:title' content={SEOTitle} />
         <link rel='canonical' href={seo_site_url}></link>

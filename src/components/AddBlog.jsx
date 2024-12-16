@@ -6,6 +6,7 @@ import { CiCircleRemove } from "react-icons/ci";
 import UploadingImage from "./uploading/UploadingImage";
 import { CLOUDINARY_NAME, CLOUDINARY_PERSISTENT } from "../api/localstorage-varibles";
 import axios from "axios";
+import Markdown from 'react-markdown'
 
 function AddBlog() {
   // const { isLoading } = useSelector((state) => state.blog);
@@ -19,6 +20,9 @@ function AddBlog() {
     blogBody: "",
     preview: "",
     date: "",
+    metaTitle:"",
+    metaDescription : "",
+    metaKeywords:"",
   });
   // -----------------------------------------------------
 
@@ -36,7 +40,6 @@ function AddBlog() {
     try {
       e.preventDefault();
 
-      setLoading(true);
 
       if(!formData.blogTitle){
         errorToast("Please enter a blog title");
@@ -57,12 +60,16 @@ function AddBlog() {
         errorToast("Please select an image");
         return false;
       }
+      setLoading(true);
 
       const data = {
         blogTitle: formData.blogTitle,
         blogBody: formData.blogBody,
         date: formData.date,
         imageFile: image,
+        metaDescription:formData.metaDescription,
+        metaTitle:formData.metaTitle,
+        metaKeywords:formData.metaKeywords
       }
 
       if(image){
@@ -106,8 +113,14 @@ function AddBlog() {
     }
   };
 
+  const markdown = '# Hi, *Pluto*!'
+  const [toggleBlogBody,setToggleBlogBody] =useState(false);
+  const handleToggleBlogBody = ()=>{
+    setToggleBlogBody(prev => !prev );
+  }
+
   return (
-    <form onSubmit={handleSubmit} className="flex flex-wrap">
+    <form onSubmit={handleSubmit} className="flex relative flex-wrap">
       <div className="flex-1">
         {/* Blog title */}
         <div className="flex flex-col gap-2 mx-3">
@@ -131,6 +144,91 @@ function AddBlog() {
           />
         </div>
 
+
+
+             {/* Blog Meta Title */}
+             <div className="flex flex-col gap-2 my-3 mx-3">
+          <label
+            htmlFor="metaTitle"
+            className="sf-medium font-medium text-sm text-[#000000]"
+          >
+            Blog Meta Title
+          </label>
+          <input
+            disabled={isLoading}
+            autoComplete=""
+            value={formData.metaTitle}
+            name="metaTitle"
+            onChange={handleChange}
+            type="text"
+            id="metaTitle"
+            placeholder="Blog meta title"
+            title="Meta Title"
+            className="border border-[#E4E4E4] py-4 px-5 rounded-[10px] sf-normal font-extralight text-sm text-[#666666]  outline-none"
+          />
+        </div>
+
+
+
+
+
+          {/* Blog Meta Description */}
+          <div className="flex flex-col gap-2 my-3 mx-3">
+          <label
+            htmlFor="metaDescription"
+            className="sf-medium font-medium text-sm text-[#000000]"
+          >
+            Blog Meta Description
+          </label>
+          {/* <input
+            disabled={isLoading}
+            autoComplete=""
+            value={formData.metaDescription}
+            name="metaDescription"
+            onChange={handleChange}
+            type="text"
+            id="metaDescription"
+            placeholder="Blog meta description"
+            title="Meta Title"
+            className="border border-[#E4E4E4] py-4 h-[100px] px-5 rounded-[10px] sf-normal font-extralight text-sm text-[#666666]  outline-none"
+          /> */}
+           <textarea
+            disabled={isLoading}
+            name="metaDescription"
+            onChange={handleChange}
+            value={formData.metaDescription}
+            id="metaDescription"
+            cols="30"
+            rows="10"
+            className="border border-[#E4E4E4] py-4 px-5 rounded-[10px] sf-normal font-extralight text-sm text-[#666666]  outline-none"
+            placeholder="Blog meta description"
+          ></textarea>
+        </div>
+
+
+   {/* Blog Meta Keywords */}
+   <div className="flex flex-col gap-2 my-3 mx-3">
+          <label
+            htmlFor="metaKeywords"
+            className="sf-medium font-medium text-sm text-[#000000]"
+          >
+            Blog Meta Keywords
+          </label>
+          <input
+            disabled={isLoading}
+            autoComplete=""
+            value={formData.metaKeywords}
+            name="metaKeywords"
+            onChange={handleChange}
+            type="text"
+            id="metaKeywords"
+            placeholder="Blog meta keywords"
+            title="Meta Keywords"
+            className="border border-[#E4E4E4] py-4 px-5 rounded-[10px] sf-normal font-extralight text-sm text-[#666666]  outline-none"
+          />
+        </div>
+
+
         {/* Date */}
         <div className="flex flex-col gap-2 mx-3">
           <label
@@ -153,7 +251,7 @@ function AddBlog() {
         </div>
 
         {/* Blog Body */}
-        <div className="flex flex-col gap-2 mx-3 mt-3">
+        <div className="flex flex-col  gap-2 mx-3 mt-3">
           <label
             htmlFor="blogBody"
             className="sf-medium font-medium text-sm text-[#000000]"
@@ -172,7 +270,26 @@ function AddBlog() {
             placeholder="Wake up to the beauty of lush landscapes and elite golf courses, with the majestic Burj Khalifa and Dubai’s skyline painting the perfect morning scene at Parkside Hills. This premier living destination encapsulates the ideal blend of nature’s tranquility and the pulse of city life, fostering a community that values both unity and privacy. With a selection of 1-3 bedroom apartments that align with the luxurious lifestyle of Dubai Hills Estate, Parkside Hills apartments epitomizes smart living infused with elegance. Situated in the picturesque Dubai Hills Estate, Parkside Hills is synonymous with refined living, integrating innovative design with classic sophistication to suit a modern lifestyle. At its core, the community thrives on a plethora of amenities, ranging from top-tier health and education services to leisure, wellness, and shopping conveniences, all within easy reach, ensuring a life marked by luxury and convenience.
                 Investors and future residents looking at Parkside Hills apartments for sale near Dubai are presented with an enticing investment opportunity. With Dubai Hills Estate’s high demand and Emaar’s reputation for quality developments, Parkside Hills offers potential for substantial ROI. Its coveted location and Emaar’s renowned quality promise both capital appreciation and lucrative rental yields for years to come.                         "
           ></textarea>
+  <label htmlFor="" onClick={handleToggleBlogBody} className="bg-black px-8 flex mb-4 capitalize w-fit py-2 rounded text-white" >{ toggleBlogBody ? 'Close markup' : 'Open markup'}</label>
+
+
+
+{ (formData?.blogBody?.length > 0 && toggleBlogBody ) && <div className="absolute prose lg:prose-xl z-50 w-1/2 border-[#E4E4E4] border overflow-auto max-h-[48vh] h-full py-4 px-5 rounded-[10px] sf-normal font-extralight text-sm text-[#666666] bg-white  outline-none top-[680px] break-words right-0">
+  <label htmlFor="" onClick={handleToggleBlogBody} className="bg-black px-8 flex mb-4 capitalize w-fit py-2 rounded text-white" >close</label>
+        <Markdown
+        >
+          
+
+          {formData.blogBody}
+        </Markdown>
+        </div>}
+
+          
         </div>
+
+
+
+       
       </div>
 
       <div className="px-4 flex-1">

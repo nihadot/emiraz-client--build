@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Footer from "../../components/Footer";
 import Header from "../../components/user/Header";
 import { MAIN_IMAG_URL, getBlogById, getBlogByName, getBlogs } from "../../api";
@@ -43,6 +43,17 @@ function UserBlogDetails() {
   const seo_title = blog?.blogTitle;
   const seo_site_url = `${window.location.href}`;
 
+   const [SEODescription,setSEODescription] = useState('');
+    const [SEOTitle,setSEOTitle] = useState('');
+    const [SEOImage,setSEOImage] = useState('');
+    const [SEOKeywords,setSEOKeywords] = useState('');
+    useEffect(()=>{
+      setSEODescription(blog?.metaDescription);
+      setSEOTitle(blog?.metaTitle);
+      setSEOImage(blog?.imageFile?.secure_url);
+      setSEOKeywords(blog?.metaKeywords);
+    },[blog])
+
 
   return (
     <>
@@ -52,13 +63,15 @@ function UserBlogDetails() {
  
 
 <Helmet>
-        <title>{seo_title}</title>
-        <meta name="author" content="Property Seller"></meta>
+        <title>{SEOTitle}</title>
+        <meta name="author" content="PropertySeller"></meta>
 
-        <meta name="description" content={seo_description?.length > 170 ?  seo_description?.slice(0,170) :  seo_description  } />
-        <meta property="og:title" content={seo_title} />
-        <meta property="og:description" content={seo_description} />
-        <meta property="og:image" content={seo_description} />
+        <meta name="description" content={SEODescription?.length > 170 ?  SEODescription?.slice(0,170) :  SEODescription  } />
+        <meta property="og:title" content={SEOTitle} />
+        <meta property="og:description" content={SEODescription} />
+        <meta property="og:image" content={SEOImage} />
+    <meta name="keywords" content={SEOKeywords}/>
+
         <meta property="og:url" content={seo_site_url} />
         <meta property="og:type" content="website" />
         <link rel="canonical" href={seo_site_url}></link>
