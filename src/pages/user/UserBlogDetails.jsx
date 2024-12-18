@@ -166,7 +166,7 @@ const BlogBody = ({ item }) => {
         </p>
       )}
 
-      <p className="whitespace-pre-line prose lg:prose-xl sf-medium break-words my-5 text-[14px] lg:text-[15px]  text-[#666666]">
+      <p className="whitespace-pre-line prose max-w-full lg:prose-xl sf-medium break-words my-5 text-[14px] lg:text-[15px]  text-[#666666]">
         {/* {item.blogBody} */}
           <Markdown
                 >

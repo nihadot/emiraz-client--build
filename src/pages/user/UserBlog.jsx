@@ -98,7 +98,8 @@ const seo_site_url = `${window.location.href}`;
                               type="button"
                               className="bg-white border border-[#000000] w-full py-3 rounded-[5px] text-[10px] poppins-semibold"
                               onClick={() =>
-                                navigate(`/blog/${item._id}/${item.blogTitle.trim().toLowerCase().replace(/\s+/g, '-')}/`)
+                                navigate(`/blog/${item.slug}/`)
+                                // navigate(`/blog/${item._id}/${item.blogTitle.trim().toLowerCase().replace(/\s+/g, '-')}/`)
                               }
                             >
                               Keep Reading
